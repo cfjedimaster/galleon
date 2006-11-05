@@ -2,7 +2,7 @@
 	Name         : message.cfc
 	Author       : Raymond Camden 
 	Created      : January 25, 2005
-	Last Updated : November 3, 2006
+	Last Updated : November 5, 2006
 	History      : Support dbtype, switched to UUID (rkc 1/25/05)
 				   Fix use of top in mysql (rkc 2/3/05)
 				   getConferences can now get msgcount, lastpost (rkc 4/4/05)
@@ -13,6 +13,7 @@
 				   show last user for post, other small fixes (rkc 7/12/06)
 				   Simple size change (rkc 7/27/06)
 				   Note to myself on bug to look into (rkc 11/3/06)
+				   Reverted description to text field (rkc 11/5/06) 
 	Purpose		 : 
 --->
 <cfcomponent displayName="Conference" hint="Handles Conferences, the highest level container for Forums.">
@@ -51,7 +52,7 @@
 			insert into #variables.tableprefix#conferences(id,name,description,active)
 			values(<cfqueryparam value="#newid#" cfsqltype="CF_SQL_VARCHAR" maxlength="35">,
 				   <cfqueryparam value="#arguments.conference.name#" cfsqltype="CF_SQL_VARCHAR" maxlength="255">,
-				   <cfqueryparam value="#arguments.conference.description#" cfsqltype="CF_SQL_LONGVARCHAR">,
+				   <cfqueryparam value="#arguments.conference.description#" cfsqltype="CF_SQL_VARCHAR" maxlength="255">,
 				   <cfqueryparam value="#arguments.conference.active#" cfsqltype="CF_SQL_BIT">
 				   )
 		</cfquery>
@@ -244,7 +245,7 @@ where c.id = #variables.tableprefix#conferences.id )
 		<cfquery datasource="#variables.dsn#">
 			update	#variables.tableprefix#conferences
 			set		name = <cfqueryparam value="#arguments.conference.name#" cfsqltype="CF_SQL_VARCHAR" maxlength="255">,
-					description = <cfqueryparam value="#arguments.conference.description#" cfsqltype="CF_SQL_LONGVARCHAR">,
+					description = <cfqueryparam value="#arguments.conference.description#" cfsqltype="CF_SQL_VARCHAR" maxlength="255">,
 					active = <cfqueryparam value="#arguments.conference.active#" cfsqltype="CF_SQL_BIT">
 			where	id = <cfqueryparam value="#arguments.id#" cfsqltype="CF_SQL_VARCHAR" maxlength="35">
 		</cfquery>

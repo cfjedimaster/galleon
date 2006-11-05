@@ -41,7 +41,7 @@ GO
 CREATE TABLE [dbo].[galleon_conferences] (
 	[id] [nvarchar] (35) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
 	[name] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
-	[description] [ntext] COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[description] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
 	[active] [bit] NOT NULL 
 ) ON [PRIMARY]
 GO
@@ -49,7 +49,7 @@ GO
 CREATE TABLE [dbo].[galleon_forums] (
 	[id] [nvarchar] (35) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
 	[name] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
-	[description] [ntext] COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[description] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
 	[readonly] [bit] NOT NULL ,
 	[active] [bit] NOT NULL ,
 	[attachments] [bit] NOT NULL ,

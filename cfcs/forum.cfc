@@ -2,7 +2,7 @@
 	Name         : forum.cfc
 	Author       : Raymond Camden 
 	Created      : January 26, 2005
-	Last Updated : November 3, 2006
+	Last Updated : November 5, 2006
 	History      : Support dbtype, switched to UUID (rkc 1/26/05)
 				   getForums now gets last msg, msg count (rkc 4/6/05)
 				   ms access fix in getForums. I love joins (rkc 4/15/05)
@@ -15,6 +15,7 @@
 				   show last user for post, other small fixes (rkc 7/12/06)				   
 				   Simple size change (rkc 7/27/06)
 				   Attachment support (rkc 11/3/06)
+				   Reverted description to text field (rkc 11/5/06)				   
 	Purpose		 : 
 --->
 <cfcomponent displayName="Forum" hint="Handles Forums which contain a collection of threads.">
@@ -51,7 +52,7 @@
 			insert into #variables.tableprefix#forums(id,name,description,readonly,active,conferenceidfk)
 			values(<cfqueryparam value="#newid#" cfsqltype="CF_SQL_VARCHAR" maxlength="35">,
 				   <cfqueryparam value="#arguments.forum.name#" cfsqltype="CF_SQL_VARCHAR" maxlength="255">,
-				   <cfqueryparam value="#arguments.forum.description#" cfsqltype="CF_SQL_LONGVARCHAR">,
+				   <cfqueryparam value="#arguments.forum.description#" cfsqltype="CF_SQL_VARCHAR" maxlength="255">,
 				   <cfqueryparam value="#arguments.forum.readonly#" cfsqltype="CF_SQL_BIT">,
 				   <cfqueryparam value="#arguments.forum.active#" cfsqltype="CF_SQL_BIT">,
 				   <cfqueryparam value="#arguments.forum.conferenceidfk#" cfsqltype="CF_SQL_VARCHAR" maxlength="35">,
@@ -190,7 +191,7 @@
 		<cfquery datasource="#variables.dsn#">
 			update	#variables.tableprefix#forums
 			set		name = <cfqueryparam value="#arguments.forum.name#" cfsqltype="CF_SQL_VARCHAR" maxlength="255">,
-					description = <cfqueryparam value="#arguments.forum.description#" cfsqltype="CF_SQL_LONGVARCHAR">,
+					description = <cfqueryparam value="#arguments.forum.description#" cfsqltype="CF_SQL_VARCHAR" maxlength="255">,
 					readonly = <cfqueryparam value="#arguments.forum.readonly#" cfsqltype="CF_SQL_BIT">,
 					active = <cfqueryparam value="#arguments.forum.active#" cfsqltype="CF_SQL_BIT">,
 					attachments = <cfqueryparam value="#arguments.forum.attachments#" cfsqltype="CF_SQL_BIT">,

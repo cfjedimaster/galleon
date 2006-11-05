@@ -26,6 +26,10 @@ Gifts are always welcome. ;)
 
 
 ---- LATEST VERSION ----
+1.7.001 (November 5, 2006)
+/admin/conferences_edit.cfm + forums_edit.cfm changed textareas back to test
+/ccs/conferences+forums - varchar not longvarchar for description
+
 1.7 (November 3, 2006)
 
 DB Changes:

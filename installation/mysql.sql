@@ -13,7 +13,7 @@ DROP TABLE IF EXISTS `galleon_conferences`;
 CREATE TABLE `galleon_conferences` (
   `Id` varchar(35) NOT NULL default '',
   `name` varchar(255) NOT NULL default '',
-  `description` text NOT NULL default '',
+  `description` varchar(255) NOT NULL default '',
   `active` tinyint(1) default NULL,
   PRIMARY KEY  (`Id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -31,7 +31,7 @@ DROP TABLE IF EXISTS `galleon_forums`;
 CREATE TABLE `galleon_forums` (
   `id` varchar(35) NOT NULL default '',
   `name` varchar(255) NOT NULL default '',
-  `description` text NOT NULL default '',
+  `description` varchar(255) NOT NULL default '',
   `readonly` tinyint(1) NOT NULL default '0',
   `active` tinyint(1) NOT NULL default '0',
   `attachments` tinyint(1) NOT NULL default '0',

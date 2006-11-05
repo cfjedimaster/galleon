@@ -3,9 +3,10 @@
 	Name         : conferences_edit.cfm
 	Author       : Raymond Camden 
 	Created      : June 01, 2004
-	Last Updated : July 27, 2006
+	Last Updated : November 5, 2006
 	History      : Removed mappings (rkc 8/27/05)
 				 : Simple size change (rkc 7/27/06)
+				 : Reverted description to text field (rkc 11/5/06)
 	Purpose		 : 
 --->
 
@@ -61,7 +62,7 @@
 	</tr>
 	<tr valign="top">
 		<td align="right"><b>Description:</b></td>
-		<td><textarea name="description" rows=6 cols=35 wrap="soft">#form.description#</textarea></td>
+		<td><input type="text" name="description" value="#form.description#" size="100"></td>
 	</tr>
 	<tr valign="top">
 		<td align="right"><b>Active:</b></td>
