@@ -32,6 +32,8 @@ Gifts are always welcome. ;)
 
 DB scripts updated for above, also, I forgot to add the signature column
 
+/cfcs/forums.cfc - bug in adding new forum
+
 1.7 (November 3, 2006)
 
 DB Changes:
