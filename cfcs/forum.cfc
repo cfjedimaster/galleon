@@ -49,7 +49,7 @@
 		</cfif>
 		
 		<cfquery name="newforum" datasource="#variables.dsn#">
-			insert into #variables.tableprefix#forums(id,name,description,readonly,active,conferenceidfk)
+			insert into #variables.tableprefix#forums(id,name,description,readonly,active,conferenceidfk,attachments)
 			values(<cfqueryparam value="#newid#" cfsqltype="CF_SQL_VARCHAR" maxlength="35">,
 				   <cfqueryparam value="#arguments.forum.name#" cfsqltype="CF_SQL_VARCHAR" maxlength="255">,
 				   <cfqueryparam value="#arguments.forum.description#" cfsqltype="CF_SQL_VARCHAR" maxlength="255">,
