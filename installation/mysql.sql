@@ -169,6 +169,7 @@ CREATE TABLE `galleon_users` (
   `username` varchar(50) NOT NULL default '',
   `password` varchar(50) NOT NULL default '',
   `emailaddress` varchar(255) NOT NULL default '',
+  `signature` varchar(1000) NOT NULL default '',
   `datecreated` datetime NOT NULL default '0000-00-00 00:00:00',
   `confirmed` tinyint(1) NOT NULL default '0',
   PRIMARY KEY  (`Id`)

@@ -28,7 +28,9 @@ Gifts are always welcome. ;)
 ---- LATEST VERSION ----
 1.7.001 (November 5, 2006)
 /admin/conferences_edit.cfm + forums_edit.cfm changed textareas back to test
-/ccs/conferences+forums - varchar not longvarchar for description
+/cfcs/conferences+forums - varchar not longvarchar for description
+
+DB scripts updated for above, also, I forgot to add the signature column
 
 1.7 (November 3, 2006)
 

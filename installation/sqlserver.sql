@@ -114,6 +114,7 @@ CREATE TABLE [dbo].[galleon_users] (
 	[username] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
 	[password] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
 	[emailaddress] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[signature] [nvarchar] (1000) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
 	[datecreated] [datetime] NOT NULL ,
 	[confirmed] [bit] NOT NULL 
 ) ON [PRIMARY]
