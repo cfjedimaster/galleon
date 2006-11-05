@@ -169,7 +169,7 @@ CREATE TABLE `galleon_users` (
   `username` varchar(50) NOT NULL default '',
   `password` varchar(50) NOT NULL default '',
   `emailaddress` varchar(255) NOT NULL default '',
-  `signature` varchar(1000) NOT NULL default '',
+  `signature` text NOT NULL default '',
   `datecreated` datetime NOT NULL default '0000-00-00 00:00:00',
   `confirmed` tinyint(1) NOT NULL default '0',
   PRIMARY KEY  (`Id`)
@@ -179,7 +179,7 @@ CREATE TABLE `galleon_users` (
 # Dumping data for table galleon_users
 #
 
-INSERT INTO `galleon_users` VALUES ('C189C5AC-7E9B-AEC8-1DAEEEA03A562CF0','admin','admin','admin@localhost.com','2005-01-29 12:00:00',1);
+INSERT INTO `galleon_users`(id,username,password,emailaddress,signature,datecreated,confirmed) VALUES ('C189C5AC-7E9B-AEC8-1DAEEEA03A562CF0','admin','admin','admin@localhost.com','','2005-01-29 12:00:00',1);
 
 #
 # Table structure for table galleon_users_groups

@@ -183,8 +183,8 @@ ALTER TABLE [dbo].[galleon_users] WITH NOCHECK ADD
 GO
 
 
-insert into [dbo].[galleon_users](id,username,password,emailaddress,datecreated,confirmed)
-values('AD0CD90E-07C8-CFFE-F80C5EB6688AF47A','admin','admin','admin@127.0.0.1',getDate(),1)
+insert into [dbo].[galleon_users](id,username,password,emailaddress,datecreated,confirmed,signature)
+values('AD0CD90E-07C8-CFFE-F80C5EB6688AF47A','admin','admin','admin@127.0.0.1',getDate(),1,'')
 GO
 
 insert into [dbo].[galleon_groups](id,[group])
