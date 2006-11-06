@@ -7,11 +7,11 @@ rootURL=http://127.0.0.1/forums/
 sendonpost=admin@localhost
 dbtype=sqlserver
 tableprefix=galleon_
-version=1.7.001
+version=1.7.002
 requireconfirmation=true
 title=Galleon Forums
 fullemails=true
-encryptpasswords=true
+encryptpasswords=false
 allowgravatars=true
 safeExtensions=zip,tar,jpg,gif,png,wpd,doc,pdf,xls,ppt,txt,odt
 --->
