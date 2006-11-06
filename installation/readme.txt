@@ -26,6 +26,12 @@ Gifts are always welcome. ;)
 
 
 ---- LATEST VERSION ----
+1.7.002 (November 5, 2006)
+/admin/gen_stats.cfm - added &nbsp;s to a few rows so they show nicer in Firefox when the cells are empty.
+/cfcs/settings.ini.cfm - Default to NOT encrypt passwords so default DB scripts work.
+/newpost.cfm - Error if no attachment
+
+---- ARCHIVED UPDATES ----
 1.7.001 (November 5, 2006)
 /admin/conferences_edit.cfm + forums_edit.cfm changed textareas back to test
 /cfcs/conferences+forums - varchar not longvarchar for description
@@ -90,7 +96,7 @@ and new email of full messages. Also added wrap to emails.
 /cfcs/settings.ini.cfm - added fullemails key
 
 /messages.cfm + /newposts.cfm - updated with new sizes
----- ARCHIVED UPDATES ----
+
 1.6.002 (July 21, 2006)
 DB install scripts had a bug.
 /cfcs/settings.ini.cfm - just a version change
