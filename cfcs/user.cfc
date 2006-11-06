@@ -2,7 +2,7 @@
 	Name         : user.cfc
 	Author       : Raymond Camden 
 	Created      : January 25, 2005
-	Last Updated : November 3, 2006
+	Last Updated : November 6, 2006
 	History      : Switched to UUID (rkc 1/25/05)
 				   Added subscribe (rkc 7/24/05)
 				   Added unsubscribe, modified code for adduser/saveuser (rkc 7/29/05)
@@ -11,6 +11,7 @@
 				   subscribe method didn't restrict to one user (rkc 10/6/05)
 				   require confirmation support, dynamic title (rkc 7/12/06)
 				   password encryption option, signatures (rkc 11/3/06)
+   				   if no confirmtation, set confirmation to 1 (rkc 11/6/06)
 	Purpose		 : 
 --->
 <cfcomponent displayName="User" hint="Handles all user/security issues for the application.">
@@ -73,6 +74,9 @@ To complete your registration at #variables.title#, please click on the link bel
 				<!--- hash password --->
 				<cfif variables.encryptpasswords>
 					<cfset arguments.password = hash(arguments.password)>
+				</cfif>
+				<cfif not variables.requireconfirmation>
+					<cfset arguments.confirmed = 1>
 				</cfif>
 				
 				<cfquery name="insuser" datasource="#variables.dsn#">
