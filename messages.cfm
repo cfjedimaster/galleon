@@ -3,7 +3,7 @@
 	Name         : messages.cfm
 	Author       : Raymond Camden 
 	Created      : June 10, 2004
-	Last Updated : November 3, 2006
+	Last Updated : November 6, 2006
 	History      : Support for UUID (rkc 1/27/05)
 				   Update to allow posting here (rkc 3/31/05)
 				   Fixed code that gets # of pages (rkc 4/8/05)
@@ -17,6 +17,7 @@
 				   IE cflocation bug fix, ensure logged on before posting (rkc 10/10/05)
 				   Simple size change (rkc 7/27/06)
 				   gravatar, sig, attachments (rkc 11/3/06)
+				   bug when no attachment (rkc 11/6/06)
 	Purpose		 : Displays messages for a thread
 --->
 
@@ -46,6 +47,7 @@
 <cfparam name="form.body" default="">
 <cfparam name="form.subscribe" default="true">
 <cfparam name="form.oldattachment" default="">
+<cfparam name="form.attachment" default="">
 <cfparam name="form.filename" default="">
 
 <cfif isDefined("form.post") and request.udf.isLoggedOn() and (application.utils.isUserInAnyRole("forumsadmin,forumsmoderator") or (not readonly))>
