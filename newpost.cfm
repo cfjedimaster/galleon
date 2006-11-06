@@ -3,7 +3,7 @@
 	Name         : newpost.cfm
 	Author       : Raymond Camden 
 	Created      : June 10, 2004
-	Last Updated : November 3, 2006
+	Last Updated : November 6, 2006
 	History      : Maxlength on title (rkc 8/30/04)
 				   Support for UUID (rkc 1/27/05)
 				   Now only does new threads (rkc 3/28/05)
@@ -13,6 +13,7 @@
 				   Simple size change (rkc 7/27/06)				   
 				   title fix (rkc 8/4/06)
 				   attachment support (rkc 11/3/06)
+				   error if attachments disabled (rkc 11/6/06)
 	Purpose		 : Displays form to add a thread.
 --->
 
@@ -47,6 +48,7 @@
 <cfparam name="form.body" default="">
 <cfparam name="form.subscribe" default="true">
 <cfparam name="form.oldattachment" default="">
+<cfparam name="form.attachment" default="">
 <cfparam name="form.filename" default="">
 
 <cfif isDefined("form.post") and not blockedAttempt>
