@@ -14,6 +14,7 @@
 				   make title in subjects dynamic, fix SaveMessage for moderators (rkc 7/12/06)
 				   Simple size change + new email support (rkc 7/27/06)
 				   Render moved in here - attachment support (rkc 11/3/06)
+				   Swaped render around (rkc 11/6/06)
 	Purpose		 : 
 --->
 <cfcomponent displayName="Message" hint="Handles Messages.">
@@ -319,11 +320,11 @@ You can visit this thread here:
 			</cfloop>
 		</cfif>
 		
-		<!--- turn on URLs --->
-		<cfset arguments.message = variables.utils.activeURL(arguments.message)>
-
 		<!--- now htmlecode --->
 		<cfset arguments.message = htmlEditFormat(arguments.message)>
+
+		<!--- turn on URLs --->
+		<cfset arguments.message = variables.utils.activeURL(arguments.message)>
 
 		<!--- now put those blocks back in --->
 		<cfloop index="counter" from="1" to="#arrayLen(codeBlocks)#">
