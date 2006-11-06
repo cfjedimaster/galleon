@@ -30,6 +30,7 @@ Gifts are always welcome. ;)
 /admin/gen_stats.cfm - added &nbsp;s to a few rows so they show nicer in Firefox when the cells are empty.
 /cfcs/settings.ini.cfm - Default to NOT encrypt passwords so default DB scripts work.
 /newpost.cfm - Error if no attachment
+/messages.cfm - ditto
 
 ---- ARCHIVED UPDATES ----
 1.7.001 (November 5, 2006)
