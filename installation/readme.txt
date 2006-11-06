@@ -26,13 +26,18 @@ Gifts are always welcome. ;)
 
 
 ---- LATEST VERSION ----
-1.7.002 (November 5, 2006)
+1.7.003 (November 6, 2006)
+/cfcs/settings.ini.cfm - Version only.
+/user.cfc - if no confirmation required, set confirmation to 1
+/message.cfc - I broke activateURL support, fixed now 
+
+---- ARCHIVED UPDATES ----
+1.7.002 (November 6, 2006)
 /admin/gen_stats.cfm - added &nbsp;s to a few rows so they show nicer in Firefox when the cells are empty.
 /cfcs/settings.ini.cfm - Default to NOT encrypt passwords so default DB scripts work.
 /newpost.cfm - Error if no attachment
 /messages.cfm - ditto
 
----- ARCHIVED UPDATES ----
 1.7.001 (November 5, 2006)
 /admin/conferences_edit.cfm + forums_edit.cfm changed textareas back to test
 /cfcs/conferences+forums - varchar not longvarchar for description
