@@ -3,8 +3,8 @@
 	Name         : gen_stats.cfm
 	Author       : Raymond Camden 
 	Created      : August 28, 2005
-	Last Updated : 
-	History      : 
+	Last Updated : November 6, 2006
+	History      : Added a few &nbsp; (rkc 11/6/06)
 	Purpose		 : general stats used both on home page and stats
 --->
 
@@ -50,11 +50,11 @@ from	messages
 </tr>
 <tr>
 	<td><b>First Post:</b></td>
-	<td>#dateFormat(getMinPost.earliestPost, "m/d/yy")# #timeFormat(getMinPost.earliestPost, "h:mm tt")#</td>
+	<td>#dateFormat(getMinPost.earliestPost, "m/d/yy")# #timeFormat(getMinPost.earliestPost, "h:mm tt")#&nbsp;</td>
 </tr>
 <tr>
 	<td><b>Last Post:</b></td>
-	<td>#dateFormat(getMaxPost.lastPost, "m/d/yy")# #timeFormat(getMaxPost.lastPost, "h:mm tt")#</td>
+	<td>#dateFormat(getMaxPost.lastPost, "m/d/yy")# #timeFormat(getMaxPost.lastPost, "h:mm tt")#&nbsp;</td>
 </tr>
 <tr>
 	<td><b>Number of Users:</b></td>
