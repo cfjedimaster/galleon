@@ -2,7 +2,7 @@
 	Name         : message.cfc
 	Author       : Raymond Camden 
 	Created      : October 21, 2004
-	Last Updated : November 3, 2006
+	Last Updated : November 9, 2006
 	History      : We now check sendonpost to see if we notify admin on posts (rkc 10/21/04)
 				   The email sent to admins now cotain forum/conference name. (rkc 2/11/05)
 				   Was calling util.throw, not utils (rkc 3/31/05)
@@ -15,6 +15,7 @@
 				   Simple size change + new email support (rkc 7/27/06)
 				   Render moved in here - attachment support (rkc 11/3/06)
 				   Swaped render around (rkc 11/6/06)
+				   Don't send email twice to admin, slight email tweaks (rkc 11/9/06)
 	Purpose		 : 
 --->
 <cfcomponent displayName="Message" hint="Handles Messages.">
@@ -62,6 +63,7 @@
 		<cfset var getInterestedFolks = "">
 		<cfset var thread = "">
 		<cfset var newid = createUUID()>
+		<cfset var notifiedList = "">
 		
 		<!--- First see if we can add a message. Because roles= doesn't allow for OR, we use a UDF --->
 		<cfif not variables.utils.isUserInAnyRole("forumsadmin,forumsmoderator,forumsmember")>
@@ -138,13 +140,13 @@
 		</cfquery>
 
 		<!--- get everyone in the thread who wants posts --->
-		<cfset notifySubscribers(arguments.threadid, tmpThread.name, arguments.forumid, variables.user.getUserID(arguments.username),arguments.message.body)>
+		<cfset notifiedList = notifySubscribers(arguments.threadid, tmpThread.name, arguments.forumid, variables.user.getUserID(arguments.username),arguments.message.body)>
 		
-		<cfif structKeyExists(variables.settings,"sendonpost") and len(variables.settings.sendonpost)>
+		<cfif structKeyExists(variables.settings,"sendonpost") and len(variables.settings.sendonpost) and not listFindNoCase(notifiedList, variables.settings.sendOnPost)>
 			<cfmail to="#variables.settings.sendonpost#" from="#variables.settings.fromAddress#" 
 					subject="#variables.settings.title# Notification: Post to #tmpThread.name#">
 Title:		#arguments.message.title#
-Thread: 		#tmpThread.name#
+Thread: 	#tmpThread.name#
 Forum:		#forum.name#
 Conference:	#tmpConference.name#
 User:		#arguments.username#
@@ -237,7 +239,7 @@ User:		#arguments.username#
 			
 	</cffunction>
 	
-	<cffunction name="notifySubscribers" access="private" returnType="void" output="false"
+	<cffunction name="notifySubscribers" access="private" returnType="string" output="false"
 				hint="Emails subscribers about a new post.">
 		<cfargument name="threadid" type="uuid" required="true">
 		<cfargument name="threadname" type="string" required="true">
@@ -266,12 +268,16 @@ User:		#arguments.username#
 		<cfif subscribers.recordCount>
 			<cfmail query="subscribers" subject="#variables.settings.title# Notification: Post to #arguments.threadname#" from="#variables.settings.fromAddress#" to="#emailaddress#">
 A post has been made to a thread, forum, or conference that you are subscribed to.
-You may change your subscription preferences by updating your profile.
-You can visit this thread here:
+You can change your subscription preferences by updating your profile.
+You can visit the thread here:
 
 #variables.settings.rootURL#messages.cfm?threadid=#arguments.threadid#
 
+Conference:	#conference.name#
+Forum: 	#forum.name#
+Thread: 	#arguments.threadname#
 <cfif variables.settings.fullemails>
+Message:
 #wrap(arguments.body,80)#
 </cfif>
 
@@ -280,6 +286,7 @@ You can visit this thread here:
 
 		</cfif>
 		
+		<cfreturn valueList(subscribers.emailaddress)>
 	</cffunction>
 	
 	<cffunction name="render" access="public" returnType="string" roles="" output="false"
