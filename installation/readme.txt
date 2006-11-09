@@ -30,6 +30,7 @@ Gifts are always welcome. ;)
 /cfcs/settings.ini.cfm - Version only.
 /message.cfc - In the past, if the sendOnPost person was subscribed to a thread, s/he would get 2 emails per post. Now you only get one.
 I also tweaked the message sent to subscribers a bit. I added the Conference/Forum/Thread Name to the body.
+/pagetemplates/main_footer.cfm - Changed footer link to riaforge.
 
 ---- ARCHIVED UPDATES ----
 1.7.003 (November 6, 2006)
