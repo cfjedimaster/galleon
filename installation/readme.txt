@@ -26,12 +26,17 @@ Gifts are always welcome. ;)
 
 
 ---- LATEST VERSION ----
+1.7.004 (November 9, 2006)
+/cfcs/settings.ini.cfm - Version only.
+/message.cfc - In the past, if the sendOnPost person was subscribed to a thread, s/he would get 2 emails per post. Now you only get one.
+I also tweaked the message sent to subscribers a bit. I added the Conference/Forum/Thread Name to the body.
+
+---- ARCHIVED UPDATES ----
 1.7.003 (November 6, 2006)
 /cfcs/settings.ini.cfm - Version only.
 /user.cfc - if no confirmation required, set confirmation to 1
 /message.cfc - I broke activateURL support, fixed now 
 
----- ARCHIVED UPDATES ----
 1.7.002 (November 6, 2006)
 /admin/gen_stats.cfm - added &nbsp;s to a few rows so they show nicer in Firefox when the cells are empty.
 /cfcs/settings.ini.cfm - Default to NOT encrypt passwords so default DB scripts work.
