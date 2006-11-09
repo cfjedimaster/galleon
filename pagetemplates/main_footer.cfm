@@ -21,7 +21,7 @@
 <tr>
 	<td colspan="2">
 	<p class="footer">
-	<a href="http://ray.camdenfamily.com/projects/galleon">Galleon Forums V#application.settings.version#</a> was created by <a href="http://ray.camdenfamily.com">Raymond Camden</a>
+	<a href="http://galleon.riaforge.org">Galleon Forums V#application.settings.version#</a> was created by <a href="http://ray.camdenfamily.com">Raymond Camden</a>
 	</p>
 	</td>
 </tr>
