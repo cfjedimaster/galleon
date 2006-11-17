@@ -2,7 +2,7 @@
 	Name         : message.cfc
 	Author       : Raymond Camden 
 	Created      : October 21, 2004
-	Last Updated : November 9, 2006
+	Last Updated : November 16, 2006
 	History      : We now check sendonpost to see if we notify admin on posts (rkc 10/21/04)
 				   The email sent to admins now cotain forum/conference name. (rkc 2/11/05)
 				   Was calling util.throw, not utils (rkc 3/31/05)
@@ -16,6 +16,7 @@
 				   Render moved in here - attachment support (rkc 11/3/06)
 				   Swaped render around (rkc 11/6/06)
 				   Don't send email twice to admin, slight email tweaks (rkc 11/9/06)
+				   Fix up the deletion of attachments (rkc 11/16/06)
 	Purpose		 : 
 --->
 <cfcomponent displayName="Message" hint="Handles Messages.">
@@ -184,7 +185,7 @@ User:		#arguments.username#
 			where	id = <cfqueryparam value="#arguments.id#" cfsqltype="CF_SQL_VARCHAR" maxlength="35">
 		</cfquery>
 		
-		<cfif q.filename>
+		<cfif len(q.filename) and fileExists("#variables.attachmentdir#/#q.filename#")>
 			<cffile action="delete" file="#variables.attachmentdir#/#q.filename#">
 		</cfif>
 		
