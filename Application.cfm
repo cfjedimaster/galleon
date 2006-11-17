@@ -3,13 +3,14 @@
 	Name         : Application.cfm
 	Author       : Raymond Camden 
 	Created      : June 01, 2004
-	Last Updated : November 3, 2006
+	Last Updated : November 16, 2006
 	History      : Don't load app.cfc, load galleon.cfc. Also pass settings to messages. (rkc 7/14/05)
 				   Make app name dynamic. Remove mapping (rkc 8/27/05)
 				   Support for sorting, errors (rkc 9/15/05)
 				   Better admin check, logout fix (rkc 7/12/06)
 				   Even better admin check, really (rkc 7/18/06)
 				   BD fix, attachment folder (rkc 11/3/06)
+				   Fix for getting attachment dir (rkc 11/16/06)
 	Purpose		 : 
 --->
 
@@ -41,9 +42,9 @@ folder. See: http://ray.camdenfamily.com/index.cfm/2005/9/21/Galleon-Issue-with-
 	<!--- Get main settings --->
 	<cfinvoke component="cfcs.galleon" method="getSettings" returnVariable="settings">
 	<cfset application.settings = settings>
-	
-	<cfset application.settings.attachmentdir = expandPath("./attachments")>
-	
+
+	<cfset application.settings.attachmentdir = getDirectoryFromPath(getCurrentTemplatePath()) & "attachments">
+
 	<cfif not directoryExists(application.settings.attachmentdir)>
 		<cfdirectory action="create" directory="#application.settings.attachmentdir#">
 	</cfif>
