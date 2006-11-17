@@ -26,11 +26,16 @@ Gifts are always welcome. ;)
 
 
 ---- LATEST VERSION ----
+1.7.006 (November 16, 2006)
+/cfcs/message.cfc - fix two bugs related to deleting of messages
+/cfcs/settings.ini.cfm - Version only.
+/Attachment.cfm - fix code that figures out attachment folder 
+
+---- ARCHIVED UPDATES ----
 1.7.005 (November 14, 2006)
 /cfcs/settings.ini.cfm - Version only.
 /message_edit.cfm - error when attachments weren't enabled
 
----- ARCHIVED UPDATES ----
 1.7.004 (November 9, 2006)
 /cfcs/settings.ini.cfm - Version only.
 /message.cfc - In the past, if the sendOnPost person was subscribed to a thread, s/he would get 2 emails per post. Now you only get one.
