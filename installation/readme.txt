@@ -26,12 +26,16 @@ Gifts are always welcome. ;)
 
 
 ---- LATEST VERSION ----
+1.7.007 (December 5, 2006)
+/cfcs/message.cfc - Slight change to emails sent out - it now includes the username
+/cfcs/settings.ini.cfm - Version only.
+
+---- ARCHIVED UPDATES ----
 1.7.006 (November 16, 2006)
 /cfcs/message.cfc - fix two bugs related to deleting of messages
 /cfcs/settings.ini.cfm - Version only.
 /Attachment.cfm - fix code that figures out attachment folder 
 
----- ARCHIVED UPDATES ----
 1.7.005 (November 14, 2006)
 /cfcs/settings.ini.cfm - Version only.
 /message_edit.cfm - error when attachments weren't enabled
