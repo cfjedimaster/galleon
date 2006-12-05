@@ -2,7 +2,7 @@
 	Name         : message.cfc
 	Author       : Raymond Camden 
 	Created      : October 21, 2004
-	Last Updated : November 16, 2006
+	Last Updated : December 5, 2006
 	History      : We now check sendonpost to see if we notify admin on posts (rkc 10/21/04)
 				   The email sent to admins now cotain forum/conference name. (rkc 2/11/05)
 				   Was calling util.throw, not utils (rkc 3/31/05)
@@ -17,6 +17,7 @@
 				   Swaped render around (rkc 11/6/06)
 				   Don't send email twice to admin, slight email tweaks (rkc 11/9/06)
 				   Fix up the deletion of attachments (rkc 11/16/06)
+				   Slight change to emails sent out - send the username as well (rkc 12/5/6)
 	Purpose		 : 
 --->
 <cfcomponent displayName="Message" hint="Handles Messages.">
@@ -251,6 +252,8 @@ User:		#arguments.username#
 		<cfset var conference = variables.conference.getConference(forum.conferenceidfk)>
 		<cfset var subscribers = "">
 		
+		<cfset var username = variables.user.getUser(variables.user.getUsernameFromId(arguments.userid)).username>
+		
 		<!--- 
 			  In order to get our subscribers, we need to get the forum and conference for the thread.
 			  Then - anyone who is subscribed to ANY of those guys will get notified, unless the person 
@@ -274,9 +277,10 @@ You can visit the thread here:
 
 #variables.settings.rootURL#messages.cfm?threadid=#arguments.threadid#
 
-Conference:	#conference.name#
-Forum: 	#forum.name#
-Thread: 	#arguments.threadname#
+Conference: #conference.name#
+Forum:      #forum.name#
+Thread:     #arguments.threadname#
+User:       #username#
 <cfif variables.settings.fullemails>
 Message:
 #wrap(arguments.body,80)#
@@ -350,8 +354,8 @@ Message:
 		<cfset var msg = "">
 		
 		<cfsavecontent variable="msg">
-No HTML is allowed in your message. 
-You may include code in your message by surrounding with these tags: [code] [/code].
+All URLs will be automatically linked. No HTML is allowed in your message.<br />
+You may include code in your message by surrounding with these tags: [code] [/code].<br />
 		</cfsavecontent>
 		
 		<cfreturn msg>	
