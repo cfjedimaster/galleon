@@ -26,11 +26,17 @@ Gifts are always welcome. ;)
 
 
 ---- LATEST VERSION ----
+1.7.008 (December 8, 2006)
+/admin/gen_stats.cfm - I changed how I got stats. It breaks encapsulation, but it is 10 times faster.
+/admin/stats_charts.cfm - ditto above
+/cfcs/message.cfc - Support for [img]. Idea taken from Rick Root's CFMBB
+/cfcs/settings.ini.cfm - Version only.
+
+---- ARCHIVED UPDATES ----
 1.7.007 (December 5, 2006)
 /cfcs/message.cfc - Slight change to emails sent out - it now includes the username
 /cfcs/settings.ini.cfm - Version only.
 
----- ARCHIVED UPDATES ----
 1.7.006 (November 16, 2006)
 /cfcs/message.cfc - fix two bugs related to deleting of messages
 /cfcs/settings.ini.cfm - Version only.
