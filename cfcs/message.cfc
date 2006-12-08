@@ -2,7 +2,7 @@
 	Name         : message.cfc
 	Author       : Raymond Camden 
 	Created      : October 21, 2004
-	Last Updated : December 5, 2006
+	Last Updated : December 8, 2006
 	History      : We now check sendonpost to see if we notify admin on posts (rkc 10/21/04)
 				   The email sent to admins now cotain forum/conference name. (rkc 2/11/05)
 				   Was calling util.throw, not utils (rkc 3/31/05)
@@ -18,6 +18,7 @@
 				   Don't send email twice to admin, slight email tweaks (rkc 11/9/06)
 				   Fix up the deletion of attachments (rkc 11/16/06)
 				   Slight change to emails sent out - send the username as well (rkc 12/5/6)
+				   Support for [img] (rkc 12/8/06)
 	Purpose		 : 
 --->
 <cfcomponent displayName="Message" hint="Handles Messages.">
@@ -304,6 +305,9 @@ Message:
 		<cfset var result = "">
 		<cfset var newbody = "">
 		<cfset var codeBlocks = arrayNew(1)>
+		<cfset var imgBlocks = arrayNew(1)>
+		<cfset var imgblock = "">
+		<cfset var imgportion = "">
 		
 		<!--- Add Code Support --->
 		<cfif findNoCase("[code]",arguments.message) and findNoCase("[/code]",arguments.message)>
@@ -318,13 +322,33 @@ Message:
 						<cfset result = "">
 					</cfif>
 					
-					<!---
-					<cfset newbody = mid(arguments.message, 1, codeblock.len[2]) & result & mid(arguments.message,codeblock.pos[6],codeblock.len[6])>
-					--->
 					<cfset arrayAppend(codeBlocks,result)>
 					<cfset newbody = mid(arguments.message, 1, codeblock.len[2]) & "****CODEBLOCK:#arrayLen(codeBlocks)#:KCOLBEDOC****" & mid(arguments.message,codeblock.pos[6],codeblock.len[6])>
                     <cfset arguments.message = newbody>
 					<cfset counter = findNoCase("[code]",arguments.message,counter)>
+				<cfelse>
+					<!--- bad crap, maybe <code> and no ender, or maybe </code><code> --->
+					<cfset counter = 0>
+				</cfif>
+			</cfloop>
+		</cfif>
+
+		<cfif findNoCase("[img]",arguments.message) and findNoCase("[/img]",arguments.message)>
+			<cfset counter = findNoCase("[img]",arguments.message)>
+			<cfloop condition="counter gte 1">
+                <cfset imgblock = reFindNoCase("(?s)(.*)(\[img\])(.*)(\[/img\])(.*)",arguments.message,1,1)> 
+				<cfif arrayLen(imgblock.len) gte 6>
+                    <cfset imgportion = mid(arguments.message, imgblock.pos[4], imgblock.len[4])>
+                    <cfif len(trim(imgportion))>
+						<cfset result = "<img src=""#imgportion#"">">
+					<cfelse>
+						<cfset result = "">
+					</cfif>
+					
+					<cfset arrayAppend(imgBlocks,result)>
+					<cfset newbody = mid(arguments.message, 1, imgblock.len[2]) & "****IMGBLOCK:#arrayLen(imgBlocks)#:KCOLBGMI****" & mid(arguments.message,imgblock.pos[6],imgblock.len[6])>
+                    <cfset arguments.message = newbody>
+					<cfset counter = findNoCase("[img]",arguments.message,counter)>
 				<cfelse>
 					<!--- bad crap, maybe <code> and no ender, or maybe </code><code> --->
 					<cfset counter = 0>
@@ -342,6 +366,9 @@ Message:
 		<cfloop index="counter" from="1" to="#arrayLen(codeBlocks)#">
 			<cfset arguments.message = replace(arguments.message,"****CODEBLOCK:#counter#:KCOLBEDOC****", codeBlocks[counter])>
 		</cfloop>
+		<cfloop index="counter" from="1" to="#arrayLen(imgBlocks)#">
+			<cfset arguments.message = replace(arguments.message,"****IMGBLOCK:#counter#:KCOLBGMI****", imgBlocks[counter])>
+		</cfloop>
 		
 		<!--- add Ps --->
 		<cfset arguments.message = variables.utils.paragraphFormat2(arguments.message)>
@@ -355,7 +382,8 @@ Message:
 		
 		<cfsavecontent variable="msg">
 All URLs will be automatically linked. No HTML is allowed in your message.<br />
-You may include code in your message by surrounding with these tags: [code] [/code].<br />
+You may include code in your message like so: [code]...[/code].<br />
+You may include an image in your message like so: [img]url[/img].<br />
 		</cfsavecontent>
 		
 		<cfreturn msg>	
