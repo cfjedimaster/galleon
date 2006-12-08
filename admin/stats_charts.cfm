@@ -2,10 +2,23 @@
 	Name         : stats_charts.cfm
 	Author       : Raymond Camden 
 	Created      : August 30, 2004
-	Last Updated : 
-	History      : 
+	Last Updated : December 8, 2006
+	History      : Slight change to how I get data (rkc 12/8/06)
 	Purpose		 : 
 --->
+
+<cfquery name="conferences" datasource="#application.settings.dsn#">
+select	id, name
+from	#application.settings.tableprefix#conferences
+</cfquery>
+
+<cfquery name="forums" datasource="#application.settings.dsn#">
+select	id, name, conferenceidfk
+from	#application.settings.tableprefix#forums
+</cfquery>
+
+<cfset threads = application.thread.getThreads()>
+<cfset users = application.user.getUsers()>
 
 <cfoutput>
 <p>
@@ -19,9 +32,17 @@
 			 labelformat="number" tipstyle="mouseOver" pieslicestyle="sliced">
 		<cfchartseries type="pie">
 			<cfloop query="conferences">
-			
-				<cfset fCount = application.forum.getForums(conferenceid=id).recordCount>
-				<cfchartdata item="#name#" value="#fCount#">
+				<cfquery name="fcount" dbtype="query">
+				select	count(id) as total
+				from	forums
+				where	conferenceidfk = '#id#'
+				</cfquery>
+				<cfif fcount.total is "">
+					<cfset total = 0>
+				<cfelse>
+					<cfset total = fcount.total>
+				</cfif>
+				<cfchartdata item="#name#" value="#total#">
 			</cfloop>
 		</cfchartseries>
 	</cfchart>
@@ -41,8 +62,17 @@
 			 labelformat="number" tipstyle="mouseOver" pieslicestyle="sliced">
 		<cfchartseries type="pie">
 			<cfloop query="forums">			
-				<cfset fCount = application.thread.getThreads(forumid=id).recordCount>
-				<cfchartdata item="#name#" value="#fCount#">
+				<cfquery name="fcount" dbtype="query">
+				select	count(id) as total
+				from	threads
+				where	forumidfk = '#id#'
+				</cfquery>
+				<cfif fcount.total is "">
+					<cfset total = 0>
+				<cfelse>
+					<cfset total = fcount.total>
+				</cfif>
+				<cfchartdata item="#name#" value="#total#">
 			</cfloop>
 		</cfchartseries>
 	</cfchart>
