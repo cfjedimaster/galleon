@@ -3,7 +3,7 @@
 	Name         : messages.cfm
 	Author       : Raymond Camden 
 	Created      : June 10, 2004
-	Last Updated : November 6, 2006
+	Last Updated : December 18, 2006
 	History      : Support for UUID (rkc 1/27/05)
 				   Update to allow posting here (rkc 3/31/05)
 				   Fixed code that gets # of pages (rkc 4/8/05)
@@ -18,6 +18,7 @@
 				   Simple size change (rkc 7/27/06)
 				   gravatar, sig, attachments (rkc 11/3/06)
 				   bug when no attachment (rkc 11/6/06)
+				   lcase the hash for gravatar (rkc 12/18/06)
 	Purpose		 : Displays messages for a thread
 --->
 
@@ -161,7 +162,7 @@
 				<td width="170" class="tableMessageCell" rowspan="2"><b>#username#</b><br>
 				#uInfo.rank#<br>
 				<cfif application.settings.allowgravatars>
-				<img src="http://www.gravatar.com/avatar.php?gravatar_id=#hash(uinfo.emailaddress)#&amp;rating=PG&amp;size=80&amp;default=#application.settings.rooturl#/images/gravatar.gif" alt="#username#'s Gravatar" border="0">
+				<img src="http://www.gravatar.com/avatar.php?gravatar_id=#lcase(hash(uinfo.emailaddress))#&amp;rating=PG&amp;size=80&amp;default=#application.settings.rooturl#/images/gravatar.gif" alt="#username#'s Gravatar" border="0">
 				</cfif>
 				<br>
 				<b>Joined:</b> #dateFormat(uInfo.dateCreated,"mm/dd/yy")#<br>
