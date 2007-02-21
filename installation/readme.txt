@@ -26,11 +26,24 @@ Gifts are always welcome. ;)
 
 
 ---- LATEST VERSION ----
+1.7.010 (December 18, 2006)
+/messages.cfm - use renderMessage, not render (BlueDragon fix)
+/login.cfm - param a few form fields I assumed existed
+/Application.cfm - Use Factory - all factory code written by Rob Gonda
+/includes/udf.cfm - renamed querysort udf (BD fix)
+/stylesheets/style.css - style blockquote
+
+Please note all CFCs updated to use the factory. I was lazy and didn't update the top headers to reflect the new dates.
+/cfcs/message.cfc - use renderMessage, not render (BlueDragon fix)
+/cfcs/message.cfc - When emailing, remove [code], [img] tags. I keep the insides, not the tags.
+/cfcs/message.cfc - Add quote
+/cfcs/settings.ini.cfm - Version only.
+
+---- ARCHIVED UPDATES ----
 1.7.009 (December 18, 2006)
 /messages.cfm - lowercase the hash for gravatar
 /cfcs/settings.ini.cfm - Version only.
 
----- ARCHIVED UPDATES ----
 1.7.008 (December 8, 2006)
 /admin/gen_stats.cfm - I changed how I got stats. It breaks encapsulation, but it is 10 times faster.
 /admin/stats_charts.cfm - ditto above
