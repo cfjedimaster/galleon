@@ -23,18 +23,24 @@
 	<cfset variables.title = "">
 	<cfset variables.encryptpasswords = false>
 	
-	<cfset variables.utils = createObject("component","utils")>
 
 	<cffunction name="init" access="public" returnType="user" output="false"
 				hint="Returns an instance of the CFC initialized with the correct DSN.">
-		<cfargument name="settings" type="struct" required="true" hint="Setting">
+		<cfargument name="settings" required="true" hint="Setting">
+		<cfargument name="utils" required="true" hint="utils">
 		
-		<cfset variables.dsn = arguments.settings.dsn>
-		<cfset variables.dbtype = arguments.settings.dbtype>
-		<cfset variables.tableprefix = arguments.settings.tableprefix>
-		<cfset variables.requireconfirmation = arguments.settings.requireconfirmation>
-		<cfset variables.title = arguments.settings.title>
-		<cfset variables.encryptpasswords = arguments.settings.encryptpasswords>
+		<cfset var cfg = arguments.settings.getSettings() />
+		
+		<cfset variables.dsn = cfg.dsn>
+		<cfset variables.dbtype = cfg.dbtype>
+		<cfset variables.tableprefix = cfg.tableprefix>
+		<cfset variables.requireconfirmation = cfg.requireconfirmation>
+		<cfset variables.title = cfg.title>
+		<cfset variables.fromAddress = cfg.fromAddress>
+		<cfset variables.rooturl = cfg.rooturl>
+		<cfset variables.encryptpasswords = cfg.encryptpasswords>
+		
+		<cfset variables.utils = arguments.utils />
 		<cfreturn this>
 		
 	</cffunction>

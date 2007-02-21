@@ -20,17 +20,17 @@
 	<cfset variables.tableprefix = "">
 	<cfset variables.settings = "">
 	
-	<cfset variables.utils = createObject("component","utils")>
-		
 	<cffunction name="init" access="public" returnType="thread" output="false"
 				hint="Returns an instance of the CFC initialized with the correct DSN.">
-		<cfargument name="settings" type="struct" required="true" hint="Setting">
+		<cfargument name="settings" required="true" hint="Setting">
+		<cfargument name="utils" required="true" hint="utils">
 				
-		<cfset variables.dsn = arguments.settings.dsn>
-		<cfset variables.dbtype = arguments.settings.dbtype>
-		<cfset variables.tableprefix = arguments.settings.tableprefix>
+		<cfset variables.dsn = arguments.settings.getSettings().dsn />
+		<cfset variables.dbtype = arguments.settings.getSettings().dbtype />
+		<cfset variables.tableprefix = arguments.settings.getSettings().tableprefix />
 		<!--- keep a global copy to pass later on --->
-		<cfset variables.settings = arguments.settings>
+		<cfset variables.settings = arguments.settings.getSettings() />
+		<cfset variables.utils = arguments.utils />
 		
 		<cfreturn this>
 		
