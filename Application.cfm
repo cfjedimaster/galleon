@@ -3,7 +3,7 @@
 	Name         : Application.cfm
 	Author       : Raymond Camden 
 	Created      : June 01, 2004
-	Last Updated : November 16, 2006
+	Last Updated : February 21, 2007
 	History      : Don't load app.cfc, load galleon.cfc. Also pass settings to messages. (rkc 7/14/05)
 				   Make app name dynamic. Remove mapping (rkc 8/27/05)
 				   Support for sorting, errors (rkc 9/15/05)
@@ -11,6 +11,7 @@
 				   Even better admin check, really (rkc 7/18/06)
 				   BD fix, attachment folder (rkc 11/3/06)
 				   Fix for getting attachment dir (rkc 11/16/06)
+				   Use Factory (thanks Rob Gonda) (rkc 2/21/07)
 	Purpose		 : 
 --->
 
@@ -38,10 +39,12 @@ folder. See: http://ray.camdenfamily.com/index.cfm/2005/9/21/Galleon-Issue-with-
 <cfif not isDefined("application.init") or isDefined("url.reinit")>
 
 	<cfset structDelete(application, "userCache")>
+
+	<!--- get user CFC --->
+	<cfset application.factory = createObject("component","cfcs.objectFactory").init()>
 	
 	<!--- Get main settings --->
-	<cfinvoke component="cfcs.galleon" method="getSettings" returnVariable="settings">
-	<cfset application.settings = settings>
+	<cfset application.settings = application.factory.getInstance('galleonSettings').getSettings()>
 
 	<cfset application.settings.attachmentdir = getDirectoryFromPath(getCurrentTemplatePath()) & "attachments">
 
@@ -50,25 +53,25 @@ folder. See: http://ray.camdenfamily.com/index.cfm/2005/9/21/Galleon-Issue-with-
 	</cfif>
 	
 	<!--- get user CFC --->
-	<cfset application.user = createObject("component","cfcs.user").init(application.settings)>
+	<cfset application.user = application.factory.getInstance('user')>
 
 	<!--- get utils CFC --->
-	<cfset application.utils = createObject("component","cfcs.utils")>
+	<cfset application.utils = application.factory.getInstance('utils')>
 		
 	<!--- get conference CFC --->
-	<cfset application.conference = createObject("component","cfcs.conference").init(application.settings)>
+	<cfset application.conference = application.factory.getInstance('conference')>
 	
 	<!--- get forum CFC --->
-	<cfset application.forum = createObject("component","cfcs.forum").init(application.settings)>
+	<cfset application.forum = application.factory.getInstance('forum')>
 
 	<!--- get thread CFC --->
-	<cfset application.thread = createObject("component","cfcs.thread").init(application.settings)>
+	<cfset application.thread = application.factory.getInstance('thread')>
 
 	<!--- get message CFC --->
-	<cfset application.message = createObject("component","cfcs.message").init(application.settings)>
+	<cfset application.message = application.factory.getInstance('message')>
 
 	<!--- get rank CFC --->
-	<cfset application.rank = createObject("component","cfcs.rank").init(application.settings)>
+	<cfset application.rank = application.factory.getInstance('rank')>
 
 	<cfset application.init = true>
 	
