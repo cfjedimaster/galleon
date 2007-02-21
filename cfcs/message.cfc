@@ -26,25 +26,27 @@
 	<cfset variables.dsn = "">
 	<cfset variables.dbtype = "">
 	<cfset variables.tableprefix = "">
-
-	<cfset variables.utils = createObject("component","utils")>
 		
 	<cffunction name="init" access="public" returnType="message" output="false"
 				hint="Returns an instance of the CFC initialized with the correct DSN.">
 		<cfargument name="settings" type="struct" required="true" hint="Setting">
+		<cfargument name="thread" required="true" hint="thread" />
+		<cfargument name="forum" required="true" hint="forum" />
+		<cfargument name="conference" required="true" hint="conference" />
+		<cfargument name="user" required="true" hint="user" />
+		<cfargument name="utils" required="true" hint="utils" />
+		
+		<cfset variables.dsn = arguments.settings.getSettings().dsn>
+		<cfset variables.dbtype = arguments.settings.getSettings().dbtype>
+		<cfset variables.tableprefix = arguments.settings.getSettings().tableprefix>
 
-		<cfset variables.dsn = arguments.settings.dsn>
-		<cfset variables.dbtype = arguments.settings.dbtype>
-		<cfset variables.tableprefix = arguments.settings.tableprefix>
-		<cfset variables.attachmentdir = arguments.settings.attachmentdir>
-		
-		<cfset variables.thread = createObject("component","thread").init(arguments.settings)>
-		<cfset variables.forum = createObject("component","forum").init(arguments.settings)>
-		<cfset variables.conference = createObject("component","conference").init(arguments.settings)>
-		<cfset variables.user = createObject("component","user").init(arguments.settings)>
-		<cfset variables.utils = createObject("component","utils")>
-		
-		<cfset variables.settings = arguments.settings>
+		<cfset variables.thread = arguments.thread />
+		<cfset variables.forum = arguments.forum />
+		<cfset variables.conference = arguments.conference />
+		<cfset variables.user = arguments.user />
+		<cfset variables.utils = arguments.utils />
+
+		<cfset variables.settings = arguments.settings.getSettings()>
 		
 		<cfreturn this>
 		
@@ -295,7 +297,7 @@ Message:
 		<cfreturn valueList(subscribers.emailaddress)>
 	</cffunction>
 	
-	<cffunction name="render" access="public" returnType="string" roles="" output="false"
+	<cffunction name="renderMessage" access="public" returnType="string" roles="" output="false"
 				hint="This is used to render messages. Handles all string manipulations.">
 		<cfargument name="message" type="string" required="true">
 		<cfset var counter = "">
