@@ -3,7 +3,7 @@
 	Name         : messages.cfm
 	Author       : Raymond Camden 
 	Created      : June 10, 2004
-	Last Updated : December 18, 2006
+	Last Updated : February 21, 2007
 	History      : Support for UUID (rkc 1/27/05)
 				   Update to allow posting here (rkc 3/31/05)
 				   Fixed code that gets # of pages (rkc 4/8/05)
@@ -19,6 +19,7 @@
 				   gravatar, sig, attachments (rkc 11/3/06)
 				   bug when no attachment (rkc 11/6/06)
 				   lcase the hash for gravatar (rkc 12/18/06)
+				   Use renderMessage, bd fix (rkc 2/21/07)
 	Purpose		 : Displays messages for a thread
 --->
 
@@ -177,7 +178,7 @@
 					<!---
 					#request.udf.paragraphFormat2(request.udf.activateURL(body))#
 					--->
-					#application.message.render(body)#
+					#application.message.renderMessage(body)#
 					
 					<cfif len(uinfo.signature)><div class="signature">#uinfo.signature#</div></cfif>
 					
