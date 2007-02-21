@@ -69,6 +69,7 @@
 		<cfset var thread = "">
 		<cfset var newid = createUUID()>
 		<cfset var notifiedList = "">
+		<cfset var body = "">
 		
 		<!--- First see if we can add a message. Because roles= doesn't allow for OR, we use a UDF --->
 		<cfif not variables.utils.isUserInAnyRole("forumsadmin,forumsmoderator,forumsmember")>
@@ -144,10 +145,16 @@
 				   )
 		</cfquery>
 
+		<!--- Do clean up of special layout. I may need to abstract this later. --->
+		<cfset body = reReplaceNoCase(arguments.message.body, "\[/{0,1}code\]", "", "all")>
+		<cfset body = reReplaceNoCase(body, "\[/{0,1}img\]", "", "all")>
+		<cfset body = reReplaceNoCase(body, "\[/{0,1}quote.*?\]", "", "all")>
+
 		<!--- get everyone in the thread who wants posts --->
-		<cfset notifiedList = notifySubscribers(arguments.threadid, tmpThread.name, arguments.forumid, variables.user.getUserID(arguments.username),arguments.message.body)>
+		<cfset notifiedList = notifySubscribers(arguments.threadid, tmpThread.name, arguments.forumid, variables.user.getUserID(arguments.username),body)>
 		
 		<cfif structKeyExists(variables.settings,"sendonpost") and len(variables.settings.sendonpost) and not listFindNoCase(notifiedList, variables.settings.sendOnPost)>
+		
 			<cfmail to="#variables.settings.sendonpost#" from="#variables.settings.fromAddress#" 
 					subject="#variables.settings.title# Notification: Post to #tmpThread.name#">
 Title:		#arguments.message.title#
@@ -156,7 +163,7 @@ Forum:		#forum.name#
 Conference:	#tmpConference.name#
 User:		#arguments.username#
 
-#wrap(arguments.message.body,80)#
+#wrap(body,80)#
 			
 #variables.settings.rootURL#messages.cfm?threadid=#arguments.threadid#
 			</cfmail>
@@ -308,6 +315,11 @@ Message:
 		<cfset var newbody = "">
 		<cfset var codeBlocks = arrayNew(1)>
 		<cfset var imgBlocks = arrayNew(1)>
+		<cfset var quoteBlocks = arrayNew(1)>
+		<cfset var quoteportion = "">
+		<cfset var quotename = "">
+		<cfset var quotetag = "">
+		
 		<cfset var imgblock = "">
 		<cfset var imgportion = "">
 		
@@ -357,6 +369,39 @@ Message:
 				</cfif>
 			</cfloop>
 		</cfif>
+
+		<cfif reFindNoCase("[quote.*?]",arguments.message) and findNoCase("[/quote]",arguments.message)>
+			<cfset counter = reFindNoCase("[quote.*?]",arguments.message)>
+			<cfloop condition="counter gte 1">
+                <cfset quoteblock = reFindNoCase("(?s)(.*)(\[quote.*?\])(.*)(\[/quote\])(.*)",arguments.message,1,1)>
+				<cfif arrayLen(quoteblock.len) gte 6>
+					<!--- look for name="" in the tag ---> 
+					<!--- so the tag is pos 3 --->
+					<cfset quotetag = mid(arguments.message, quoteblock.pos[3], quoteblock.len[3])>
+					<cfif findNoCase("name=", quotetag)>
+						<cfset quotename = rereplace(quotetag, ".*?name=""(.+?)"".*\]", "\1")>
+					</cfif>
+                    <cfset quoteportion = mid(arguments.message, quoteblock.pos[4], quoteblock.len[4])>
+                    <cfif len(trim(quoteportion))>
+						<cfif len(quotename)>
+							<cfset result = "<blockquote><div class=""bqheader"">#quotename# said:</div>#quoteportion#</blockquote>">
+						<cfelse>
+							<cfset result = "<blockquote>#quoteportion#</blockquote>">
+						</cfif>
+					<cfelse>
+						<cfset result = "">
+					</cfif>
+					
+					<cfset arrayAppend(quoteBlocks,result)>
+					<cfset newbody = mid(arguments.message, 1, quoteblock.len[2]) & "****QUOTEBLOCK:#arrayLen(quoteBlocks)#:KCOLBETOUQ****" & mid(arguments.message,quoteblock.pos[6],quoteblock.len[6])>
+                    <cfset arguments.message = newbody>
+					<cfset counter = reFindNoCase("[quote.*?]",arguments.message,counter)>
+				<cfelse>
+					<!--- bad crap, maybe <code> and no ender, or maybe </code><code> --->
+					<cfset counter = 0>
+				</cfif>
+			</cfloop>
+		</cfif>
 		
 		<!--- now htmlecode --->
 		<cfset arguments.message = htmlEditFormat(arguments.message)>
@@ -370,6 +415,9 @@ Message:
 		</cfloop>
 		<cfloop index="counter" from="1" to="#arrayLen(imgBlocks)#">
 			<cfset arguments.message = replace(arguments.message,"****IMGBLOCK:#counter#:KCOLBGMI****", imgBlocks[counter])>
+		</cfloop>
+		<cfloop index="counter" from="1" to="#arrayLen(quoteBlocks)#">
+			<cfset arguments.message = replace(arguments.message,"****QUOTEBLOCK:#counter#:KCOLBETOUQ****", quoteBlocks[counter])>
 		</cfloop>
 		
 		<!--- add Ps --->
@@ -386,6 +434,8 @@ Message:
 All URLs will be automatically linked. No HTML is allowed in your message.<br />
 You may include code in your message like so: [code]...[/code].<br />
 You may include an image in your message like so: [img]url[/img].<br />
+To add a quote, use [quote]...[/quote].<br />
+To annotate the quote, use [quote name="foo"]...[/quote].
 		</cfsavecontent>
 		
 		<cfreturn msg>	
