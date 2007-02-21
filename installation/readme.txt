@@ -39,6 +39,8 @@ Please note all CFCs updated to use the factory. I was lazy and didn't update th
 /cfcs/message.cfc - Add quote
 /cfcs/settings.ini.cfm - Version only.
 
+/install/mysql.sql - updated to use more indexes.
+
 ---- ARCHIVED UPDATES ----
 1.7.009 (December 18, 2006)
 /messages.cfm - lowercase the hash for gravatar
