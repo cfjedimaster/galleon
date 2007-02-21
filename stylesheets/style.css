@@ -169,3 +169,14 @@ td {
     line-height: 15px;
 	 margin:5px 0 5px 0;	
 }
+
+blockquote {
+	border: solid thin #c0c0c0;
+	background-color: #f0f0f0;
+    padding: 4px 4px 4px 4px;
+}
+	
+blockquote .bqheader {
+	font-weight: bold;
+	margin-bottom: -10px;
+} 
