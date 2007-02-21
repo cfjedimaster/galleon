@@ -3,13 +3,14 @@
 	Name         : udf.cfm
 	Author       : Raymond Camden 
 	Created      : June 01, 2004
-	Last Updated : November 3, 2006
+	Last Updated : February 21, 2007
 	History      : Added ActivateURL (rkc 2/11/05)
 				   Added ParagraphFormat2 (rkc 3/28/05)
 				   Added call to get rank (rkc 8/28/05)
 				   Variety of a few new funcs (rkc 9/15/05)
 				   Change isLoggedOn and the get user info stuff (rkc 7/12/06)
 				   Moved some funcs into utils (rkc 11/3/06)
+				   bd fix (rkc 2/21/07)
 	Purpose		 : 
 --->
 
@@ -139,7 +140,7 @@ request.udf.headerLink = headerLink;
 </cffunction>
 <cfset request.udf.cachedUserInfo = cachedUserInfo>
 
-<cffunction name="querySort" returnType="query" output="false">
+<cffunction name="querySortManual" returnType="query" output="false">
 	<cfargument name="query" type="query" required="true">
 	<cfargument name="column" type="string" required="true">
 	<cfargument name="direction" type="string" required="true">
@@ -164,6 +165,6 @@ request.udf.headerLink = headerLink;
 	
 	<cfreturn result>
 </cffunction>
-<cfset request.udf.querySort = querySort>
+<cfset request.udf.querySort = querySortManual>
 	
 <cfsetting enablecfoutputonly=false>
