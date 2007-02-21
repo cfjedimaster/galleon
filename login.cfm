@@ -3,13 +3,14 @@
 	Name         : newthread.cfm
 	Author       : Raymond Camden 
 	Created      : June 10, 2004
-	Last Updated : November 3, 2006
+	Last Updated : February 21, 2007
 	History      : Support password reminders (rkc 2/18/05)
 				   No more notifications (rkc 7/29/05)
 				   Removed mappings (rkc 8/27/05)
 				   require confirmation changes (rkc 7/12/06)
 				   make title work (rkc 8/4/06)
 				   handle encryption and auto-focus (rkc 11/3/06)
+				   param a few fields I was assuming existed (rkc 2/21/07)
 	Purpose		 : Displays form to add a thread.
 --->
 
@@ -18,6 +19,9 @@
 
 <cfparam name="form.username_new" default="">
 <cfparam name="form.emailaddress" default="">
+<cfparam name="form.password_new" default="">
+<cfparam name="form.password_new2" default="">
+
 <cfset failedLogon = false>
 
 <!--- did they try to logon and succeeed? --->
