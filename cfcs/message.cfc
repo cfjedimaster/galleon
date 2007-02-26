@@ -28,26 +28,7 @@
 	<cfset variables.tableprefix = "">
 		
 	<cffunction name="init" access="public" returnType="message" output="false"
-				hint="Returns an instance of the CFC initialized with the correct DSN.">
-		<cfargument name="settings" type="struct" required="true" hint="Setting">
-		<cfargument name="thread" required="true" hint="thread" />
-		<cfargument name="forum" required="true" hint="forum" />
-		<cfargument name="conference" required="true" hint="conference" />
-		<cfargument name="user" required="true" hint="user" />
-		<cfargument name="utils" required="true" hint="utils" />
-		
-		<cfset variables.dsn = arguments.settings.getSettings().dsn>
-		<cfset variables.dbtype = arguments.settings.getSettings().dbtype>
-		<cfset variables.tableprefix = arguments.settings.getSettings().tableprefix>
-
-		<cfset variables.thread = arguments.thread />
-		<cfset variables.forum = arguments.forum />
-		<cfset variables.conference = arguments.conference />
-		<cfset variables.user = arguments.user />
-		<cfset variables.utils = arguments.utils />
-
-		<cfset variables.settings = arguments.settings.getSettings()>
-		
+				hint="Returns an instance of the CFC initialized with the correct DSN.">		
 		<cfreturn this>
 		
 	</cffunction>
@@ -534,4 +515,38 @@ To annotate the quote, use [quote name="foo"]...[/quote].
 		<cfreturn true>
 		
 	</cffunction>
+	
+	<cffunction name="setSettings" access="public" output="No" returntype="void">
+		<cfargument name="settings" required="true" hint="Setting">
+		<cfset variables.dsn = arguments.settings.getSettings().dsn>
+		<cfset variables.dbtype = arguments.settings.getSettings().dbtype>
+		<cfset variables.tableprefix = arguments.settings.getSettings().tableprefix>
+		<cfset variables.settings = arguments.settings.getSettings()>
+	</cffunction>
+	
+	<cffunction name="setUtils" access="public" output="No" returntype="void">
+		<cfargument name="utils" required="true" hint="utils">
+		<cfset variables.utils = arguments.utils />
+	</cffunction>
+
+	<cffunction name="setThread" access="public" output="No" returntype="void">
+		<cfargument name="thread" required="true" hint="thread">
+		<cfset variables.thread = arguments.thread />
+	</cffunction>
+
+	<cffunction name="setForum" access="public" output="No" returntype="void">
+		<cfargument name="forum" required="true" hint="forum">
+		<cfset variables.forum = arguments.forum />
+	</cffunction>
+
+	<cffunction name="setUser" access="public" output="No" returntype="void">
+		<cfargument name="user" required="true" hint="user" />
+		<cfset variables.user = arguments.user />
+	</cffunction>
+
+	<cffunction name="setConference" access="public" output="No" returntype="void">
+		<cfargument name="conference" required="true" hint="conference" />
+		<cfset variables.conference = arguments.conference />
+	</cffunction>
+		
 </cfcomponent>

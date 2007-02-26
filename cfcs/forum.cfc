@@ -26,16 +26,6 @@
 		
 	<cffunction name="init" access="public" returnType="forum" output="false"
 				hint="Returns an instance of the CFC initialized with the correct DSN.">
-		<cfargument name="settings" required="true" hint="Setting">
-		<cfargument name="thread" required="true" hint="thread">
-		<cfargument name="utils" required="true" hint="utils">
-		
-		<cfset variables.dsn = arguments.settings.getSettings().dsn>
-		<cfset variables.dbtype = arguments.settings.getSettings().dbtype>
-		<cfset variables.tableprefix = arguments.settings.getSettings().tableprefix>
-
-		<cfset variables.thread = arguments.thread />
-		<cfset variables.utils = arguments.utils />
 		<cfreturn this>
 		
 	</cffunction>
@@ -267,4 +257,22 @@
 		<cfreturn true>
 		
 	</cffunction>
+	
+	<cffunction name="setSettings" access="public" output="No" returntype="void">
+		<cfargument name="settings" required="true" hint="Setting">
+		<cfset variables.dsn = arguments.settings.getSettings().dsn>
+		<cfset variables.dbtype = arguments.settings.getSettings().dbtype>
+		<cfset variables.tableprefix = arguments.settings.getSettings().tableprefix>
+	</cffunction>
+	
+	<cffunction name="setUtils" access="public" output="No" returntype="void">
+		<cfargument name="utils" required="true" hint="utils">
+		<cfset variables.utils = arguments.utils />
+	</cffunction>
+
+	<cffunction name="setThread" access="public" output="No" returntype="void">
+		<cfargument name="thread" required="true" hint="thread">
+		<cfset variables.thread = arguments.thread />
+	</cffunction>
+	
 </cfcomponent>

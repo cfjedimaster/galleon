@@ -24,16 +24,6 @@
 		
 	<cffunction name="init" access="public" returnType="conference" output="false"
 				hint="Returns an instance of the CFC initialized with the correct DSN.">
-		<cfargument name="settings" required="true" hint="Setting">
-		<cfargument name="forum" required="true" hint="forum">
-		<cfargument name="utils" required="true" hint="utils">
-								
-		<cfset variables.dsn = arguments.settings.getSettings().dsn>
-		<cfset variables.dbtype = arguments.settings.getSettings().dbtype>
-		<cfset variables.tableprefix = arguments.settings.getSettings().tableprefix>
-		
-		<cfset variables.forum = arguments.forum />
-		<cfset variables.utils = arguments.utils />
 
 		<cfreturn this>
 		
@@ -319,4 +309,22 @@ where c.id = #variables.tableprefix#conferences.id )
 		<cfreturn true>
 		
 	</cffunction>
+	
+	<cffunction name="setSettings" access="public" output="No" returntype="void">
+		<cfargument name="settings" required="true" hint="Setting">
+		<cfset variables.dsn = arguments.settings.getSettings().dsn>
+		<cfset variables.dbtype = arguments.settings.getSettings().dbtype>
+		<cfset variables.tableprefix = arguments.settings.getSettings().tableprefix>
+	</cffunction>
+	
+	<cffunction name="setUtils" access="public" output="No" returntype="void">
+		<cfargument name="utils" required="true" hint="utils">
+		<cfset variables.utils = arguments.utils />
+	</cffunction>
+
+	<cffunction name="setForum" access="public" output="No" returntype="void">
+		<cfargument name="forum" required="true" hint="forum">
+		<cfset variables.forum = arguments.forum />
+	</cffunction>
+	
 </cfcomponent>

@@ -26,21 +26,6 @@
 
 	<cffunction name="init" access="public" returnType="user" output="false"
 				hint="Returns an instance of the CFC initialized with the correct DSN.">
-		<cfargument name="settings" required="true" hint="Setting">
-		<cfargument name="utils" required="true" hint="utils">
-		
-		<cfset var cfg = arguments.settings.getSettings() />
-		
-		<cfset variables.dsn = cfg.dsn>
-		<cfset variables.dbtype = cfg.dbtype>
-		<cfset variables.tableprefix = cfg.tableprefix>
-		<cfset variables.requireconfirmation = cfg.requireconfirmation>
-		<cfset variables.title = cfg.title>
-		<cfset variables.fromAddress = cfg.fromAddress>
-		<cfset variables.rooturl = cfg.rooturl>
-		<cfset variables.encryptpasswords = cfg.encryptpasswords>
-		
-		<cfset variables.utils = arguments.utils />
 		<cfreturn this>
 		
 	</cffunction>
@@ -477,5 +462,24 @@ To complete your registration at #variables.title#, please click on the link bel
 		</cfquery>		
 				
 	</cffunction>		
+
+	<cffunction name="setSettings" access="public" output="No" returntype="void">
+		<cfargument name="settings" required="true" hint="Setting">
+
+		<cfset var cfg = arguments.settings.getSettings() />
+		<cfset variables.dsn = cfg.dsn>
+		<cfset variables.dbtype = cfg.dbtype>
+		<cfset variables.tableprefix = cfg.tableprefix>
+		<cfset variables.requireconfirmation = cfg.requireconfirmation>
+		<cfset variables.title = cfg.title>
+		<cfset variables.fromAddress = cfg.fromAddress>
+		<cfset variables.rooturl = cfg.rooturl>
+		
+	</cffunction>
+	
+	<cffunction name="setUtils" access="public" output="No" returntype="void">
+		<cfargument name="utils" required="true" hint="utils">
+		<cfset variables.utils = arguments.utils />
+	</cffunction>
 
 </cfcomponent>

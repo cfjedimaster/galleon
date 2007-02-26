@@ -20,18 +20,9 @@
 	<cfset variables.tableprefix = "">
 	<cfset variables.settings = "">
 	
+		
 	<cffunction name="init" access="public" returnType="thread" output="false"
 				hint="Returns an instance of the CFC initialized with the correct DSN.">
-		<cfargument name="settings" required="true" hint="Setting">
-		<cfargument name="utils" required="true" hint="utils">
-				
-		<cfset variables.dsn = arguments.settings.getSettings().dsn />
-		<cfset variables.dbtype = arguments.settings.getSettings().dbtype />
-		<cfset variables.tableprefix = arguments.settings.getSettings().tableprefix />
-		<!--- keep a global copy to pass later on --->
-		<cfset variables.settings = arguments.settings.getSettings() />
-		<cfset variables.utils = arguments.utils />
-		
 		<cfreturn this>
 		
 	</cffunction>
@@ -74,11 +65,10 @@
 		<cfargument name="id" type="uuid" required="true">
 		
 		<!--- delete kids --->
-		<cfset var messageCFC = createObject("component","message").init(variables.settings)>
-		<cfset var msgKids = messageCFC.getMessages(arguments.id)>
+		<cfset var msgKids = variables.message.getMessages(arguments.id)>
 		
 		<cfloop query="msgKids">
-			<cfset messageCFC.deleteMessage(msgKids.id)>
+			<cfset variables.message.deleteMessage(msgKids.id)>
 		</cfloop>
 
 		<cfquery datasource="#variables.dsn#">
@@ -266,4 +256,24 @@
 		<cfreturn true>
 		
 	</cffunction>
+
+	<cffunction name="setSettings" access="public" output="No" returntype="void">
+		<cfargument name="settings" required="true" hint="Setting">
+		<cfset variables.dsn = arguments.settings.getSettings().dsn />
+		<cfset variables.dbtype = arguments.settings.getSettings().dbtype />
+		<cfset variables.tableprefix = arguments.settings.getSettings().tableprefix />
+		<!--- keep a global copy to pass later on --->
+		<cfset variables.settings = arguments.settings.getSettings() />
+	</cffunction>
+	
+	<cffunction name="setUtils" access="public" output="No" returntype="void">
+		<cfargument name="utils" required="true" hint="utils">
+		<cfset variables.utils = arguments.utils />
+	</cffunction>
+
+	<cffunction name="setMessage" access="public" output="No" returntype="void">
+		<cfargument name="message" required="true" hint="utils">
+		<cfset variables.message = arguments.message />
+	</cffunction>
+
 </cfcomponent>

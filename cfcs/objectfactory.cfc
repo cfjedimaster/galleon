@@ -30,66 +30,105 @@
 		out:	object
 		notes:	
 	 --->
-	<cffunction name="createObj" access="public" output="No" returntype="any">
-		<cfargument name="objName" required="Yes" />
+	<cffunction name="get" access="public" output="No" returntype="any">
+		<cfargument name="objName" required="false" type="string" />
+		<cfargument name="singleton" required="false" type="boolean" default="true" />
 		
 		<cfscript>
+			var obj = ''; //local var to hold object
+			if (arguments.singleton and singletonExists(arguments.objName)) {
+				return getSingleton(arguments.objName);
+			}
+		
 			switch(arguments.objName) {
 				case "conference":
-					return createObject('component','conference').init(
-						settings = getInstance('galleonSettings'),
-						forum = getInstance('forum'),
-						utils = getInstance('utils')
-					);
+					obj = createObject('component','conference').init();
+						if (arguments.singleton) { // scope singleton
+							addSingleton(arguments.objName, obj);
+						}
+						// inject dependencies through setter
+						obj.setSettings( get('galleonSettings', arguments.singleton) );
+						obj.setForum( get('forum', arguments.singleton) );
+						obj.setUtils( get('utils', arguments.singleton) );
+					return obj;
 				break;
 
 				case "forum":
-					return createObject('component','forum').init(
-						settings = getInstance('galleonSettings'),
-						thread = getInstance('thread'),
-						utils = getInstance('utils')
-					);
+					obj = createObject('component','forum').init();
+						if (arguments.singleton) { // scope singleton
+							addSingleton(arguments.objName, obj);
+						}
+						// inject dependencies through setter
+						obj.setSettings( get('galleonSettings', arguments.singleton) );
+						obj.setThread( get('thread', arguments.singleton) );
+						obj.setUtils( get('utils', arguments.singleton) );
+					return obj;
 				break;
 
 				case "galleonSettings":
-					return createObject('component','galleon');
+					obj = createObject('component','galleon');
+						if (arguments.singleton) { // scope singleton
+							addSingleton(arguments.objName, obj);
+						}
+					return obj;
 				break;
 
 				case "message":
-					return createObject('component','message').init(
-						settings = getInstance('galleonSettings'),
-						thread = getInstance('thread'),
-						forum = getInstance('forum'),
-						conference = getInstance('conference'),
-						user = getInstance('user'),
-						utils = getInstance('utils')
-					);
+					obj = createObject('component','message').init();
+						if (arguments.singleton) { // scope singleton
+							addSingleton(arguments.objName, obj);
+						}
+						// inject dependencies through setter
+						obj.setSettings( get('galleonSettings', arguments.singleton) );
+						obj.setThread( get('thread', arguments.singleton) );
+						obj.setForum( get('forum', arguments.singleton) );
+						obj.setConference( get('conference', arguments.singleton) );
+						obj.setUser( get('user', arguments.singleton) );
+						obj.setUtils( get('utils', arguments.singleton) );
+					return obj;
 				break;
 
 				case "rank":
-					return createObject('component','rank').init(
-						settings = getInstance('galleonSettings'),
-						utils = getInstance('utils')
-						
-					);
+					obj = createObject('component','rank').init();
+						if (arguments.singleton) { // scope singleton
+							addSingleton(arguments.objName, obj);
+						}
+						// inject dependencies through setter
+						obj.setSettings( get('galleonSettings', arguments.singleton) );
+						obj.setUtils( get('utils', arguments.singleton) );
+					return obj;
 				break;
 
 				case "thread":
-					return createObject('component','thread').init(
-						settings = getInstance('galleonSettings'),
-						utils = getInstance('utils')
-					);
+					obj = createObject('component','thread').init();
+						if (arguments.singleton) { // scope singleton
+							addSingleton(arguments.objName, obj);
+						}
+						// inject dependencies through setter
+						obj.setSettings( get('galleonSettings', arguments.singleton) );
+						obj.setUtils( get('utils', arguments.singleton) );
+						obj.setMessage( get('message', arguments.singleton) );
+					return obj;
 				break;
 
 				case "user":
-					return createObject('component','user').init(
-						settings = getInstance('galleonSettings'),
-						utils = getInstance('utils')
-					);
+					obj = createObject('component','user').init();
+						if (arguments.singleton) { // scope singleton
+							addSingleton(arguments.objName, obj);
+						}
+						// inject dependencies through setter
+						obj.setSettings( get('galleonSettings', arguments.singleton) );
+						obj.setUtils( get('utils', arguments.singleton) );
+					return obj;
 				break;
 
 				case "utils":
-					return createObject('component','utils');
+					obj = createObject('component','utils');
+						if (arguments.singleton) { // scope singleton
+							addSingleton(arguments.objName, obj);
+						}
+						// inject dependencies through setter
+					return obj;
 				break;
 
 			}
@@ -98,27 +137,24 @@
 	</cffunction>
 	
 	
-	<!--- 
-		function getInstance
-		in:		name of object
-		out:	object
-		notes:	create a persistant object if doen not previously exists
-	 --->
-	<cffunction name="getInstance" access="public" output="No" returntype="any">
-		<cfargument name="objName" required="Yes" />
-		
-		<cfscript>
-			if ( not StructKeyExists(variables.com, arguments.objName) ){
-				variables.com[arguments.objName] = createObj(arguments.objName);
-			}
-			
-			return variables.com[arguments.objName];
-		</cfscript>
+	<cffunction name="singletonExists" access="public" output="No" returntype="boolean">
+		<cfargument name="objName" required="Yes" type="string" />
+		<cfreturn StructKeyExists(variables.com, arguments.objName) />
+	</cffunction>
+	
+	<cffunction name="addSingleton" access="public" output="No" returntype="void">
+		<cfargument name="objName" required="Yes" type="string" />
+		<cfargument name="obj" required="Yes" />
+		<cfset variables.com[arguments.objName] = arguments.obj />
 	</cffunction>
 
-	<cffunction name="removeInstance" access="public" output="No" returntype="void">
+	<cffunction name="getSingleton" access="public" output="No" returntype="any">
+		<cfargument name="objName" required="Yes" type="string" />
+		<cfreturn variables.com[arguments.objName] />
+	</cffunction>
+
+	<cffunction name="removeSingleton" access="public" output="No" returntype="void">
 		<cfargument name="objName" required="Yes" />
-	
 		<cfscript>
 			if ( StructKeyExists(variables.com, arguments.objName) ){
 				structDelete(variables.com, arguments.objName);
