@@ -44,7 +44,7 @@ folder. See: http://ray.camdenfamily.com/index.cfm/2005/9/21/Galleon-Issue-with-
 	<cfset application.factory = createObject("component","cfcs.objectFactory").init()>
 	
 	<!--- Get main settings --->
-	<cfset application.settings = application.factory.getInstance('galleonSettings').getSettings()>
+	<cfset application.settings = application.factory.get('galleonSettings').getSettings()>
 
 	<cfset application.settings.attachmentdir = getDirectoryFromPath(getCurrentTemplatePath()) & "attachments">
 
@@ -53,25 +53,25 @@ folder. See: http://ray.camdenfamily.com/index.cfm/2005/9/21/Galleon-Issue-with-
 	</cfif>
 	
 	<!--- get user CFC --->
-	<cfset application.user = application.factory.getInstance('user')>
+	<cfset application.user = application.factory.get('user')>
 
 	<!--- get utils CFC --->
-	<cfset application.utils = application.factory.getInstance('utils')>
+	<cfset application.utils = application.factory.get('utils')>
 		
 	<!--- get conference CFC --->
-	<cfset application.conference = application.factory.getInstance('conference')>
+	<cfset application.conference = application.factory.get('conference')>
 	
 	<!--- get forum CFC --->
-	<cfset application.forum = application.factory.getInstance('forum')>
+	<cfset application.forum = application.factory.get('forum')>
 
 	<!--- get thread CFC --->
-	<cfset application.thread = application.factory.getInstance('thread')>
+	<cfset application.thread = application.factory.get('thread')>
 
 	<!--- get message CFC --->
-	<cfset application.message = application.factory.getInstance('message')>
+	<cfset application.message = application.factory.get('message')>
 
 	<!--- get rank CFC --->
-	<cfset application.rank = application.factory.getInstance('rank')>
+	<cfset application.rank = application.factory.get('rank')>
 
 	<cfset application.init = true>
 	
