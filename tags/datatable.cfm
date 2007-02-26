@@ -3,11 +3,12 @@
 	Name         : datatable.cfm
 	Author       : Raymond Camden 
 	Created      : June 02, 2004
-	Last Updated : November 3, 2005
+	Last Updated : February 26, 2007
 	History      : JS fix (7/23/04)
 				   Minor formatting updates (rkc 8/29/05)
 				   finally add sorting (rkc 9/9/05)
 				   mods for new stuff (rkc 11/3/06)
+				   added linkappend (rkc 2/26/07)
 	Purpose		 : A VERY app specific datable tag. 
 --->
 
@@ -18,6 +19,7 @@
 <cfparam name="url.page" default="1">
 <cfparam name="url.sort" default="">
 <cfparam name="url.dir" default="asc">
+<cfparam name="attributes.linkappend" default="">
 
 <cfif url.dir is not "asc" and url.dir is not "desc">
 	<cfset url.dir = "asc">
@@ -79,24 +81,29 @@ function checksubmit() {
 
 <cfif attributes.data.recordCount gt application.settings.perpage>
 	<p align="right">
+	[[ #application.settings.perpage# of #attributes.data.recordCount# records ]]
 	[[
 	<cfif url.page gt 1>
-		<a href="#cgi.script_name#?page=#url.page-1#&sort=#urlEncodedFormat(url.sort)#&dir=#url.dir#">Previous</a>
+		<a href="#cgi.script_name#?page=#url.page-1#&sort=#urlEncodedFormat(url.sort)#&dir=#url.dir##attributes.linkappend#">Previous</a>
 	<cfelse>
 		Previous
 	</cfif>
-	--
+	- 
 	<cfif url.page * application.settings.perpage lt attributes.data.recordCount>
-		<a href="#cgi.script_name#?page=#url.page+1#&sort=#urlEncodedFormat(url.sort)#&dir=#url.dir#">Next</a>
+		<a href="#cgi.script_name#?page=#url.page+1#&sort=#urlEncodedFormat(url.sort)#&dir=#url.dir##attributes.linkappend#">Next</a>
 	<cfelse>
 		Next
 	</cfif>
 	]]
 	</p>
+<cfelse>
+	<p align="right">
+	[[ #attributes.data.recordCount# records ]]
+	</p>
 </cfif>
 
 <p>
-<form name="listing" action="#cgi.script_name#" method="post">
+<form name="listing" action="#cgi.script_name#?#attributes.linkappend#" method="post">
 <table width="100%" cellspacing=0 cellpadding=5 class="adminListTable">
 	<tr class="adminListHeader">
 		<td>&nbsp;</td>
@@ -108,7 +115,7 @@ function checksubmit() {
 			</cfif>
 			<td class="adminListHeaderText">
 			<!--- static rewrites of a few of the columns --->
-			<a href="#cgi.script_name#?page=#url.page#&sort=#urlEncodedFormat(c)#&dir=#dir#">#displayHeader(c)#</a>
+			<a href="#cgi.script_name#?page=#url.page#&sort=#urlEncodedFormat(c)#&dir=#dir##attributes.linkappend#">#displayHeader(c)#</a>
 			</td>
 		</cfloop>
 	</tr>
