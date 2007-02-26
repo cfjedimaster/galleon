@@ -26,7 +26,11 @@ Gifts are always welcome. ;)
 
 
 ---- LATEST VERSION ----
-1.7.010 (December 18, 2006)
+
+1.7.010 (February 26, 2007)
+/admin/users.cfm, threads.cfm, and messages.cfm support filtering
+/tags/datatable.cfm - ditto above.
+
 /messages.cfm - use renderMessage, not render (BlueDragon fix)
 /login.cfm - param a few form fields I assumed existed
 /Application.cfm - Use Factory - all factory code written by Rob Gonda
