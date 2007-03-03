@@ -26,7 +26,11 @@ Gifts are always welcome. ;)
 
 
 ---- LATEST VERSION ----
+1.7.011 (March 2, 2007)
+/rss.cfm - Title wasn't dynamic
+/cfcs/settings.ini.cfm - just a version change
 
+---- ARCHIVED UPDATES ----
 1.7.010 (February 26, 2007)
 /admin/users.cfm, threads.cfm, and messages.cfm support filtering
 /tags/datatable.cfm - ditto above.
@@ -45,7 +49,6 @@ Please note all CFCs updated to use the factory. I was lazy and didn't update th
 
 /install/mysql.sql - updated to use more indexes.
 
----- ARCHIVED UPDATES ----
 1.7.009 (December 18, 2006)
 /messages.cfm - lowercase the hash for gravatar
 /cfcs/settings.ini.cfm - Version only.
