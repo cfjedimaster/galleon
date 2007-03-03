@@ -3,9 +3,10 @@
 	Name         : rss.cfm
 	Author       : Raymond Camden 
 	Created      : July 5, 2004
-	Last Updated : August 3, 2005
+	Last Updated : March 2, 2007
 	History      : Support for UUID (rkc 1/27/05)
 				   You can't have 2 or more of the same link, so I add r=X to make it unique. Thanks to Tom Thomas for finding this bug (rkc 8/3/05)
+				   Title used in RSS wasn't dynamic (rkc 3/2/07)
 	Purpose		 : Displays RSS for a Conference
 --->
 
@@ -33,7 +34,7 @@
 >
 
 	<channel rdf:about="#application.settings.rootURL#">
-	<title>Galleon Forums : Conference : #request.conference.name#</title>
+	<title>#application.settings.title# : Conference : #request.conference.name#</title>
 	<description>Conference : #request.conference.name# : #request.conference.description#</description>
 	<link>#application.settings.rootURL#</link>
 	
