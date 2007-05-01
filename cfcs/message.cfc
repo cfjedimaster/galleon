@@ -2,7 +2,7 @@
 	Name         : message.cfc
 	Author       : Raymond Camden 
 	Created      : October 21, 2004
-	Last Updated : December 8, 2006
+	Last Updated : May 1, 2007
 	History      : We now check sendonpost to see if we notify admin on posts (rkc 10/21/04)
 				   The email sent to admins now cotain forum/conference name. (rkc 2/11/05)
 				   Was calling util.throw, not utils (rkc 3/31/05)
@@ -18,6 +18,7 @@
 				   Don't send email twice to admin, slight email tweaks (rkc 11/9/06)
 				   Fix up the deletion of attachments (rkc 11/16/06)
 				   Slight change to emails sent out - send the username as well (rkc 12/5/6)
+				   Changed calls to isUserInAnyRole to isTheUserInAnyRole (rkc 5/1/07)
 				   Support for [img] (rkc 12/8/06)
 	Purpose		 : 
 --->
@@ -53,7 +54,7 @@
 		<cfset var body = "">
 		
 		<!--- First see if we can add a message. Because roles= doesn't allow for OR, we use a UDF --->
-		<cfif not variables.utils.isUserInAnyRole("forumsadmin,forumsmoderator,forumsmember")>
+		<cfif not variables.utils.isTheUserInAnyRole("forumsadmin,forumsmoderator,forumsmember")>
 			<cfset variables.utils.throw("Message CFC","Unauthorized execution of addMessage.")>
 		</cfif>
 
@@ -162,7 +163,7 @@ User:		#arguments.username#
 		<cfset var q = "">
 		
 		<!--- First see if we can delete a message. Because roles= doesn't allow for OR, we use a UDF --->
-		<cfif not variables.utils.isUserInAnyRole("forumsadmin,forumsmoderator")>
+		<cfif not variables.utils.isTheUserInAnyRole("forumsadmin,forumsmoderator")>
 			<cfset variables.utils.throw("Message CFC","Unauthorized execution of deleteMessage.")>
 		</cfif>
 
@@ -428,7 +429,7 @@ To annotate the quote, use [quote name="foo"]...[/quote].
 		<cfargument name="id" type="uuid" required="true">
 		<cfargument name="message" type="struct" required="true">
 
-		<cfif not variables.utils.isUserInAnyRole("forumsadmin,forumsmoderator")>
+		<cfif not variables.utils.isTheUserInAnyRole("forumsadmin,forumsmoderator")>
 			<cfset variables.utils.throw("Message CFC","Unauthorized execution of saveMessage.")>
 		</cfif>
 		
