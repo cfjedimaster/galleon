@@ -185,7 +185,7 @@ Copyright for coloredCode function. Also note that Jeff Coughlin made some mods 
 		
 	</cffunction>
 	
-	<cffunction name="isUserInAnyRole" access="public" returnType="boolean" output="false"
+	<cffunction name="isTheUserInAnyRole" access="public" returnType="boolean" output="false"
 				hint="isUserInRole only does AND checks. This method allows for OR checks.">
 		
 		<cfargument name="rolelist" type="string" required="true">
