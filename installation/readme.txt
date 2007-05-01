@@ -26,11 +26,22 @@ Gifts are always welcome. ;)
 
 
 ---- LATEST VERSION ----
+1.7.012 (May 1, 2007)
+/images/gravatar.gif - used for people who don't have gravatar accounts
+/cfcs/message.cfc - use isTheUserInAnyRole
+/newpost.cfm - ditto above
+/messages.cfm - ditto above
+/message_edit.cfm - ditto above
+/thread.cfc - ditto above
+/Application.cfm - case fix for the factory 
+/cfcs/utils.cfc - Changed udf isUserInAnyRole to isTheUserInAnyRole. This was not done for any special purpose. Really.
+/cfcs/settings.ini.cfm - changed a few values for my own testing, but the real change is the version 
+
+---- ARCHIVED UPDATES ----
 1.7.011 (March 2, 2007)
 /rss.cfm - Title wasn't dynamic
 /cfcs/settings.ini.cfm - just a version change
 
----- ARCHIVED UPDATES ----
 1.7.010 (February 26, 2007)
 /admin/users.cfm, threads.cfm, and messages.cfm support filtering
 /tags/datatable.cfm - ditto above.
