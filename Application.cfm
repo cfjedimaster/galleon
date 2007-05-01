@@ -3,7 +3,7 @@
 	Name         : Application.cfm
 	Author       : Raymond Camden 
 	Created      : June 01, 2004
-	Last Updated : February 21, 2007
+	Last Updated : May 1, 2007
 	History      : Don't load app.cfc, load galleon.cfc. Also pass settings to messages. (rkc 7/14/05)
 				   Make app name dynamic. Remove mapping (rkc 8/27/05)
 				   Support for sorting, errors (rkc 9/15/05)
@@ -12,6 +12,7 @@
 				   BD fix, attachment folder (rkc 11/3/06)
 				   Fix for getting attachment dir (rkc 11/16/06)
 				   Use Factory (thanks Rob Gonda) (rkc 2/21/07)
+				   case fix for the factory (rkc 5/1/07)
 	Purpose		 : 
 --->
 
@@ -41,7 +42,7 @@ folder. See: http://ray.camdenfamily.com/index.cfm/2005/9/21/Galleon-Issue-with-
 	<cfset structDelete(application, "userCache")>
 
 	<!--- get user CFC --->
-	<cfset application.factory = createObject("component","cfcs.objectFactory").init()>
+	<cfset application.factory = createObject("component","cfcs.objectfactory").init()>
 	
 	<!--- Get main settings --->
 	<cfset application.settings = application.factory.get('galleonSettings').getSettings()>
