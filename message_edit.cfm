@@ -3,15 +3,16 @@
 	Name         : message_edit.cfm
 	Author       : Raymond Camden 
 	Created      : July 6, 2004
-	Last Updated : November 14, 2006
+	Last Updated : May 1, 2007
 	History      : Removed mappings (rkc 8/29/05)
 				 : title+cfcatch change (rkc 8/4/06)
 				 : attachment support (rkc 11/3/06)
 				 : fix bug if attachments turned off (rkc 11/14/06)
+				   Changed calls to isUserInAnyRole to isTheUserInAnyRole (rkc 5/1/07)				   									   				 
 	Purpose		 : Allows moderators/admins to edit post.
 --->
 
-<cfif not request.udf.isLoggedOn() or not application.utils.isUserInAnyRole("forumsadmin,forumsmoderator")>
+<cfif not request.udf.isLoggedOn() or not application.utils.isTheUserInAnyRole("forumsadmin,forumsmoderator")>
 	<cflocation url="index.cfm" addToken="false">
 </cfif>
 
