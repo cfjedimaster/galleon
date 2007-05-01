@@ -3,7 +3,7 @@
 	Name         : newpost.cfm
 	Author       : Raymond Camden 
 	Created      : June 10, 2004
-	Last Updated : November 6, 2006
+	Last Updated : May 1, 2007
 	History      : Maxlength on title (rkc 8/30/04)
 				   Support for UUID (rkc 1/27/05)
 				   Now only does new threads (rkc 3/28/05)
@@ -14,6 +14,7 @@
 				   title fix (rkc 8/4/06)
 				   attachment support (rkc 11/3/06)
 				   error if attachments disabled (rkc 11/6/06)
+				   Changed calls to isUserInAnyRole to isTheUserInAnyRole (rkc 5/1/07)				   
 	Purpose		 : Displays form to add a thread.
 --->
 
@@ -35,7 +36,7 @@
 	<cfset request.conference = application.conference.getConference(request.forum.conferenceidfk)>
 	<!--- check both thread and forum for readonly and not admin --->
 	<cfif request.forum.readonly or (isDefined("request.thread") and request.thread.readonly)>
-		<cfif not application.utils.isUserInAnyRole("forumsadmin,forumsmoderator")>
+		<cfif not application.utils.isTheUserInAnyRole("forumsadmin,forumsmoderator")>
 			<cfset blockedAttempt = true>
 		</cfif>
 	</cfif>
