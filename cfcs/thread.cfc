@@ -2,7 +2,7 @@
 	Name         : thread.cfc
 	Author       : Raymond Camden 
 	Created      : January 26, 2005
-	Last Updated : July 27, 2006
+	Last Updated : May 1, 2007
 	History      : Support for dbtype, and uuid (rkc 1/26/05)
 				   New init, tableprefix (rkc 8/27/05)
 				   Sticky (rkc 8/29/05)
@@ -11,6 +11,7 @@
 				   limit search length (rkc 10/30/05)
 				   show last user (rkc 7/12/06)
 				   Simple size change (rkc 7/27/06)
+				   change to isTheUserInAnyRole (rkc 5/1/07)
 	Purpose		 : 
 --->
 <cfcomponent displayName="Thread" hint="Handles Threads which contain a collection of message.">
@@ -35,7 +36,7 @@
 		<cfset var newid = createUUID()>
 				
 		<!--- First see if we can add a thread. Because roles= doesn't allow for OR, we use a UDF --->
-		<cfif not variables.utils.isUserInAnyRole("forumsadmin,forumsmoderator,forumsmember")>
+		<cfif not variables.utils.isTheUserInAnyRole("forumsadmin,forumsmoderator,forumsmember")>
 			<cfset variables.utils.throw("ThreadCFC","Unauthorized execution of addThread.")>
 		</cfif>
 		
