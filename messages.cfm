@@ -3,7 +3,7 @@
 	Name         : messages.cfm
 	Author       : Raymond Camden 
 	Created      : June 10, 2004
-	Last Updated : February 21, 2007
+	Last Updated : May 1, 2007
 	History      : Support for UUID (rkc 1/27/05)
 				   Update to allow posting here (rkc 3/31/05)
 				   Fixed code that gets # of pages (rkc 4/8/05)
@@ -20,6 +20,7 @@
 				   bug when no attachment (rkc 11/6/06)
 				   lcase the hash for gravatar (rkc 12/18/06)
 				   Use renderMessage, bd fix (rkc 2/21/07)
+				   Changed calls to isUserInAnyRole to isTheUserInAnyRole (rkc 5/1/07)				   									   
 	Purpose		 : Displays messages for a thread
 --->
 
@@ -52,7 +53,7 @@
 <cfparam name="form.attachment" default="">
 <cfparam name="form.filename" default="">
 
-<cfif isDefined("form.post") and request.udf.isLoggedOn() and (application.utils.isUserInAnyRole("forumsadmin,forumsmoderator") or (not readonly))>
+<cfif isDefined("form.post") and request.udf.isLoggedOn() and (application.utils.isTheUserInAnyRole("forumsadmin,forumsmoderator") or (not readonly))>
 
 	<cfset errors = "">
 	<!--- clean the fields --->
@@ -182,7 +183,7 @@
 					
 					<cfif len(uinfo.signature)><div class="signature">#uinfo.signature#</div></cfif>
 					
-					<cfif request.udf.isLoggedOn() and application.utils.isUserInAnyRole("forumsadmin,forumsmoderator")>
+					<cfif request.udf.isLoggedOn() and application.utils.isTheUserInAnyRole("forumsadmin,forumsmoderator")>
 					<p align="right"><a href="message_edit.cfm?id=#id#">[Edit Post]</a></p>
 					</cfif>
 				</td>
@@ -236,7 +237,7 @@
 				<tr>
 					<td>Please <a href="#link#">login</a> to post a response.</td>
 				</tr>
-			<cfelseif application.utils.isUserInAnyRole("forumsadmin,forumsmoderator") or not readonly>
+			<cfelseif application.utils.isTheUserInAnyRole("forumsadmin,forumsmoderator") or not readonly>
 				<tr>
 					<td><b>Title: </b></td>
 					<td><input type="text" name="title" value="#form.title#" class="formBox"></td>
