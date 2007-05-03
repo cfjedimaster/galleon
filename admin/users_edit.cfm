@@ -3,11 +3,12 @@
 	Name         : users_edit.cfm
 	Author       : Raymond Camden 
 	Created      : July 5, 2004
-	Last Updated : July 17, 2006
+	Last Updated : May 3, 2007
 	History      : Fixed bugs related to sendnotifications change (rkc 8/3/05)
 				   Removed mappings (rkc 8/27/05)
 				   Handle confirmation, and require one group (rkc 7/12/06)
 				   Fix error thrown when requireconfirmation=false (rkc 7/17/06)
+				   Don't html encode the password or email address (rkc 5/3/07)
 	Purpose		 : 
 --->
 
@@ -36,8 +37,8 @@
 	<cfif not len(errors)>
 		<cfset user = structNew()>
 		<cfset form.username = trim(htmlEditFormat(form.username))>
-		<cfset form.emailaddress = trim(htmlEditFormat(form.emailaddress))>
-		<cfset form.password = trim(htmlEditFormat(form.password))>
+		<cfset form.emailaddress = trim(form.emailaddress)>
+		<cfset form.password = trim(form.password)>
 		<cfset form.datecreated = trim(htmlEditFormat(form.datecreated))>
 		<cfparam name="form.groups" default="">
 		<!--- set confirmed to true if not passed --->

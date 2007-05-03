@@ -27,6 +27,11 @@ Gifts are always welcome. ;)
 
 ---- LATEST VERSION ----
 1.7.012 (May 1, 2007)
+/admin/users_edit.cfm - Do not htmleditformat the password or email address.
+/cfcs/settings.ini.cfm - Version 
+
+---- ARCHIVED UPDATES ----
+1.7.012 (May 1, 2007)
 /images/gravatar.gif - used for people who don't have gravatar accounts
 /cfcs/message.cfc - use isTheUserInAnyRole
 /newpost.cfm - ditto above
@@ -37,7 +42,6 @@ Gifts are always welcome. ;)
 /cfcs/utils.cfc - Changed udf isUserInAnyRole to isTheUserInAnyRole. This was not done for any special purpose. Really.
 /cfcs/settings.ini.cfm - changed a few values for my own testing, but the real change is the version 
 
----- ARCHIVED UPDATES ----
 1.7.011 (March 2, 2007)
 /rss.cfm - Title wasn't dynamic
 /cfcs/settings.ini.cfm - just a version change
