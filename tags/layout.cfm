@@ -3,8 +3,8 @@
 	Name         : layout.cfm
 	Author       : Raymond Camden 
 	Created      : June 02, 2004
-	Last Updated : August 27, 2005
-	History      : removed mappings (rkc 8/27/05)
+	Last Updated : October 12, 2007
+	History      : Reset for V2
 	Purpose		 : Loads up templates. Will look in a subdirectory for templates, 
 				   and will load #attributes.template#_header.cfm and 
 				   #attributes.template#_footer.cfm

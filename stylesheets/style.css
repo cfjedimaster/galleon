@@ -1,182 +1,448 @@
-.tMain {
-	background-color: #66ccff; 
-}
-
-.tHeader {
-	background-color: #6699ff;
-	
-}
-
-td {
-	font-family: Verdana, Arial;
-	font-size: 11px;
-}
-
-.linktext, .linktext a {
-	font-size: 9px;
-	color: #235577;
-}
-
-.adminAppTitle {
-	font-family: Verdana, Arial;
-	font-weight: bold;
-	font-size: 18px;
-	margin-bottom: 5px;
-}
-
-.adminLeftMenu, .adminLeftMenu a {
-	background-color: #66ccff;
-	color: #000000;
-	font-family: Verdana, Arial;
-	font-size: 12px;
-	
-}
-
-.adminPageHeader {
-	font-family: Verdana, Arial;
-	font-weight: bold;
-	font-size: 16px;
-}
-
-.adminListHeader {
-	background-color: #6699ff;
-	font-weight: bold;
-}
-
-.adminListHeaderText, .adminListHeaderText a {
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, font, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	outline: 0;
+	font-weight: inherit;
+	font-style: inherit;
+	font-size: 100%;
+	font-family: inherit;
+	vertical-align: baseline;
+	}
+/* remember to define focus styles! */
+:focus {
+	outline: 0;
+	}
+body {
+	line-height: 1;
 	color: black;
-}
+	background: white;
+	}
+ol, ul {
+	list-style: none;
+	}
 
-.adminListTable, .adminListTable td {
-	border-style: solid;
-	border-width: 1px;
-}
+caption, th, td {
+	text-align: left;
+	font-weight: normal;
+	}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: "";
+	}
+blockquote, q {
+	quotes: "" "";
+	}
+	
+/* _______________________________ MeyerWeb Reset Reloaded - http://meyerweb.com/eric/thoughts/2007/05/01/reset-reloaded/ ___________ */
 
-.adminList0 {
-	background-color: white;
-}
 
-.adminList1 {
-	background-color: #ffff99;
-}
+/* _______________________________ Basics ___________ */
 
-.topMenu {
-	font-family: Verdana;
-	font-size: 11px;
-	color: #000000;
-}
-
-.topMenu a, .footer a {
+a:link {
 	color: #235577;
-}
-
-.footer {
-	font-family: Verdana;
-	font-size: 10px;
-	color: #000000;
-}
-
-.tableDisplay {
-	background-color: #98acb4;;
-}
-
-.tableHeader {
-	background-color: #cdd9de;
-	font-family: Verdana;
-	font-weight: bold;
-	font-size: 11px;
-	color: #000000;
-}
-
-.tableSubHeader, .tableSubheader a {
-	background-color: #eff4f6;
-	font-family: Verdana;
-	font-weight: bold;
-	font-size: 10px;
-	color: #000000;
-}
-
-.tableRow0, .tableRow0 a {
-	background-color: #ffffff;
-	font-family: Verdana;
-	font-size: 11px;
+	text-decoration: underline;
+	}
+a:visited {
 	color: #235577;
-}
-
-.tableRow1, .tableRow1 a {
-	background-color: #eff4f6;
-	font-family: Verdana;
-	font-size: 11px;
+	text-decoration: underline;
+	}
+a:hover {
 	color: #235577;
-}
+	text-decoration: underline;
+	}
+a:active {
+	color: #235577;
+	text-decoration: underline;
+	}
 
-.tableRowMain, .tableRowMain a {
-	background-color: #eff4f6;
-	font-family: Verdana;
-	font-size: 11px;
-	color: #000000;
-}
+.row_name a:link {
+	color: black;
+	text-decoration: underline;
+	}
+.row_name a:visited {
+	color: black;
+	text-decoration: underline;
+	}
+.row_name a:hover {
+	color: black;
+	text-decoration: underline;
+	}
+.row_name a:active{
+	color: black;
+	text-decoration: underline;
+	}
 
-.tableMessageCell {
-	background-color: #e0e8eb;
-}
+/* _______________________________ Helpers ___________ */
 
-.tableMessageCellRight {
-	background-color: #ffffff;
-}
+.clearer { clear: both; }
 
-.pageText {
-	font-family: Verdana;
-	font-size: 10px;
-	color: #000000;
-}
+.align_left { text-align: left; }
+.align_center { text-align: center; }
+.align_right { text-align: right; }
 
-.pageText a {
-	color: #d27010;
-}
+.border_right { border-right: 1px solid #98ACB4; }
 
-.formBox, .formDropDown, .formTextArea {
-	width: 250px;
-	font-family: Verdana;
-	font-size: 11px;
-}
+.right_pad { padding: 0px 5px 0px 0px; }
+.top_pad { padding: 10px 0px 0px 0px; }
 
-.siteName {
-	font-family: Verdana;
-	font-weight: bold;
-	font-size: 20px;
-}
-
-.siteName a {
+.submit_error {
+	color: red;
+	padding: 0px 0px 0px 10px;
 	text-decoration: none;
+	}
+
+/* _______________________________ Layout ___________ */
+
+#container {
+	width: 780px;
+	margin: 0px auto;
+	font-size: 11px;
+	line-height: 16px;
+	font-family: verdana;
 	color: #235577;
-}
+	}
 
-.signature {
-	margin-top: 10px;
-	border-top: 1px dashed #999999;
-}
-
-.code {
-	font-family: courier,monospace;
-	font-size: .7em;
-	color: black;
-	border: solid thin #0000cc;
-	background-color: #ffffcc;
-	overflow: auto;
-	max-height: 200px;
-    padding: 4px 4px 4px 4px;
-    line-height: 15px;
-	 margin:5px 0 5px 0;	
-}
-
-blockquote {
-	border: solid thin #c0c0c0;
-	background-color: #f0f0f0;
-    padding: 4px 4px 4px 4px;
-}
+#header {
+	height: 20px;
+	margin: 0px;
+	padding: 12px 1px 10px 0px;
+	border-bottom: 1px solid #235577;
+	}
 	
-blockquote .bqheader {
+.logo {
+	float: left;
+	font-size: 20px;
 	font-weight: bold;
-	margin-bottom: -10px;
-} 
+	}
+	.logo a:link { text-decoration: none; }
+	.logo a:visited { text-decoration: none; }
+	.logo a:hover { color: #666; text-decoration: none; }
+	.logo a:active { text-decoration: none; }
+	
+.top_menu {
+	width: 400px;
+	padding: 3px 0px 0px 0px;
+	float: right;
+	text-align: right;
+	}
+	
+.breadCrumbs {
+	width: 100%;
+	height: 15px;
+	padding: 5px 0px 5px 0px;
+	}
+	
+#pages_btn {
+	width: 100%;
+	height: 20px;
+	padding: 20px 0px 00px 0px;
+	}
+	
+.top_btn {
+	float: left;
+	width: 40%;
+	}
+	
+.pages {
+	float: right;
+	width: 40%;
+	height: 20px;
+	padding: 0px;
+	text-align: right;
+	}
+	.pages p {
+		padding: 2px 5px 0px 5px;
+		float: right;
+		}
+	.pages img {
+		float: right;
+		}
+		
+#footer {
+	border-top: 1px solid #235577;
+	padding: 10px 0px 10px 0px;
+	font-size: 10px;
+	margin: 40px 0px 0px 0px;
+	}
+	#footer img {
+		}
+	
+/* _______________________________ Data Layout ___________ */
+
+.left_10 { width: 10%; float: left; }
+.left_15 { width: 15%; float: left; }
+.left_20 { width: 20%; float: left; }
+.left_30 { width: 30%; float: left; }	
+.left_40 { width: 40%; float: left; }
+.left_45 { width: 45%; float: left; }	
+.left_50 { width: 50%; float: left; }	
+.left_60 { width: 60%; float: left; }	
+.left_70 { width: 70%; float: left; }	
+.left_80 { width: 80%; float: left; }	
+.left_90 { width: 90%; float: left; }	
+.left_100 { width: 100%; float: left; }	
+.left_auto { width: auto; float: left; }
+
+.right_10 { width: 10%; float: right; }
+.right_20 { width: 20%; float: right; }	
+.right_30 { width: 30%; float: right; }	
+.right_40 { width: 40%; float: right; }	
+.right_50 { width: 50%; float: right; }	
+.right_60 { width: 60%; float: right; }	
+.right_70 { width: 70%; float: right; }	
+.right_80 { width: 80%; float: right; }	
+.right_90 { width: 90%; float: right; }	
+.right_100 { width: 100%; float: right; }	
+
+.content_box {
+	margin: 10px 0px 0px 0px;
+	border-top: 1px solid #98ACB4;
+	border-left: 1px solid #98ACB4;
+	border-right: 1px solid #98ACB4;
+	}
+
+.row_title {
+	width: 100%;
+	height: 100%;
+	background-color: #CDD9DE;
+	font-weight: bold;
+	color: black;
+	border-bottom: 1px solid #98ACB4;
+	}
+	.row_title p {
+		padding: 5px;
+		}
+			
+.row_name {
+	width: 100%;
+	clear: both;
+	font-size: 10px;
+	border-bottom: 1px solid #98ACB4;
+	overflow: hidden;
+	font-weight: bold;
+	}
+	.row_name p {
+		padding: 8px 0px 8px 5px;
+		}
+				
+.row_0 {
+	width: 100%;
+	clear: both;
+	font-size: 11px;
+	border-bottom: 1px solid #98ACB4;
+	overflow: hidden;
+	}
+	.row_0 p {
+		padding: 8px 0px 8px 5px;
+		}
+				
+.row_1 {
+	background-color: #EFF4F6;
+	width: 100%;
+	clear: both;
+	font-size: 11px;
+	border-bottom: 1px solid #98ACB4;
+	overflow: hidden;
+	}
+	.row_1 p {
+		padding: 8px 0px 8px 5px;
+		}
+		
+.keep_on { padding-bottom: 32767px; margin-bottom: -32767px; }
+
+.forum_post {
+	background-color: #eff4f6;
+	width: 100%;
+	border-bottom: 1px solid #98ACB4;
+	margin: 0px;
+	padding: 0px;
+	clear: both;
+	overflow: hidden;
+	}
+	.bolder { font-size: 11px; font-weight: bold; padding: 0px 0px 5px 0px; }
+	.forum_post_identity {
+		width: 162px;
+		float: left;
+		margin: 0px;
+		padding: 10px;
+		clear: right;
+		}
+	.forum_post_right {
+		background-color: white;
+		border-left: 1px solid #98acb4;
+		width: 537px;
+		/* margin: 0px;
+		padding: 10px; */
+		float: right;
+		clear: top;
+		}
+	.forum_post_content {
+		margin: 0px;
+		padding: 10px 0px 0px 0px;
+		font-size: 11px;
+		line-height: 11px;
+		height: 100%;
+		}
+	.forum_post_links {
+		border-top: 1px solid #98acb4;
+		width: 100%;
+		text-align: right;
+		padding: 10px 0px 10px 0px;
+		margin: 0px 0px 0px 0px;
+		font-size: 11px;
+		line-height: 11px;
+		}
+		.forum_post_links p {
+			padding: 0px 10px 0px 0px;
+			}
+	.post_padding { min-height: 170px; padding: 10px 10px 20px 10px; }
+	
+.basic_forms {
+	width: 520px;
+	padding: 0px 0px 0px 40px;
+	}
+	
+.input_name {
+	width: 130px;
+	height: 5px;
+	line-height: 5px;
+	margin: 0px;
+	padding: 0px;
+	float: left;
+	color: black;
+	font-weight: bold;
+	}	
+.input_name2 {
+	width: 100px;
+	height: 5px;
+	line-height: 5px;
+	margin: 0px;
+	padding: 0px;
+	float: left;
+	color: black;
+	font-weight: bold;
+	}
+.input_name_extras {
+	width: 130px;
+	height: 5px;
+	line-height: 5px;
+	margin: 0px 0px 0px 140px;
+	padding: 0px;
+	float: left;
+	font-size: 9px;
+	color: #666;
+	clear: none;
+	}
+.input_box {
+	width: 200px;
+	height: 15px;
+	line-height: 10px;
+	margin: 0px;
+	padding: 1px 0px 0px 0px;
+	}
+.select_box {
+	width: 204px;
+	line-height: 10px;
+	margin: 0px;
+	padding: 1px 0px 0px 0px;
+	}
+.input_file {
+	line-height: 10px;
+	margin: 0px;
+	padding: 1px 0px 0px 0px;
+	}
+.input_checkbox {
+	float: right;
+	display: block;
+	padding: 0px 0px 0px 0px;
+	margin: 4px 0px 0px 5px;
+	}
+.input_checkbox_text {
+	width: 180px;
+	text-align: right;
+	float: right;
+	margin: 0px;
+	padding: 0px;
+	color: black;
+	font-size: 9px;
+	}
+.file_text {
+	width: 280px;
+	text-align: right;
+	float: right;
+	margin: 0px;
+	padding: 0px;
+	color: black;
+	font-size: 9px;
+	}
+.submit_btns {
+	float: right;
+	}
+	
+.profile_username {
+	width: 200px;
+	height: 5px;
+	line-height: 5px;
+	margin: 0px;
+	padding: 0px;
+	float: right;
+	color: black;
+	}
+.profile_textarea {
+	width: 200px;
+	height: 40px;
+	margin: 0px;
+	padding: 0px;
+	overflow: auto;
+	}
+.edit_textarea {
+	width: 500px;
+	height: 300px;
+	margin: 0px;
+	padding: 0px;
+	overflow: auto;
+	}
+	
+.current_avatar {
+	float: right;
+	clear: both;
+	}
+	
+.profile_form {
+	padding: 20px;
+	width: 600px;
+	}
+	.profile_form textarea { width: 200px; }
+	.profile_form .clearer { line-height: 5px; }
+	.profile_form .profile_username { float: left; }
+	
+	.avatar_title {
+		width: 140px;
+		float: left;
+		color: black;
+		font-weight: bold;
+		padding: 10px 0px 0px 5px;
+		}
+		
+	.avatar_options {
+		width: 250px;
+		float: left;
+		}
+		
+.search_forms {
+	width: 340px;
+	padding: 20px 0px 0px 0px;
+	margin: 0px auto;
+	}		
+.login_forms {
+	width: 340px;
+	padding: 20px 0px 0px 20px;
+	}
