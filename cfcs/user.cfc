@@ -2,16 +2,8 @@
 	Name         : user.cfc
 	Author       : Raymond Camden 
 	Created      : January 25, 2005
-	Last Updated : November 6, 2006
-	History      : Switched to UUID (rkc 1/25/05)
-				   Added subscribe (rkc 7/24/05)
-				   Added unsubscribe, modified code for adduser/saveuser (rkc 7/29/05)
-				   Fixed bugs relating to last changes (rkc 8/3/05)
-				   New init, use of prefix (rkc 8/27/05)
-				   subscribe method didn't restrict to one user (rkc 10/6/05)
-				   require confirmation support, dynamic title (rkc 7/12/06)
-				   password encryption option, signatures (rkc 11/3/06)
-   				   if no confirmtation, set confirmation to 1 (rkc 11/6/06)
+	Last Updated : October 12, 2007
+	History      : Reset for V2
 	Purpose		 : 
 --->
 <cfcomponent displayName="User" hint="Handles all user/security issues for the application.">
@@ -30,6 +22,33 @@
 		
 	</cffunction>
 
+	<cffunction name="addGroup" access="public" returnType="void" output="false"
+				hint="Attempts to create a new group.">
+		<cfargument name="group" type="string" required="true">	
+		<cfset var checkgroup = "">
+		<cfset var newid = createUUID()>
+		
+		<cflock name="user.cfc" type="exclusive" timeout="30">
+			<cfquery name="checkgroup" datasource="#variables.dsn#">
+				select	id
+				from	#variables.tableprefix#groups
+				where	#variables.tableprefix#groups.[group] = <cfqueryparam value="#arguments.group#" cfsqltype="CF_SQL_VARCHAR" maxlength="255">
+			</cfquery>
+			
+			<cfif checkgroup.recordCount>
+				<cfset variables.utils.throw("User CFC","Group already exists")>
+			<cfelse>				
+				<cfquery name="insuser" datasource="#variables.dsn#">
+				insert into #variables.tableprefix#groups(id,<cfif variables.dbtype is not "mysql">[group]<cfelse>`group`</cfif>)
+				values(<cfqueryparam value="#newid#" cfsqltype="CF_SQL_VARCHAR" maxlength="35">,
+				<cfqueryparam value="#arguments.group#" cfsqltype="CF_SQL_VARCHAR" maxlength="255">
+				)
+				</cfquery>
+			</cfif>			
+		</cflock>
+		
+	</cffunction>
+	
 	<cffunction name="addUser" access="public" returnType="void" output="false"
 				hint="Attempts to create a new user.">
 		<cfargument name="username" type="string" required="true">
@@ -38,6 +57,7 @@
 		<cfargument name="groups" type="string" required="false">
 		<cfargument name="confirmed" type="boolean" required="false" default="false">
 		<cfargument name="signature" type="string" required="false">
+		<cfargument name="avatar" type="string" required="false">
 		
 		<cfset var checkuser = "">
 		<cfset var insuser = "">
@@ -71,7 +91,7 @@ To complete your registration at #variables.title#, please click on the link bel
 				</cfif>
 				
 				<cfquery name="insuser" datasource="#variables.dsn#">
-				insert into #variables.tableprefix#users(id,username,password,emailaddress,datecreated,confirmed,signature)
+				insert into #variables.tableprefix#users(id,username,password,emailaddress,datecreated,confirmed,signature,avatar)
 				values(<cfqueryparam value="#newid#" cfsqltype="CF_SQL_VARCHAR" maxlength="35">,
 				<cfqueryparam value="#arguments.username#" cfsqltype="CF_SQL_VARCHAR" maxlength="50">,
 				<cfqueryparam value="#arguments.password#" cfsqltype="CF_SQL_VARCHAR" maxlength="50">,
@@ -79,10 +99,15 @@ To complete your registration at #variables.title#, please click on the link bel
 				<cfqueryparam value="#now()#" cfsqltype="CF_SQL_TIMESTAMP">,
 			    <cfqueryparam value="#arguments.confirmed#" cfsqltype="CF_SQL_BIT">,
 				<cfif structKeyExists(arguments, "signature")>
-			    <cfqueryparam value="#left(htmlEditFormat(arguments.signature),1000)#" cfsqltype="cf_sql_varchar">
+			    <cfqueryparam value="#left(htmlEditFormat(arguments.signature),1000)#" cfsqltype="cf_sql_varchar">,
 			    <cfelse>
-			    ''
+			    '',
 			    </cfif>
+				<cfif structKeyExists(arguments, "avatar")>
+				<cfqueryparam value="#arguments.avatar#" cfsqltype="CF_SQL_VARCHAR" maxlength="255">
+				<cfelse>
+				''
+				</cfif>
 				)
 				</cfquery>
 				<cfif isDefined("arguments.groups") and len(arguments.groups)>
@@ -181,6 +206,34 @@ To complete your registration at #variables.title#, please click on the link bel
 		</cflock>
 						
 	</cffunction>
+
+	<cffunction name="getGroup" access="public" returnType="struct" output="false"
+				hint="Returns a group.">
+		<cfargument name="id" type="uuid" required="true">
+		<cfset var qGetGroup = "">
+		<cfset var s = structNew()>
+		
+		<cfquery name="qGetGroup" datasource="#variables.dsn#">
+			select	id, 
+			<cfif variables.dbtype is not "mysql">
+			[group]
+			<cfelse>
+			`group`
+			</cfif>
+			from	#variables.tableprefix#groups
+			where	id
+			 = <cfqueryparam value="#arguments.id#" cfsqltype="CF_SQL_VARCHAR" maxlength="35">
+		</cfquery>
+		
+		<cfif qGetGroup.recordCount>
+			<cfset s.id = qGetGroup.id>
+			<cfset s.group = qGetGroup.group>
+			<cfreturn s>
+		<cfelse>
+			<cfset variables.utils.throw("UserCFC","Invalid Group [#arguments.id#]")>
+		</cfif>
+				
+	</cffunction>
 	
 	<cffunction name="getGroupID" access="public" returnType="uuid" output="false"
 				hint="Returns a group id.">
@@ -196,7 +249,7 @@ To complete your registration at #variables.title#, please click on the link bel
 			<cfelse>
 			#variables.tableprefix#groups.group
 			</cfif>
-			 = <cfqueryparam value="#arguments.group#" cfsqltype="CF_SQL_VARCHAR" maxlength="50">
+			 = <cfqueryparam value="#arguments.group#" cfsqltype="CF_SQL_VARCHAR" maxlength="255">
 		</cfquery>
 		
 		<cfif qGetGroup.recordCount>
@@ -267,6 +320,7 @@ To complete your registration at #variables.title#, please click on the link bel
 		<cfargument name="username" type="string" required="true">
 		<cfset var qGetUser = "">
 		<cfset var user = structNew()>
+		<cfset var g = "">
 		
 		<!---
 		<cfquery name="qGetUser" datasource="#variables.dsn#">		
@@ -285,7 +339,7 @@ To complete your registration at #variables.title#, please click on the link bel
 		<cfquery name="qGetUser" datasource="#variables.dsn#">		
 		select #variables.tableprefix#users.id, #variables.tableprefix#users.username, #variables.tableprefix#users.password, 
 		#variables.tableprefix#users.emailaddress, #variables.tableprefix#users.datecreated,
-		#variables.tableprefix#users.confirmed, #variables.tableprefix#users.signature
+		#variables.tableprefix#users.confirmed, #variables.tableprefix#users.signature, #variables.tableprefix#users.avatar
 		from #variables.tableprefix#users
 		where #variables.tableprefix#users.username = <cfqueryparam value="#arguments.username#" cfsqltype="CF_SQL_VARCHAR" maxlength="50">
 		</cfquery>
@@ -303,6 +357,11 @@ To complete your registration at #variables.title#, please click on the link bel
 			<cfset user.postcount = 0>
 		</cfif>
 		<cfset user.groups = getGroupsForUser(arguments.username)>
+		
+		<cfset user.groupids = "">
+		<cfloop index="g" list="#user.groups#">
+			<cfset user.groupids = listAppend(user.groupids, getGroupId(g))>
+		</cfloop>
 		
 		<cfreturn user>
 			
@@ -370,6 +429,40 @@ To complete your registration at #variables.title#, please click on the link bel
 		</cfquery>
 		
 	</cffunction>
+
+	<cffunction name="saveGroup" access="public" returnType="void" output="false"
+				hint="Attempts to save a group.">
+		<cfargument name="id" type="uuid" required="true">
+		<cfargument name="group" type="string" required="true">
+		<cfset var checkgroup = "">
+		
+		<cflock name="user.cfc" type="exclusive" timeout="30">
+			<cfquery name="checkgroup" datasource="#variables.dsn#">
+				select	id
+				from	#variables.tableprefix#groups
+				where
+					#variables.tableprefix#groups.<cfif variables.dbtype is not "mysql">[group]<cfelse>group</cfif>
+					  = <cfqueryparam value="#arguments.group#" cfsqltype="CF_SQL_VARCHAR" maxlength="255">
+				and		id != <cfqueryparam value="#arguments.id#" cfsqltype="cf_sql_varchar" maxlength="35">
+			</cfquery>
+
+			<cfif checkgroup.recordCount>
+				<cfset variables.utils.throw("User CFC","Another group has that name")>
+			<cfelse>		
+				<cfquery datasource="#variables.dsn#">
+				update	#variables.tableprefix#groups
+				set
+				<cfif variables.dbtype is not "mysql">
+					[group] 
+				<cfelse>
+					`group`
+				</cfif> = <cfqueryparam value="#arguments.group#" cfsqltype="CF_SQL_VARCHAR" maxlength="255">
+				where	id = <cfqueryparam value="#arguments.id#" cfsqltype="CF_SQL_VARCHAR" maxlength="35">
+				</cfquery>
+			</cfif>
+		</cflock>	
+				
+	</cffunction>
 	
 	<cffunction name="saveUser" access="public" returnType="void" output="false"
 				hint="Attempts to save a user.">
@@ -379,7 +472,8 @@ To complete your registration at #variables.title#, please click on the link bel
 		<cfargument name="datecreated" type="date" required="true">
 		<cfargument name="groups" type="string" required="false">
 		<cfargument name="confirmed" type="boolean" required="false" default="false">
-		<cfargument name="signature" type="string" required="false" >
+		<cfargument name="signature" type="string" required="false">
+		<cfargument name="avatar" type="string" required="false">
 		
 		<cfset var uid = getUserId(arguments.username)>
 
@@ -391,7 +485,8 @@ To complete your registration at #variables.title#, please click on the link bel
 					confirmed = <cfqueryparam value="#arguments.confirmed#" cfsqltype="CF_SQL_BIT">
 					<cfif structKeyExists(arguments, "signature")>
 					,
-					signature = <cfqueryparam value="#left(htmleditFormat(arguments.signature),1000)#" cfsqltype="cf_sql_varchar">
+					signature = <cfqueryparam value="#left(htmleditFormat(arguments.signature),1000)#" cfsqltype="cf_sql_varchar">,
+					avatar = <cfqueryparam value="#arguments.avatar#" cfsqltype="cf_sql_varchar" maxlength="255">
 					</cfif>
 			where	username = <cfqueryparam value="#arguments.username#" cfsqltype="CF_SQL_VARCHAR" maxlength="50">
 		</cfquery>

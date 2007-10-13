@@ -2,24 +2,8 @@
 	Name         : message.cfc
 	Author       : Raymond Camden 
 	Created      : October 21, 2004
-	Last Updated : May 1, 2007
-	History      : We now check sendonpost to see if we notify admin on posts (rkc 10/21/04)
-				   The email sent to admins now cotain forum/conference name. (rkc 2/11/05)
-				   Was calling util.throw, not utils (rkc 3/31/05)
-				   We needed settings, so now I just pass them all in. (rkc 7/14/05)
-				   Subscriptions are different now (rkc 7/29/05)
-				   New init, tableprefix (rkc 8/27/05)
-				   getmessages returns forum+conference (rkc 9/9/05)
-				   limit search string (rkc 10/30/05)
-				   make title in subjects dynamic, fix SaveMessage for moderators (rkc 7/12/06)
-				   Simple size change + new email support (rkc 7/27/06)
-				   Render moved in here - attachment support (rkc 11/3/06)
-				   Swaped render around (rkc 11/6/06)
-				   Don't send email twice to admin, slight email tweaks (rkc 11/9/06)
-				   Fix up the deletion of attachments (rkc 11/16/06)
-				   Slight change to emails sent out - send the username as well (rkc 12/5/6)
-				   Changed calls to isUserInAnyRole to isTheUserInAnyRole (rkc 5/1/07)
-				   Support for [img] (rkc 12/8/06)
+	Last Updated : October 12, 2007
+	History      : Reset for V2
 	Purpose		 : 
 --->
 <cfcomponent displayName="Message" hint="Handles Messages.">
@@ -52,6 +36,7 @@
 		<cfset var newid = createUUID()>
 		<cfset var notifiedList = "">
 		<cfset var body = "">
+		<cfset var posted = now()>
 		
 		<!--- First see if we can add a message. Because roles= doesn't allow for OR, we use a UDF --->
 		<cfif not variables.utils.isTheUserInAnyRole("forumsadmin,forumsmoderator,forumsmember")>
@@ -70,11 +55,15 @@
 		<!--- is the forum readonly, or non existent? --->
 		<cftry>
 			<cfset forum = variables.forum.getForum(arguments.forumid)>
+			<!---
 			<cfif forum.readonly and not isUserInRole("forumsadmin")>
 				<cfset badForum = true>
 			<cfelse>
 				<cfset tmpConference = variables.conference.getConference(forum.conferenceidfk)>
 			</cfif>
+			--->
+			<cfset tmpConference = variables.conference.getConference(forum.conferenceidfk)>
+
 			<cfcatch type="forumcfc">
 				<!--- don't really care which it is - it is bad --->
 				<cfset badForum = true>
@@ -89,9 +78,11 @@
 		<cfif isDefined("arguments.threadid")>
 			<cftry>
 				<cfset tmpThread = variables.thread.getThread(arguments.threadid)>
+				<!---
 				<cfif tmpThread.readonly and not isUserInRole("forumsadmin")>
 					<cfset badThread = true>
 				</cfif>
+				--->
 				<cfcatch type="threadcfc">
 					<!--- don't really care which it is - it is bad --->
 					<cfset badThread = true>
@@ -109,7 +100,7 @@
 			<cfset tmpThread.active = true>
 			<cfset tmpThread.forumidfk = arguments.forumid>
 			<cfset tmpThread.useridfk = variables.user.getUserID(arguments.username)>
-			<cfset tmpThread.dateCreated = now()>
+			<cfset tmpThread.dateCreated = posted>
 			<cfset tmpThread.sticky = false>
 			<cfset arguments.threadid = variables.thread.addThread(tmpThread)>
 		</cfif>
@@ -121,7 +112,7 @@
 				   <cfqueryparam value="#arguments.message.body#" cfsqltype="CF_SQL_LONGVARCHAR">,
 				   <cfqueryparam value="#variables.user.getUserID(arguments.username)#" cfsqltype="CF_SQL_VARCHAR" maxlength="35">,
 				   <cfqueryparam value="#arguments.threadid#" cfsqltype="CF_SQL_VARCHAR" maxlength="35">,
-				   <cfqueryparam value="#now()#" cfsqltype="CF_SQL_TIMESTAMP">,
+				   <cfqueryparam value="#posted#" cfsqltype="CF_SQL_TIMESTAMP">,
 				   <cfqueryparam value="#arguments.message.attachment#" cfsqltype="CF_SQL_VARCHAR" maxlength="255">,
    				   <cfqueryparam value="#arguments.message.filename#" cfsqltype="CF_SQL_VARCHAR" maxlength="255">				   
 				   )
@@ -152,6 +143,11 @@ User:		#arguments.username#
 
 		</cfif>
 		
+		<!--- Now we notify our thread, forum, and conference on our new stats --->
+		<cfset variables.conference.updateLastMessage(tmpConference.id, arguments.threadid, variables.user.getUserID(arguments.username), posted)>
+		<cfset variables.forum.updateLastMessage(forum.id, arguments.threadid, variables.user.getUserID(arguments.username), posted)>
+		<cfset variables.thread.updateLastMessage(arguments.threadid, variables.user.getUserID(arguments.username), posted)>
+		
 		<cfreturn newid>
 				
 	</cffunction>
@@ -160,7 +156,10 @@ User:		#arguments.username#
 				hint="Deletes a message.">
 
 		<cfargument name="id" type="uuid" required="true">
+		<cfargument name="runupdate" type="boolean" required="false" default="true">
+		
 		<cfset var q = "">
+		<cfset var m = getMessage(arguments.id)>
 		
 		<!--- First see if we can delete a message. Because roles= doesn't allow for OR, we use a UDF --->
 		<cfif not variables.utils.isTheUserInAnyRole("forumsadmin,forumsmoderator")>
@@ -180,6 +179,11 @@ User:		#arguments.username#
 		
 		<cfif len(q.filename) and fileExists("#variables.attachmentdir#/#q.filename#")>
 			<cffile action="delete" file="#variables.attachmentdir#/#q.filename#">
+		</cfif>
+
+		<!--- update my parent --->
+		<cfif arguments.runupdate>
+			<cfset variables.thread.updateStats(m.threadidfk)>
 		</cfif>
 		
 	</cffunction>
@@ -286,6 +290,7 @@ Message:
 		<cfreturn valueList(subscribers.emailaddress)>
 	</cffunction>
 	
+	<!--- DISABLED! Now that we have bbml. --->
 	<cffunction name="renderMessage" access="public" returnType="string" roles="" output="false"
 				hint="This is used to render messages. Handles all string manipulations.">
 		<cfargument name="message" type="string" required="true">
@@ -413,11 +418,25 @@ Message:
 		<cfset var msg = "">
 		
 		<cfsavecontent variable="msg">
-All URLs will be automatically linked. No HTML is allowed in your message.<br />
-You may include code in your message like so: [code]...[/code].<br />
-You may include an image in your message like so: [img]url[/img].<br />
-To add a quote, use [quote]...[/quote].<br />
-To annotate the quote, use [quote name="foo"]...[/quote].
+No HTML is allowed in your message. Basic Formatting Rules:<br />
+<table cellpadding="10">
+<tr valign="top">
+<td>
+[b]...[/b] for bold<br />
+[i]...[/i] for italics<br />
+[code]...[/code] for code<br />
+</td>
+<td>
+[pre]...[/pre] for preformatted text<br />
+[link]...[/link] for URLs<br />
+[img]...[/img] for images<br />
+</td>
+</tr>
+</table>
+
+<p>
+<a href="syntax.cfm">View Complete BBML Syntax</a> DBML support courtesy of <a href="http://www.depressedpress.com/Content/Development/ColdFusion/Extensions/DP_ParseBBML/Index.cfm" target="_new">DP_ParseBBML</a>
+</p>
 		</cfsavecontent>
 		
 		<cfreturn msg>	
@@ -477,9 +496,11 @@ To annotate the quote, use [quote name="foo"]...[/quote].
 		</cfif>
 		
 		<cfquery name="results" datasource="#variables.dsn#">
-			select	id, title, threadidfk 
-			from	#variables.tableprefix#messages
-			where	1 = 1
+			select	m.id, m.title, m.threadidfk, t.forumidfk, f.conferenceidfk
+			from	#variables.tableprefix#messages m, #variables.tableprefix#threads t,
+					#variables.tableprefix#forums f
+			where	m.threadidfk = t.id
+			and		t.forumidfk = f.id
 			and (
 				<cfif arguments.searchtype is not "phrase">
 					<cfloop index="x" from=1 to="#arrayLen(aTerms)#">

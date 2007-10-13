@@ -1,17 +1,17 @@
 <!---
 [settings]
-dsn=galleon
-perpage=20
-fromAddress=galleon@localhost
-rootURL=http://127.0.0.1:8500/galleon/
-sendonpost=admin@localhost
+dsn=galleon2
+perpage=17
+fromAddress=galleon@localhost.com
+rootURL=http://127.0.0.1/forums
+sendonpost=youremail@goeshere.com
 dbtype=mysql
 tableprefix=galleon_
-version=1.7.013
+version=2
 requireconfirmation=true
 title=Galleon Forums
 fullemails=true
 encryptpasswords=false
-allowgravatars=true
+allowavatars=true
 safeExtensions=zip,tar,jpg,gif,png,wpd,doc,pdf,xls,ppt,txt,odt
 --->

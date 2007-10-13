@@ -2,16 +2,8 @@
 	Name         : thread.cfc
 	Author       : Raymond Camden 
 	Created      : January 26, 2005
-	Last Updated : May 1, 2007
-	History      : Support for dbtype, and uuid (rkc 1/26/05)
-				   New init, tableprefix (rkc 8/27/05)
-				   Sticky (rkc 8/29/05)
-				   Access dbs did stickies wrong, return conf on getall (rkc 9/9/05)
-				   Remove from subscriptions (rkc 11/22/05)
-				   limit search length (rkc 10/30/05)
-				   show last user (rkc 7/12/06)
-				   Simple size change (rkc 7/27/06)
-				   change to isTheUserInAnyRole (rkc 5/1/07)
+	Last Updated : October 12, 2007
+	History      : Reset for V2
 	Purpose		 : 
 --->
 <cfcomponent displayName="Thread" hint="Handles Threads which contain a collection of message.">
@@ -45,15 +37,15 @@
 		</cfif>
 		
 		<cfquery name="newthread" datasource="#variables.dsn#">
-			insert into #variables.tableprefix#threads(id,name,readonly,active,forumidfk,useridfk,datecreated,sticky)
+			insert into #variables.tableprefix#threads(id,name,active,forumidfk,useridfk,datecreated,sticky,messages)
 			values(<cfqueryparam value="#newid#" cfsqltype="CF_SQL_VARCHAR" maxlength="35">,
 				   <cfqueryparam value="#arguments.thread.name#" cfsqltype="CF_SQL_VARCHAR" maxlength="255">,
-				   <cfqueryparam value="#arguments.thread.readonly#" cfsqltype="CF_SQL_BIT">,
 				   <cfqueryparam value="#arguments.thread.active#" cfsqltype="CF_SQL_BIT">,
 				   <cfqueryparam value="#arguments.thread.forumidfk#" cfsqltype="CF_SQL_VARCHAR" maxlength="35">,
    				   <cfqueryparam value="#arguments.thread.useridfk#" cfsqltype="CF_SQL_VARCHAR" maxlength="35">,
 				   <cfqueryparam value="#arguments.thread.datecreated#" cfsqltype="CF_SQL_TIMESTAMP">,
-   				   <cfqueryparam value="#arguments.thread.sticky#" cfsqltype="CF_SQL_BIT">
+   				   <cfqueryparam value="#arguments.thread.sticky#" cfsqltype="CF_SQL_BIT">,
+					0
 				   )
 		</cfquery>
 		
@@ -64,12 +56,15 @@
 				hint="Deletes a thread along with all of it's children.">
 
 		<cfargument name="id" type="uuid" required="true">
+		<cfargument name="runupdate" type="boolean" required="false" default="true">
+		
+		<cfset var t = getThread(arguments.id)>
 		
 		<!--- delete kids --->
 		<cfset var msgKids = variables.message.getMessages(arguments.id)>
 		
 		<cfloop query="msgKids">
-			<cfset variables.message.deleteMessage(msgKids.id)>
+			<cfset variables.message.deleteMessage(msgKids.id,false)>
 		</cfloop>
 
 		<cfquery datasource="#variables.dsn#">
@@ -83,6 +78,11 @@
 			where	threadidfk = <cfqueryparam value="#arguments.id#" cfsqltype="CF_SQL_VARCHAR" maxlength="35">
 		</cfquery>
 		
+		<!--- update my parent --->
+		<cfif arguments.runupdate>
+			<cfset variables.forum.updateStats(t.forumidfk)>
+		</cfif>
+		
 	</cffunction>
 	
 	<cffunction name="getThread" access="remote" returnType="struct" output="false"
@@ -91,7 +91,7 @@
 		<cfset var qGetThread = "">
 				
 		<cfquery name="qGetThread" datasource="#variables.dsn#">
-			select	id, name, readonly, active, forumidfk, useridfk, datecreated, sticky
+			select	id, name, active, forumidfk, useridfk, datecreated, sticky, lastpostuseridfk, lastpostcreated
 			from	#variables.tableprefix#threads
 			where	id = <cfqueryparam value="#arguments.id#" cfsqltype="CF_SQL_VARCHAR" maxlength="35">
 		</cfquery>
@@ -125,49 +125,23 @@
 		</cfif>
 		
 		<cfquery name="qGetThreads" datasource="#variables.dsn#">
-		select #variables.tableprefix#threads.id, #variables.tableprefix#threads.name, #variables.tableprefix#threads.readonly, 
-		#variables.tableprefix#threads.active, #variables.tableprefix#threads.forumidfk, #variables.tableprefix#threads.useridfk, 
-		#variables.tableprefix#threads.datecreated, #variables.tableprefix#forums.name as forum, #variables.tableprefix#users.username,
-		max(#variables.tableprefix#messages.posted) as lastpost, count(#variables.tableprefix#messages.id) as messagecount, #variables.tableprefix#threads.sticky,
-		#variables.tableprefix#conferences.name as conference
-		from (((#variables.tableprefix#threads left join #variables.tableprefix#messages on #variables.tableprefix#threads.id = #variables.tableprefix#messages.threadidfk) 
-		inner join #variables.tableprefix#forums on #variables.tableprefix#threads.forumidfk = #variables.tableprefix#forums.id)
-		inner join #variables.tableprefix#conferences on #variables.tableprefix#forums.conferenceidfk = #variables.tableprefix#conferences.id)
-
-		inner join #variables.tableprefix#users on #variables.tableprefix#threads.useridfk = #variables.tableprefix#users.id
-
+		select	t.id, t.name, t.active, t.forumidfk, t.useridfk, t.datecreated, t.messages, t.lastpostuseridfk,
+			   	t.lastpostcreated, f.name as forum, u.username, sticky, c.name as conference
+		
+		from	#variables.tableprefix#threads t
+		inner join #variables.tableprefix#forums f on t.forumidfk = f.id
+		inner join #variables.tableprefix#conferences c on f.conferenceidfk = c.id
+		inner join #variables.tableprefix#users u on t.useridfk = u.id
+		
 		where 1=1 
 		<cfif arguments.bActiveOnly>
-			and		#variables.tableprefix#threads.active = 1
+			and		t.active = 1
 		</cfif>
 		<cfif isDefined("arguments.forumid")>
-			and		#variables.tableprefix#threads.forumidfk = <cfqueryparam value="#arguments.forumid#" cfsqltype="CF_SQL_VARCHAR" maxlength="35">
+			and		t.forumidfk = <cfqueryparam value="#arguments.forumid#" cfsqltype="CF_SQL_VARCHAR" maxlength="35">
 		</cfif>
-
-		group by #variables.tableprefix#threads.id, #variables.tableprefix#threads.name, #variables.tableprefix#threads.readonly, #variables.tableprefix#threads.active, 
-    	#variables.tableprefix#threads.forumidfk, #variables.tableprefix#threads.useridfk, #variables.tableprefix#threads.datecreated, #variables.tableprefix#forums.name, #variables.tableprefix#users.username, #variables.tableprefix#threads.sticky, #variables.tableprefix#conferences.name
-
-		order by #variables.tableprefix#threads.sticky <cfif variables.dbtype is not "msaccess">desc<cfelse>asc</cfif>,
-		<cfif variables.dbtype is not "mysql">
-			max(#variables.tableprefix#messages.posted) desc		
-		<cfelse>
-			lastpost desc
-		</cfif>
+		order by t.sticky <cfif variables.dbtype is not "msaccess">desc<cfelse>asc</cfif>, t.messages
 		</cfquery>
-
-		<!--- My ugly hack to add useridfk. There must be a better way to do this. --->
-		<cfset queryAddColumn(qGetThreads, "lastuseridfk", arrayNew(1))>
-		<cfloop query="qGetThreads">
-			<cfif len(lastpost)>
-				<cfquery name="getLastUser" datasource="#variables.dsn#">
-				select	useridfk
-				from	#variables.tableprefix#messages
-				where	threadidfk = <cfqueryparam cfsqltype="cf_sql_varchar" value="#id#" maxlength="35">
-				and		posted = <cfqueryparam cfsqltype="cf_sql_timestamp" value="#lastpost#">
-				</cfquery>
-				<cfset querySetCell(qGetThreads, "lastuseridfk", getLastUser.useridfk, currentRow)>
-			</cfif>
-		</cfloop>
 		
 		<cfreturn qGetThreads>
 			
@@ -186,7 +160,6 @@
 		<cfquery datasource="#variables.dsn#">
 			update	#variables.tableprefix#threads
 			set		name = <cfqueryparam value="#arguments.thread.name#" cfsqltype="CF_SQL_VARCHAR" maxlength="255">,
-					readonly = <cfqueryparam value="#arguments.thread.readonly#" cfsqltype="CF_SQL_BIT">,
 					active = <cfqueryparam value="#arguments.thread.active#" cfsqltype="CF_SQL_BIT">,
 					forumidfk = <cfqueryparam value="#arguments.thread.forumidfk#" cfsqltype="CF_SQL_VARCHAR" maxlength="35">,
 					useridfk = <cfqueryparam value="#arguments.thread.useridfk#" cfsqltype="CF_SQL_VARCHAR" maxlength="35">,
@@ -223,29 +196,97 @@
 		</cfif>
 		
 		<cfquery name="results" datasource="#variables.dsn#">
-			select	id, name
-			from	#variables.tableprefix#threads
-			where	active = 1
+			select	t.id, t.name, t.forumidfk, f.conferenceidfk
+			from	#variables.tableprefix#threads t, #variables.tableprefix#forums f
+			where	t.active = 1
+			and		t.forumidfk = f.id
 			and (
 				<cfif arguments.searchtype is not "phrase">
 					<cfloop index="x" from=1 to="#arrayLen(aTerms)#">
-						(name like <cfqueryparam cfsqltype="CF_SQL_VARCHAR" maxlength="255" value="%#left(aTerms[x],255)#%">)
+						(t.name like <cfqueryparam cfsqltype="CF_SQL_VARCHAR" maxlength="255" value="%#left(aTerms[x],255)#%">)
 						 <cfif x is not arrayLen(aTerms)>#joiner#</cfif>
 					</cfloop>
 				<cfelse>
-					name like <cfqueryparam cfsqltype="CF_SQL_VARCHAR" maxlength="255" value="%#left(arguments.searchTerms,255)#%">
+					t.name like <cfqueryparam cfsqltype="CF_SQL_VARCHAR" maxlength="255" value="%#left(arguments.searchTerms,255)#%">
 				</cfif>
 			)
 		</cfquery>
 		
 		<cfreturn results>
 	</cffunction>
+
+	<cffunction name="updateLastMessage" access="public" returnType="void" output="false" hint="Updates last message stats">
+		<cfargument name="id" type="uuid" required="true">
+		<cfargument name="userid" type="uuid" required="true">
+		<cfargument name="posted" type="date" required="true">
+			
+		<cfquery datasource="#variables.dsn#">
+		update	#variables.tableprefix#threads
+		set		lastpostuseridfk = <cfqueryparam cfsqltype="cf_sql_varchar" maxlength="35" value="#arguments.userid#">,
+				lastpostcreated = <cfqueryparam cfsqltype="cf_sql_timestamp" value="#arguments.posted#">,
+				messages = messages + 1
+		where	id = <cfqueryparam cfsqltype="cf_sql_varchar" maxlength="35" value="#arguments.id#">
+		</cfquery>
+		
+	</cffunction>
+
+	<cffunction name="updateStats" access="public" returnType="void" output="false" hint="Reset stats for thread">
+		<cfargument name="id" type="uuid" required="true">
+		<cfset var threadKids = "">
+		<cfset var me = getThread(arguments.id)>
+		<cfset var total = 0>
+		<cfset var last = createDate(1900,1,1)>
+		<cfset var lastu = "">
+		<cfset var lasti = "">
+		<cfset var haveSome = false>
+		
+		<!---
+		Rather simple. Get my kids. Count total msgs, and pick latest date 
+		--->
+
+		<cfset msgKids = variables.message.getMessages(arguments.id)>
+		<cfset haveSome = msgKids.recordCount gte 1>
+
+		<!--- last msg is latest --->
+		<cfif haveSome>
+			<cfset total = msgKids.recordCount>
+			<cfset last = msgKids.posted[msgKids.recordCount]>
+			<cfset lastu = msgKids.useridfk[msgKids.recordCount]>
+			<cfset lasti = msgKids.id[msgKids.recordCount]>
+			<!--- lasti is NOT used. I know this. keeping this anyway for now. --->
+		</cfif>
+
+		<!--- now update this conf --->
+		<cfif haveSome>
+			<cfquery datasource="#variables.dsn#">
+			update	#variables.tableprefix#threads
+			set		
+					lastpostuseridfk = <cfqueryparam cfsqltype="cf_sql_varchar" maxlength="35" value="#lastu#">,
+					lastpostcreated = <cfqueryparam cfsqltype="cf_sql_timestamp" value="#last#">,
+					messages = <cfqueryparam cfsqltype="cf_sql_numeric" value="#total#">
+			where	id = <cfqueryparam cfsqltype="cf_sql_varchar" maxlength="35" value="#arguments.id#">
+			</cfquery>
+		<cfelse>
+			<cfquery datasource="#variables.dsn#">
+			update	#variables.tableprefix#forums
+			set		
+					lastpostuseridfk = <cfqueryparam cfsqltype="cf_sql_varchar" null="true">,
+					lastpostcreated = <cfqueryparam cfsqltype="cf_sql_timestamp" null="true">,
+					messages = <cfqueryparam cfsqltype="cf_sql_numeric" value="0">
+			where	id = <cfqueryparam cfsqltype="cf_sql_varchar" maxlength="35" value="#arguments.id#">
+			</cfquery>
+		</cfif>
+		
+		<!--- now update my parent --->
+		<cfset variables.forum.updateStats(me.forumidfk)>
+		
+	</cffunction>
 	
 	<cffunction name="validThread" access="private" returnType="boolean" output="false"
 				hint="Checks a structure to see if it contains all the proper keys/values for a thread.">
 		
 		<cfargument name="cData" type="struct" required="true">
-		<cfset var rList = "name,readonly,active,forumidfk,useridfk,datecreated,sticky">
+		<cfset var rList = "name,active,forumidfk,useridfk,datecreated,sticky">
 		<cfset var x = "">
 		
 		<cfloop index="x" list="#rList#">
@@ -273,8 +314,13 @@
 	</cffunction>
 
 	<cffunction name="setMessage" access="public" output="No" returntype="void">
-		<cfargument name="message" required="true" hint="utils">
+		<cfargument name="message" required="true" hint="message">
 		<cfset variables.message = arguments.message />
+	</cffunction>
+
+	<cffunction name="setForum" access="public" output="No" returntype="void">
+		<cfargument name="forum" required="true" hint="forum">
+		<cfset variables.forum = arguments.forum />
 	</cffunction>
 
 </cfcomponent>

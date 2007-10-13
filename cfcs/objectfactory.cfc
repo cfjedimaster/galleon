@@ -61,6 +61,7 @@
 						// inject dependencies through setter
 						obj.setSettings( get('galleonSettings', arguments.singleton) );
 						obj.setThread( get('thread', arguments.singleton) );
+						obj.setConference( get('conference', arguments.singleton) );						
 						obj.setUtils( get('utils', arguments.singleton) );
 					return obj;
 				break;
@@ -88,6 +89,16 @@
 					return obj;
 				break;
 
+				case "permission":
+					obj = createObject('component','permission').init();
+						if (arguments.singleton) { // scope singleton
+							addSingleton(arguments.objName, obj);
+						}
+						// inject dependencies through setter
+						obj.setSettings( get('galleonSettings', arguments.singleton) );
+					return obj;
+				break;
+
 				case "rank":
 					obj = createObject('component','rank').init();
 						if (arguments.singleton) { // scope singleton
@@ -107,6 +118,7 @@
 						// inject dependencies through setter
 						obj.setSettings( get('galleonSettings', arguments.singleton) );
 						obj.setUtils( get('utils', arguments.singleton) );
+						obj.setForum( get('forum', arguments.singleton) );
 						obj.setMessage( get('message', arguments.singleton) );
 					return obj;
 				break;
@@ -124,6 +136,15 @@
 
 				case "utils":
 					obj = createObject('component','utils');
+						if (arguments.singleton) { // scope singleton
+							addSingleton(arguments.objName, obj);
+						}
+						// inject dependencies through setter
+					return obj;
+				break;
+
+				case "image":
+					obj = createObject('component','Image');
 						if (arguments.singleton) { // scope singleton
 							addSingleton(arguments.objName, obj);
 						}

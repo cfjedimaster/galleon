@@ -17,4 +17,14 @@
 		
 	</cffunction>
 	
+	<cffunction name="setSetting" access="public" returnType="void" output="false">
+		<cfargument name="name" type="string" required="true">
+		<cfargument name="value" type="string" required="true">
+
+		<cfset var settingsFile = replace(getDirectoryFromPath(getCurrentTemplatePath()),"\","/","all") & "/settings.ini.cfm">
+
+		<cfset setProfileString(settingsFile, "settings", arguments.name, arguments.value)>
+				
+	</cffunction>
+	
 </cfcomponent>

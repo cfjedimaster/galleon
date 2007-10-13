@@ -2,18 +2,8 @@
 	Name         : message.cfc
 	Author       : Raymond Camden 
 	Created      : January 25, 2005
-	Last Updated : November 5, 2006
-	History      : Support dbtype, switched to UUID (rkc 1/25/05)
-				   Fix use of top in mysql (rkc 2/3/05)
-				   getConferences can now get msgcount, lastpost (rkc 4/4/05)
-   				   New init, use of table prefix (rkc 8/27/05)
-				   query returns threadid of last post. thanks to shlomy! (rkc 9/15/05)
-				   limit length of search term (rkc 10/30/05)
-				   clean up subscriptions (rkc 11/22/05)
-				   show last user for post, other small fixes (rkc 7/12/06)
-				   Simple size change (rkc 7/27/06)
-				   Note to myself on bug to look into (rkc 11/3/06)
-				   Reverted description to text field (rkc 11/5/06) 
+	Last Updated : October 12, 2007
+	History      : Reset for V2
 	Purpose		 : 
 --->
 <cfcomponent displayName="Conference" hint="Handles Conferences, the highest level container for Forums.">
@@ -41,11 +31,12 @@
 		</cfif>
 		
 		<cfquery name="newconference" datasource="#variables.dsn#">
-			insert into #variables.tableprefix#conferences(id,name,description,active)
+			insert into #variables.tableprefix#conferences(id,name,description,active,messages)
 			values(<cfqueryparam value="#newid#" cfsqltype="CF_SQL_VARCHAR" maxlength="35">,
 				   <cfqueryparam value="#arguments.conference.name#" cfsqltype="CF_SQL_VARCHAR" maxlength="255">,
 				   <cfqueryparam value="#arguments.conference.description#" cfsqltype="CF_SQL_VARCHAR" maxlength="255">,
-				   <cfqueryparam value="#arguments.conference.active#" cfsqltype="CF_SQL_BIT">
+				   <cfqueryparam value="#arguments.conference.active#" cfsqltype="CF_SQL_BIT">,
+				   0
 				   )
 		</cfquery>
 		
@@ -62,7 +53,7 @@
 		<!--- first, delete my children --->
 		<cfset forumKids = variables.forum.getForums(false,arguments.id)>
 		<cfloop query="forumKids">
-			<cfset variables.forum.deleteForum(forumKids.id)>
+			<cfset variables.forum.deleteForum(forumKids.id,false)>
 		</cfloop>
 		
 		<cfquery datasource="#variables.dsn#">
@@ -84,7 +75,7 @@
 		<cfset var qGetConference = "">
 				
 		<cfquery name="qGetConference" datasource="#variables.dsn#">
-			select	id, name, description, active
+			select	id, name, description, active, messages, lastpost, lastpostuseridfk, lastpostcreated
 			from	#variables.tableprefix#conferences
 			where	id = <cfqueryparam value="#arguments.id#" cfsqltype="CF_SQL_VARCHAR" maxlength="35">
 		</cfquery>
@@ -96,7 +87,7 @@
 		
 		<!--- Only a ForumsAdmin can get bActiveOnly=false --->
 		<cfif not qGetConference.active and not isUserInRole("forumsadmin")>
-			<cfset variables.utils.throw("ConferenceCFC","Invalid call to getConferfence")>
+			<cfset variables.utils.throw("ConferenceCFC","Invalid call to getConference")>
 		</cfif>
 		
 		<cfreturn variables.utils.queryToStruct(qGetConference)>
@@ -107,94 +98,20 @@
 				hint="Returns a list of conferences.">
 
 		<cfargument name="bActiveOnly" type="boolean" required="false" default="true">
+		
 		<cfset var qGetConferences = "">
 		
 		<!--- Only a ForumsAdmin can be bActiveOnly=false --->
 		<cfif not arguments.bActiveOnly and not isUserInRole("forumsadmin")>
-			<cfset variables.utils.throw("ConferenceCFC","Invalid call to getConferfences")>
+			<cfset variables.utils.throw("ConferenceCFC","Invalid call to getConferences")>
 		</cfif>
 		
 		<cfquery name="qGetConferences" datasource="#variables.dsn#">
-			select #variables.tableprefix#conferences.id,#variables.tableprefix#conferences.name, #variables.tableprefix#conferences.description, 
-			#variables.tableprefix#conferences.active, Count(#variables.tableprefix#messages.id) AS messagecount, max(#variables.tableprefix#messages.posted)
-			as lastpost,
-			(
-			select threadidfk from #variables.tableprefix#messages m where  m.posted = (SELECT max(mm.posted)
-			as lastpost
-			from ((#variables.tableprefix#conferences c left JOIN #variables.tableprefix#forums f ON c.id = f.conferenceidfk) left
-			join #variables.tableprefix#threads t  ON f.id = t.forumidfk) left JOIN #variables.tableprefix#messages mm ON t.id =
-			mm.threadidfk  where c.id = #variables.tableprefix#conferences.id )
-			) as threadidfk,
-(
-select useridfk from #variables.tableprefix#messages m where  m.posted = (SELECT
-max(mm.posted) as lastpost from ((#variables.tableprefix#conferences c left JOIN
-#variables.tableprefix#forums f ON c.id = f.conferenceidfk) left join #variables.tableprefix#threads t  ON
-f.id = t.forumidfk) left JOIN #variables.tableprefix#messages mm ON t.id = mm.threadidfk
-where c.id = #variables.tableprefix#conferences.id )
-) as useridfk
-			from ((#variables.tableprefix#conferences left JOIN #variables.tableprefix#forums ON #variables.tableprefix#conferences.id =
-			#variables.tableprefix#forums.conferenceidfk) left JOIN #variables.tableprefix#threads ON #variables.tableprefix#forums.id = #variables.tableprefix#threads.forumidfk)
-			left JOIN #variables.tableprefix#messages ON #variables.tableprefix#threads.id = #variables.tableprefix#messages.threadidfk
-			<cfif arguments.bActiveOnly>
-			where	#variables.tableprefix#conferences.active = 1
-			</cfif>
-			GROUP BY #variables.tableprefix#conferences.id,#variables.tableprefix#conferences.name, #variables.tableprefix#conferences.description,
-			#variables.tableprefix#conferences.active
-			order by #variables.tableprefix#conferences.name
+			select	id, name, description, active, messages, lastpost, lastpostuseridfk, lastpostcreated
+			from	#variables.tableprefix#conferences
+			order by name
 		</cfquery>
-		
-		<!---
-		TODO: 
-		
-		I discovered a bug that crops up where 2 messages for the same conf have the same date. Need to ping my man Schlomy
-		<cfquery name="qGetConfs" datasource="#variables.dsn#">
-				select	#variables.tableprefix#conferences.id,#variables.tableprefix#conferences.name, #variables.tableprefix#conferences.description, 
-			   	#variables.tableprefix#conferences.active, count(#variables.tableprefix#messages.id) AS messagecount, max(#variables.tableprefix#messages.posted) as lastpost
-			from ((#variables.tableprefix#conferences left JOIN #variables.tableprefix#forums ON #variables.tableprefix#conferences.id =
-			#variables.tableprefix#forums.conferenceidfk) left JOIN #variables.tableprefix#threads ON #variables.tableprefix#forums.id = #variables.tableprefix#threads.forumidfk)
-			left JOIN #variables.tableprefix#messages ON #variables.tableprefix#threads.id = #variables.tableprefix#messages.threadidfk
-			<cfif arguments.bActiveOnly>
-			where	#variables.tableprefix#conferences.active = 1
-			</cfif>
-			GROUP BY #variables.tableprefix#conferences.id,#variables.tableprefix#conferences.name, #variables.tableprefix#conferences.description,
-			#variables.tableprefix#conferences.active
-
-			order by #variables.tableprefix#conferences.name
-		</cfquery>
-		
-		<cfset queryAddColumn(qGetConfs, "threadidfk", arrayNew(1))>
-		<cfset queryAddColumn(qGetConfs, "useridfk", arrayNew(1))>
-
-		<cfloop query="qGetConfs">
-		
-			<cfquery name="test" datasource="#variables.dsn#">
-			select threadidfk from #variables.tableprefix#messages m where  m.posted = 
-			(
-				SELECT max(mm.posted) 	as lastpost
-				from ((#variables.tableprefix#conferences c left JOIN #variables.tableprefix#forums f ON c.id = f.conferenceidfk) left
-				join #variables.tableprefix#threads t  ON f.id = t.forumidfk) left JOIN #variables.tableprefix#messages mm ON t.id =
-				mm.threadidfk  where c.id = #variables.tableprefix#conferences.id 
-			)
-			
-			<cfquery name="getForums" datasource="#variables.dsn#">
-			select	id
-			from	#variables.tableprefix#forums
-			where	conferenceidfk = <cfqueryparam cfsqltype="cf_sql_varchar" value="#id#">
-			</cfquery>
-			
-			<cfif getForums.recordCount>
-
-				<cfquery name="q" datasource="#variables.dsn#" >
-				select	max(datecreated) as lastpost
-				from	#variables.tableprefix#threads
-				where	forumidfk in (<cfqueryparam cfsqltype="cf_sql_varchar" value="#valueList(getForums.id)#" list="true">)
-				</cfquery>
 				
-				<cfset querySetCell(qGetConfs, "threadidfk", q.lastpost, currentRow)>
-			</cfif>
-		</cfloop>
-		--->
-		
 		<cfreturn qGetConferences>
 			
 	</cffunction>
@@ -231,7 +148,7 @@ where c.id = #variables.tableprefix#conferences.id )
 		<cfargument name="conference" type="struct" required="true">
 		
 		<cfif not validConference(arguments.conference)>
-			<cfset variables.utils.throw("ConferfenceCFC","Invalid data passed to saveConference.")>
+			<cfset variables.utils.throw("ConferenceCFC","Invalid data passed to saveConference.")>
 		</cfif>
 		
 		<cfquery datasource="#variables.dsn#">
@@ -293,6 +210,70 @@ where c.id = #variables.tableprefix#conferences.id )
 		<cfreturn results>
 	</cffunction>
 	
+	<cffunction name="updateLastMessage" access="public" returnType="void" output="false" hint="Updates last message stats">
+		<cfargument name="id" type="uuid" required="true">
+		<cfargument name="threadid" type="uuid" required="true">
+		<cfargument name="userid" type="uuid" required="true">
+		<cfargument name="posted" type="date" required="true">
+			
+		<cfquery datasource="#variables.dsn#">
+		update	#variables.tableprefix#conferences
+		set		lastpost = <cfqueryparam cfsqltype="cf_sql_varchar" maxlength="35" value="#arguments.threadid#">,
+				lastpostuseridfk = <cfqueryparam cfsqltype="cf_sql_varchar" maxlength="35" value="#arguments.userid#">,
+				lastpostcreated = <cfqueryparam cfsqltype="cf_sql_timestamp" value="#arguments.posted#">,
+				messages = messages + 1
+		where	id = <cfqueryparam cfsqltype="cf_sql_varchar" maxlength="35" value="#arguments.id#">
+		</cfquery>
+		
+	</cffunction>
+
+	<cffunction name="updateStats" access="public" returnType="void" output="false" hint="Reset stats for conferences">
+		<cfargument name="id" type="uuid" required="true">
+		<cfset var forumKids = "">
+		<cfset var total = 0>
+		<cfset var last = createDate(1900,1,1)>
+		<cfset var lastu = "">
+		<cfset var lasti = "">
+		<cfset var haveSome = false>
+		
+		<!---
+		Rather simple. Get my kids. Count total msgs, and pick latest date 
+		--->
+
+		<cfset forumKids = variables.forum.getForums(true,arguments.id)>
+		<cfset haveSome = forumKids.recordCount gte 1>
+		
+		<cfloop query="forumKids">
+			<cfset total = total + messages>
+			<cfif dateCompare(last, lastPostCreated) is -1>
+				<cfset last = lastpostcreated>
+				<cfset lastu = lastpostuseridfk>
+				<cfset lasti = lastpost>
+			</cfif>
+		</cfloop>
+
+		<!--- now update this conf --->
+		<cfif haveSome>
+			<cfquery datasource="#variables.dsn#">
+			update	#variables.tableprefix#conferences
+			set		lastpost = <cfqueryparam cfsqltype="cf_sql_varchar" maxlength="35" value="#lasti#">,
+					lastpostuseridfk = <cfqueryparam cfsqltype="cf_sql_varchar" maxlength="35" value="#lastu#">,
+					lastpostcreated = <cfqueryparam cfsqltype="cf_sql_timestamp" value="#last#">,
+					messages = <cfqueryparam cfsqltype="cf_sql_numeric" value="#total#">
+			where	id = <cfqueryparam cfsqltype="cf_sql_varchar" maxlength="35" value="#arguments.id#">
+			</cfquery>
+		<cfelse>
+			<cfquery datasource="#variables.dsn#">
+			update	#variables.tableprefix#conferences
+			set		lastpost = <cfqueryparam cfsqltype="cf_sql_varchar" null="true">,
+					lastpostuseridfk = <cfqueryparam cfsqltype="cf_sql_varchar" null="true">,
+					lastpostcreated = <cfqueryparam cfsqltype="cf_sql_timestamp" null="true">,
+					messages = <cfqueryparam cfsqltype="cf_sql_numeric" value="0">
+			where	id = <cfqueryparam cfsqltype="cf_sql_varchar" maxlength="35" value="#arguments.id#">
+			</cfquery>
+		</cfif>
+	</cffunction>
+		
 	<cffunction name="validConference" access="private" returnType="boolean" output="false"
 				hint="Checks a structure to see if it contains all the proper keys/values for a conference.">
 		
