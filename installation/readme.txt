@@ -26,11 +26,15 @@ Gifts are always welcome. ;)
 
 
 ---- LATEST VERSION ----
+2.0 (October 12, 2007)
+Please read the Migration Guide in the to2 folder. This guide covers everything you need to do.
+
+---- ARCHIVED UPDATES ----
 1.7.012 (May 1, 2007)
 /admin/users_edit.cfm - Do not htmleditformat the password or email address.
 /cfcs/settings.ini.cfm - Version 
 
----- ARCHIVED UPDATES ----
+
 1.7.012 (May 1, 2007)
 /images/gravatar.gif - used for people who don't have gravatar accounts
 /cfcs/message.cfc - use isTheUserInAnyRole

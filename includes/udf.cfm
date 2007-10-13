@@ -3,14 +3,8 @@
 	Name         : udf.cfm
 	Author       : Raymond Camden 
 	Created      : June 01, 2004
-	Last Updated : February 21, 2007
-	History      : Added ActivateURL (rkc 2/11/05)
-				   Added ParagraphFormat2 (rkc 3/28/05)
-				   Added call to get rank (rkc 8/28/05)
-				   Variety of a few new funcs (rkc 9/15/05)
-				   Change isLoggedOn and the get user info stuff (rkc 7/12/06)
-				   Moved some funcs into utils (rkc 11/3/06)
-				   bd fix (rkc 2/21/07)
+	Last Updated : October 12, 2007
+	History      : Reset for V2
 	Purpose		 : 
 --->
 
@@ -19,6 +13,12 @@ function isLoggedOn() {
 	return structKeyExists(session, "user");
 }
 request.udf.isLoggedOn = isLoggedOn;
+
+function getGroups() {
+	if(request.udf.isLoggedOn()) return session.user.groupids;
+	return "";
+}
+request.udf.getGroups = getGroups;
 
 /**
  * Tests passed value to see if it is a valid e-mail address (supports subdomain nesting and new top-level domains).
@@ -155,6 +155,10 @@ request.udf.headerLink = headerLink;
 	
 	<cfif not listFindNoCase(query.columnList, column)>
 		<cfreturn query>
+	</cfif>
+	
+	<cfif not listFindNoCase("asc,desc", arguments.direction)>
+		<cfset arguments.direction = "asc">
 	</cfif>
 	
 	<cfquery name="result" dbtype="query">
