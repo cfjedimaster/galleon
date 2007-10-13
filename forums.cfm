@@ -3,16 +3,8 @@
 	Name         : forums.cfm
 	Author       : Raymond Camden 
 	Created      : June 10, 2004
-	Last Updated : August 4, 2006
-	History      : Support for UUID (rkc 1/27/05)
-				   Display lastmsg, msgcount (rkc 4/6/05)
-				   Fixed code that gets # of pages (rkc 4/8/05)				
-				   Right colspan if no data (rkc 4/15/05)
-				   Pass mode to pagination tag, used to hide/show subscribe button (rkc 7/29/05)
-				   Remove mappings (8/27/05)
-				   Support for sorting (rkc 9/15/05)
-				   show last user (rkc 7/12/06)
-				   show title (rkc 8/4/06)
+	Last Updated : October 12, 2007
+	History      : Reset for V2
 	Purpose		 : Displays forums for conference
 --->
 
@@ -28,8 +20,15 @@
 	</cfcatch>
 </cftry>
 
+<!--- Am I allowed to look at this? --->
+<cfif not application.permission.allowed(application.rights.CANVIEW, url.conferenceid, request.udf.getGroups())>
+	<cflocation url="denied.cfm" addToken="false">
+</cfif>
+
 <!--- get my forums --->
 <cfset data = application.forum.getForums(conferenceid=url.conferenceid)>
+<!--- filter by what I can read... --->
+<cfset data = application.permission.filter(query=data, groups=request.udf.getGroups(), right=application.rights.CANVIEW)>
 
 <!--- sort --->
 <cfset data = request.udf.querySort(data,url.sort,url.sortdir)>
@@ -49,41 +48,46 @@
 
 <!--- Now display the table. This changes based on what our data is. --->
 <cfoutput>
-<p>
-<table width="100%" cellpadding="6" class="tableDisplay" cellspacing="1" border="0">
-	<tr class="tableHeader">
-		<td colspan="5" class="tableHeader">Conference: #request.conference.name#</td>
-	</tr>
-	<tr class="tableSubHeader">
-		<td class="tableSubHeader">#request.udf.headerLink("Forum","name")#</td>
-		<td class="tableSubHeader">#request.udf.headerLink("Description")#</td>
-		<td class="tableSubHeader">#request.udf.headerLink("Messages","messagecount")#</td>
-		<td class="tableSubHeader">#request.udf.headerLink("Last Post","lastpost")#</td>
-		<td class="tableSubHeader">#request.udf.headerLink("Read Only","readonly")#</td>
-	</tr>
-	<cfif data.recordCount>
+	
+	<!-- Content Start -->
+	<div class="content_box">
+		
+		<div class="row_title">
+			<p>Conference: #request.conference.name#</p>
+		</div>
+		
+		<div class="row_name">
+			
+			<div class="left_20 keep_on border_right"><p>#request.udf.headerLink("Forum","name")#</p></div>
+			<div class="left_40 keep_on border_right"><p>#request.udf.headerLink("Description")#</p></div>
+			<div class="left_10 keep_on border_right"><p>#request.udf.headerLink("Messages","messages")#</p></div>
+			<div class="left_auto keep_on"><p>#request.udf.headerLink("Last Post","lastpost")#</p></div>
+			
+		</div>
+		<cfif data.recordCount>
 		<cfset cachedUserInfo = request.udf.cachedUserInfo>
-		<cfloop query="data" startrow="#(url.page-1)*application.settings.perpage+1#" endrow="#(url.page-1)*application.settings.perpage+application.settings.perpage#">
-			<tr class="tableRow#currentRow mod 2#">
-				<td><a href="threads.cfm?forumid=#id#">#name#</a></td>
-				<td>#description#</td>
-				<td>#messagecount#</td>
-				<td>
-				<cfif len(useridfk)>
-				<cfset uinfo = cachedUserInfo(username=useridfk,userid=true)>
-				<a href="messages.cfm?threadid=#threadidfk###last">#dateFormat(lastpost,"m/d/yy")# #timeFormat(lastpost,"h:mm tt")#</a> by #uinfo.username#
-				<cfelse>&nbsp;</cfif>
-				</td>
-				<td>#yesNoFormat(readonly)#</td>
-			</tr>
+		<cfloop query="data" startrow="#(url.page-1)*application.settings.perpage+1#" endrow="#(url.page-1)*application.settings.perpage+application.settings.perpage#">			
+		<div class="row_#currentRow mod 2#">
+			
+			<div class="left_20 keep_on border_right"><p><a href="threads.cfm?forumid=#id#">#name#</a></p></div>
+			<div class="left_40 keep_on border_right"><p>#description#</p></div>
+			<div class="left_10 keep_on border_right"><p>#messages#</p></div>
+			<div class="left_auto keep_on">
+				<p><cfif len(lastpostuseridfk)>
+				<cfset uinfo = cachedUserInfo(username=lastpostuseridfk,userid=true)>
+				<a href="messages.cfm?threadid=#lastpost###last">#dateFormat(lastpostcreated,"m/d/yy")# #timeFormat(lastpostcreated,"h:mm tt")#</a> by #uinfo.username#
+				<cfelse>&nbsp;</cfif></p>
+			</div>
+			
+		</div>
 		</cfloop>
-	<cfelse>
-		<tr class="tableRow1">
-			<td colspan="5">Sorry, but there are no forums available for this conference.</td>
-		</tr>
-	</cfif>
-</table>
-</p>
+		<cfelse>
+		<div class="row_0">Sorry, but there are no forums available for this conference.</div>						
+		</cfif>
+				
+	</div>
+	<!-- Content End -->
+
 </cfoutput>
 	
 </cfmodule>
