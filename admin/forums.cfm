@@ -3,10 +3,8 @@
 	Name         : forums.cfm
 	Author       : Raymond Camden 
 	Created      : June 01, 2004
-	Last Updated : November 3, 2006
-	History      : Removed mappings (rkc 8/27/05)
-				   changed cols (rkc 9/9/05)
-				   show attachments value (rkc 11/3/06)
+	Last Updated : October 12, 2007
+	History      : Reset for V2
 	Purpose		 : 
 --->
 
@@ -28,7 +26,8 @@
 <cfset forums = application.forum.getForums(false)>
 
 <cfmodule template="../tags/datatable.cfm" 
-		  data="#forums#" list="name,description,conference,messagecount,readonly,attachments,active" 
+		  data="#forums#" list="name,description,conference,lastpostcreated,messages,active" 
+		  classList="left_20,left_25,left_15 align_center,left_15 align_center,left_10 align_center,right_10 align_center"
 		  editlink="forums_edit.cfm" linkcol="name" label="Forum" />
 
 

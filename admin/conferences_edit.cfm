@@ -3,10 +3,8 @@
 	Name         : conferences_edit.cfm
 	Author       : Raymond Camden 
 	Created      : June 01, 2004
-	Last Updated : November 5, 2006
-	History      : Removed mappings (rkc 8/27/05)
-				 : Simple size change (rkc 7/27/06)
-				 : Reverted description to text field (rkc 11/5/06)
+	Last Updated : October 12, 2007
+	History      : Reset for V2
 	Purpose		 : 
 --->
 
@@ -30,10 +28,15 @@
 		<cfif url.id neq 0>
 			<cfset application.conference.saveConference(url.id, conference)>
 		<cfelse>
-			<cfset application.conference.addConference(conference)>
+			<cfset url.id = application.conference.addConference(conference)>
 		</cfif>
-		<cfset msg = "Conferfence, #conference.name#, has been updated.">
-		<cflocation url="conferences.cfm?msg=#urlEncodedFormat(msg)#">
+		<!--- update security --->
+		<cfset application.permission.setAllowed(application.rights.CANVIEW, url.id, form.canread)>
+		<cfset application.permission.setAllowed(application.rights.CANPOST, url.id, form.canpost)>
+		<cfset application.permission.setAllowed(application.rights.CANEDIT, url.id, form.canedit)>
+		
+		<cfset msg = "Conference, #conference.name#, has been updated.">
+		<cflocation url="conferences.cfm?msg=#urlEncodedFormat(msg)#" addToken="false">
 	</cfif>
 </cfif>
 
@@ -43,41 +46,93 @@
 	<cfparam name="form.name" default="#conference.name#">
 	<cfparam name="form.description" default="#conference.description#">
 	<cfparam name="form.active" default="#conference.active#">
+	<!--- get groups with can read --->
+	<cfset canread = application.permission.getAllowed(application.rights.CANVIEW, url.id)>
+	<!--- get groups with can post --->
+	<cfset canpost = application.permission.getAllowed(application.rights.CANPOST, url.id)>
+	<!--- get groups with can edit --->
+	<cfset canedit = application.permission.getAllowed(application.rights.CANEDIT, url.id)>
 <cfelse>
 	<cfparam name="form.name" default="">
 	<cfparam name="form.description" default="">
-	<cfparam name="form.active" default="false">
+	<cfparam name="form.active" default="true">
+	<cfset canread = queryNew("group")>
+	<cfset canpost = queryNew("group")>
+	<cfset canedit = queryNew("group")>
 </cfif>
+
+<!--- Security Related --->
+<!--- get all groups --->
+<cfset groups = application.user.getGroups()>
 
 <cfmodule template="../tags/layout.cfm" templatename="admin" title="Conference Editor">
 
 <cfoutput>
-<p>
-<cfif isDefined("errors")><ul><b>#errors#</b></ul></cfif>
 <form action="#cgi.script_name#?#cgi.query_string#" method="post">
-<table width="100%" cellspacing=0 cellpadding=5 class="adminEditTable">
-	<tr valign="top">
-		<td align="right"><b>Name:</b></td>
-		<td><input type="text" name="name" value="#form.name#" size="100"></td>
-	</tr>
-	<tr valign="top">
-		<td align="right"><b>Description:</b></td>
-		<td><input type="text" name="description" value="#form.description#" size="100"></td>
-	</tr>
-	<tr valign="top">
-		<td align="right"><b>Active:</b></td>
-		<td><select name="active">
+<cfif isDefined("errors")><ul><b>#errors#</b></ul></cfif>
+
+<div class="name_row">
+<p class="left_100"></p>
+</div>
+
+<div class="row_0">
+	<p class="input_name">Name</p>
+	<input type="text" name="name" value="#form.name#" class="inputs_01">
+	<div class="clearer"></div>
+</div>
+<div class="row_1">
+	<p class="input_name">Description</p>
+	<input type="text" name="description" value="#form.description#" class="inputs_01">
+	<div class="clearer"></div>
+</div>
+
+<div class="row_0">
+	<p class="input_name">Active</p>
+	<select name="active" class="inputs_02">
 		<option value="1" <cfif form.active>selected</cfif>>Yes</option>
 		<option value="0" <cfif not form.active>selected</cfif>>No</option>
-		</select></td>
-	</tr>
-	<tr>
-		<td>&nbsp;</td>
-		<td><input type="submit" name="save" value="Save"> <input type="submit" name="cancel" value="Cancel"></td>
-	</tr>
-</table>
+	</select>
+<div class="clearer"></div>
+</div>
+
+<div class="row_1">
+	<p class="input_name">Groups with Read Access</p>
+		<select name="canread" multiple="true" size="4" class="inputs_02">
+		<option value="" <cfif canread.recordCount is 0>selected</cfif>>Everyone</option>
+		<cfloop query="groups">
+		<option value="#id#" <cfif listFind(valueList(canread.group), id)>selected</cfif>>#group#</option>
+		</cfloop>
+		</select>
+<div class="clearer"></div>
+</div>
+
+<div class="row_0">
+	<p class="input_name">Groups with Post Access</p>
+		<select name="canpost" multiple="true" size="4" class="inputs_02">
+		<option value="" <cfif canpost.recordCount is 0>selected</cfif>>Everyone</option>
+		<cfloop query="groups">
+		<option value="#id#" <cfif listFind(valueList(canpost.group), id)>selected</cfif>>#group#</option>
+		</cfloop>
+		</select>
+<div class="clearer"></div>
+</div>
+
+<div class="row_1">
+	<p class="input_name">Groups with Edit Access</p>
+	<select name="canedit" multiple="true" size="4" class="inputs_02">
+		<option value="" <cfif canedit.recordCount is 0>selected</cfif>>Everyone</option>
+		<cfloop query="groups">
+		<option value="#id#" <cfif listFind(valueList(canedit.group), id)>selected</cfif>>#group#</option>
+		</cfloop>
+	</select>
+<div class="clearer"></div>
+</div>
+
+<div id="input_btns">	
+	<input type="image" src="../images/btn_save.jpg"  name="save" value="Save">
+	<input type="image" src="../images/btn_cancel.jpg" type="submit" name="cancel" value="Cancel">
+</div>
 </form>
-</p>
 </cfoutput>
 
 </cfmodule>

@@ -3,8 +3,8 @@
 	Name         : Application.cfm
 	Author       : Raymond Camden 
 	Created      : June 01, 2004
-	Last Updated : July 18, 2006
-	History      : Flag to root admin to say we are in admin (rkc 7/18/06)
+	Last Updated : October 12, 2007
+	History      : Reset for V2
 	Purpose		 : 
 --->
 
