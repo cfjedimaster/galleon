@@ -3,16 +3,8 @@
 	Name         : Application.cfm
 	Author       : Raymond Camden 
 	Created      : June 01, 2004
-	Last Updated : May 1, 2007
-	History      : Don't load app.cfc, load galleon.cfc. Also pass settings to messages. (rkc 7/14/05)
-				   Make app name dynamic. Remove mapping (rkc 8/27/05)
-				   Support for sorting, errors (rkc 9/15/05)
-				   Better admin check, logout fix (rkc 7/12/06)
-				   Even better admin check, really (rkc 7/18/06)
-				   BD fix, attachment folder (rkc 11/3/06)
-				   Fix for getting attachment dir (rkc 11/16/06)
-				   Use Factory (thanks Rob Gonda) (rkc 2/21/07)
-				   case fix for the factory (rkc 5/1/07)
+	Last Updated : October 12, 2007
+	History      : Reset for V2
 	Purpose		 : 
 --->
 
@@ -48,9 +40,13 @@ folder. See: http://ray.camdenfamily.com/index.cfm/2005/9/21/Galleon-Issue-with-
 	<cfset application.settings = application.factory.get('galleonSettings').getSettings()>
 
 	<cfset application.settings.attachmentdir = getDirectoryFromPath(getCurrentTemplatePath()) & "attachments">
+	<cfset application.settings.avatardir = getDirectoryFromPath(getCurrentTemplatePath()) & "images/avatars">
 
 	<cfif not directoryExists(application.settings.attachmentdir)>
 		<cfdirectory action="create" directory="#application.settings.attachmentdir#">
+	</cfif>
+	<cfif not directoryExists(application.settings.avatardir)>
+		<cfdirectory action="create" directory="#application.settings.avatardir#">
 	</cfif>
 	
 	<!--- get user CFC --->
@@ -74,6 +70,20 @@ folder. See: http://ray.camdenfamily.com/index.cfm/2005/9/21/Galleon-Issue-with-
 	<!--- get rank CFC --->
 	<cfset application.rank = application.factory.get('rank')>
 
+	<!--- get security CFC --->
+	<cfset application.permission = application.factory.get('permission')>
+	
+	<!--- hard coded rights for now --->
+	<cfset application.rights.CANVIEW = "7EA5070B-9774-E11E-96E727122408C03C">
+	<cfset application.rights.CANPOST = "7EA5070C-E788-7378-8930FA15EF58BBD2">
+	<cfset application.rights.CANEDIT = "7EA5070D-CB58-72BA-2E4A3DFC0AE35F35">
+
+	<!--- get image CFC if we need it --->
+	<cfif application.settings.allowavatars>
+		<cfset application.image = application.factory.get('image')>
+		<cfset application.image.setOption("throwonerror", false)>
+	</cfif>
+	
 	<cfset application.init = true>
 	
 </cfif>
@@ -108,13 +118,12 @@ folder. See: http://ray.camdenfamily.com/index.cfm/2005/9/21/Galleon-Issue-with-
 <!--- however, don't do this in the admin ;) --->
 <cfif not structKeyExists(variables, "isAdmin")>
 	<cfif findNoCase("threads.cfm", cgi.script_name)>
-		<cfparam name="url.sort" default="lastpost">
+		<cfparam name="url.sort" default="lastpostcreated">
 		<cfparam name="url.sortdir" default="desc">
 	<cfelse>
 		<cfparam name="url.sort" default="name">
 		<cfparam name="url.sortdir" default="asc">
 	</cfif>
 </cfif>
-
 
 <cfsetting enablecfoutputonly=false>
