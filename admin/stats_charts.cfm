@@ -2,8 +2,8 @@
 	Name         : stats_charts.cfm
 	Author       : Raymond Camden 
 	Created      : August 30, 2004
-	Last Updated : December 8, 2006
-	History      : Slight change to how I get data (rkc 12/8/06)
+	Last Updated : October 12, 2007
+	History      : Reset for V2
 	Purpose		 : 
 --->
 
@@ -21,89 +21,79 @@ from	#application.settings.tableprefix#forums
 <cfset users = application.user.getUsers()>
 
 <cfoutput>
-<p>
-<table class="adminListTable" width="500">
-<tr class="adminListHeader">
-	<td><b>Number of Forums Per Conference</b></td>
-</tr>
-<tr>
-	<td>
-	<cfchart format="flash" chartheight="400" chartwidth="400" seriesplacement="default" 
-			 labelformat="number" tipstyle="mouseOver" pieslicestyle="sliced">
-		<cfchartseries type="pie">
-			<cfloop query="conferences">
-				<cfquery name="fcount" dbtype="query">
-				select	count(id) as total
-				from	forums
-				where	conferenceidfk = '#id#'
-				</cfquery>
-				<cfif fcount.total is "">
-					<cfset total = 0>
-				<cfelse>
-					<cfset total = fcount.total>
-				</cfif>
-				<cfchartdata item="#name#" value="#total#">
-			</cfloop>
-		</cfchartseries>
-	</cfchart>
-	</td>
-</tr>
-</table>
-</p>
+<div class="title_row">
+<p>Number of Forums Per Conference</p>
+</div>
 
-<p>
-<table class="adminListTable" width="500">
-<tr class="adminListHeader">
-	<td><b>Number of Threads Per Forum</b></td>
-</tr>
-<tr>
-	<td>
-	<cfchart format="flash" chartheight="400" chartwidth="400" seriesplacement="default" 
-			 labelformat="number" tipstyle="mouseOver" pieslicestyle="sliced">
-		<cfchartseries type="pie">
-			<cfloop query="forums">			
-				<cfquery name="fcount" dbtype="query">
-				select	count(id) as total
-				from	threads
-				where	forumidfk = '#id#'
-				</cfquery>
-				<cfif fcount.total is "">
-					<cfset total = 0>
-				<cfelse>
-					<cfset total = fcount.total>
-				</cfif>
-				<cfchartdata item="#name#" value="#total#">
-			</cfloop>
-		</cfchartseries>
-	</cfchart>
-	</td>
-</tr>
-</table>
-</p>
+<cfchart format="flash" chartheight="400" chartwidth="400" seriesplacement="default" 
+		 labelformat="number" tipstyle="mouseOver" pieslicestyle="sliced">
+	<cfchartseries type="pie">
+		<cfloop query="conferences">
+			<cfquery name="fcount" dbtype="query">
+			select	count(id) as total
+			from	forums
+			where	conferenceidfk = '#id#'
+			</cfquery>
+			<cfif fcount.total is "">
+				<cfset total = 0>
+			<cfelse>
+				<cfset total = fcount.total>
+			</cfif>
+			<cfchartdata item="#name#" value="#total#">
+		</cfloop>
+	</cfchartseries>
+</cfchart>
+
+<div class="title_row">
+<p>Number of Threads Per Forum</p>
+</div>
+
+<cfchart format="flash" chartheight="400" chartwidth="400" seriesplacement="default" 
+		 labelformat="number" tipstyle="mouseOver" pieslicestyle="sliced">
+	<cfchartseries type="pie">
+		<cfloop query="forums">			
+			<cfquery name="fcount" dbtype="query">
+			select	count(id) as total
+			from	threads
+			where	forumidfk = '#id#'
+			</cfquery>
+			<cfif fcount.total is "">
+				<cfset total = 0>
+			<cfelse>
+				<cfset total = fcount.total>
+			</cfif>
+			<cfchartdata item="#name#" value="#total#">
+		</cfloop>
+	</cfchartseries>
+</cfchart>
 
 <cfquery name="sortedThreads" dbtype="query">
 	select		*
 	from		threads
-	order by	messagecount desc
+	order by	messages desc
 </cfquery>
 
-<p>
-<table class="adminListTable" width="500">
-<tr class="adminListHeader">
-	<td colspan="2"><b>Top 10 Threads by Message Count</b></td>
-</tr>
-<tr>
-	<td><b>Thread Name</b></td>
-	<td><b>Message Count</b></td>
-</tr>
+<div class="title_row">
+	<p>Top 10 Threads by Message Count</p>
+</div>
+
+<div class="secondary_row">
+	<p class="left_50"><span><strong>Thread Name</strong></span></p>
+	<p class="left_40"><strong>Message Count</strong></p>
+<div class="clearer"></div>
+</div>
+
 <cfloop query="sortedThreads" endrow="10">
-<tr>
-	<td>#name#</td>
-	<td>#messagecount#
-</tr>
+	<cfif currentRow mod 2>
+<div class="row_0">
+	<cfelse>
+<div class="row_1">
+	</cfif>	
+	<p class="left_50"><span>#name#</span></p>
+	<p class="left_40">#messages#</p>
+	<div class="clearer"></div>
+</div>				
 </cfloop>
-</table>
-</p>
 
 <cfquery name="sortedUsers" dbtype="query">
 	select		*
@@ -111,23 +101,27 @@ from	#application.settings.tableprefix#forums
 	order by	postcount desc
 </cfquery>
 
-<p>
-<table class="adminListTable" width="500">
-<tr class="adminListHeader">
-	<td colspan="2"><b>Top 10 Users by Post Count</b></td>
-</tr>
-<tr>
-	<td><b>User Name</b></td>
-	<td><b>Post Count</b></td>
-</tr>
+<div class="title_row">
+	<p>Top 10 Uses by Post Count</p>
+</div>
+
+<div class="secondary_row">
+	<p class="left_50"><span><strong>User Name</strong></span></p>
+	<p class="left_40"><strong>Post Count</strong></p>
+<div class="clearer"></div>
+</div>
+
 <cfloop query="sortedUsers" endrow="10">
-<tr>
-	<td>#username#</td>
-	<td>#postcount#
-</tr>
+	<cfif currentRow mod 2>
+<div class="row_0">
+	<cfelse>
+<div class="row_1">
+	</cfif>	
+	<p class="left_50"><span>#username#</span></p>
+	<p class="left_40">#postcount#</p>
+	<div class="clearer"></div>
+</div>				
 </cfloop>
-</table>
-</p>
 
 </cfoutput>
 

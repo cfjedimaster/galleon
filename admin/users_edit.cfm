@@ -3,12 +3,8 @@
 	Name         : users_edit.cfm
 	Author       : Raymond Camden 
 	Created      : July 5, 2004
-	Last Updated : May 3, 2007
-	History      : Fixed bugs related to sendnotifications change (rkc 8/3/05)
-				   Removed mappings (rkc 8/27/05)
-				   Handle confirmation, and require one group (rkc 7/12/06)
-				   Fix error thrown when requireconfirmation=false (rkc 7/17/06)
-				   Don't html encode the password or email address (rkc 5/3/07)
+	Last Updated : October 12, 2007
+	History      : Reset for V2
 	Purpose		 : 
 --->
 
@@ -48,14 +44,14 @@
 		<cfelse>
 			<cftry>
 				<cfset application.user.addUser(form.username, form.password, form.emailaddress, form.groups,form.confirmed)>
-				<cfcatch><cfdump var="#cfcatch#">
+				<cfcatch>
 					<cfset errors = cfcatch.message>
 				</cfcatch>
 			</cftry>
 		</cfif>
 		<cfif not len(errors)>
 			<cfset msg = "User, #form.username#, has been updated.">
-			<cflocation url="users.cfm?msg=#urlEncodedFormat(msg)#">
+			<cflocation url="users.cfm?msg=#urlEncodedFormat(msg)#" addToken="false">
 		</cfif>
 	</cfif>
 </cfif>
@@ -83,58 +79,68 @@
 <cfmodule template="../tags/layout.cfm" templatename="admin" title="User Editor">
 
 <cfoutput>
-<p>
-<cfif isDefined("errors")><ul><b>#errors#</b></ul></cfif>
 <form action="#cgi.script_name#?#cgi.query_string#" method="post">
-<table width="100%" cellspacing=0 cellpadding=5 class="adminEditTable">
-	<tr valign="top">
-		<td align="right"><b>User Name:</b></td>
-		<td>
-			<cfif url.id is not "0">
-				<input type="hidden" name="username" value="#form.username#">#form.username#
-			<cfelse>
-				<input type="text" name="username" value="#form.username#" size="50"></td>
-			</cfif>
-		</td>
-	</tr>
-	<tr valign="top">
-		<td align="right"><b>Email Address:</b></td>
-		<td><input type="text" name="emailaddress" value="#form.emailaddress#" size="50"></td>
-	</tr>
-	<tr valign="top">
-		<td align="right"><b>Password:</b></td>
-		<td><input type="text" name="password" value="#form.password#" size="50"></td>
-	</tr>
-	<tr valign="top">
-		<td align="right"><b>Date Created:</b></td>
-		<td><input type="text" name="datecreated" value="#form.datecreated#" size="50"></td>
-	</tr>
-	<tr valign="top">
-		<td align="right"><b>Groups:</b></td>
-		<td>
-		<select name="groups" multiple size="3">
+<cfif isDefined("errors")><ul><b>#errors#</b></ul></cfif>
+
+<div class="clearer"></div>
+<div class="name_row">
+<p class="left_100"></p>
+</div>
+
+<div class="row_0">
+	<p class="input_name">User Name</p>
+	<cfif url.id is not "0">
+		<input type="hidden" name="username" value="#form.username#">#form.username#
+	<cfelse>
+		<input type="text" name="username" value="#form.username#" class="inputs_01"></td>
+	</cfif>
+	<div class="clearer"></div>
+</div>
+
+<div class="row_1">
+	<p class="input_name">Email Address</p>
+	<input type="text" name="emailaddress" value="#form.emailaddress#" class="inputs_01">
+	<div class="clearer"></div>
+</div>
+
+<div class="row_0">
+	<p class="input_name">Password</p>
+	<input type="text" name="password" value="#form.password#" class="inputs_01">
+	<div class="clearer"></div>
+</div>
+
+<div class="row_1">
+	<p class="input_name">Date Created</p>
+	<input type="text" name="datecreated" value="#form.datecreated#" class="inputs_01">
+	<div class="clearer"></div>
+</div>
+
+<div class="row_0">
+	<p class="input_name">Groups</p>
+		<select name="groups" class="inputs_02" multiple size="3">
 		<cfloop query="groups">
 		<option value="#group#" <cfif listFindNoCase(form.groups, group)>selected</cfif>>#group#</option>
 		</cfloop>
 		</select>
-		</td>
-	</tr>
-	<cfif application.settings.requireconfirmation>
-	<tr valign="top">
-		<td align="right"><b>Confirmed:</b></td>	
-		<td><select name="confirmed">
+<div class="clearer"></div>
+</div>
+
+<cfif application.settings.requireconfirmation>
+<div class="row_1">
+	<p class="input_name">Confirmed</p>
+		<select name="confirmed" class="inputs_02">
 		<option value="0" <cfif not form.confirmed>selected</cfif>>No</option>
 		<option value="1" <cfif form.confirmed>selected</cfif>>Yes</option>
-		</select></td>
-	</tr>
-	</cfif>
-	<tr>
-		<td>&nbsp;</td>
-		<td><input type="submit" name="save" value="Save"> <input type="submit" name="cancel" value="Cancel"></td>
-	</tr>
-</table>
+		</select>
+<div class="clearer"></div>
+</div>
+</cfif>
+
+<div id="input_btns">	
+	<input type="image" src="../images/btn_save.jpg"  name="save" value="Save">
+	<input type="image" src="../images/btn_cancel.jpg" type="submit" name="cancel" value="Cancel">
+</div>
 </form>
-</p>
 </cfoutput>
 
 </cfmodule>

@@ -3,9 +3,8 @@
 	Name         : messages_edit.cfm
 	Author       : Raymond Camden 
 	Created      : July 5, 2004
-	Last Updated : November 6, 2006
-	History      : Simple size change (rkc 7/27/06)
-				 : Attachments support (rkc 11/6/06)
+	Last Updated : October 12, 2007
+	History      : Reset for V2
 	Purpose		 : 
 	
 	Note: In the admin I don't let folks upload attachments, but 
@@ -71,7 +70,7 @@
 			<cfset application.message.addMessage(message,threadPicked.forumidfk,theusername,form.threadidfk)>
 		</cfif>
 		<cfset msg = "Message, #message.title#, has been updated.">
-		<cflocation url="messages.cfm?msg=#urlEncodedFormat(msg)#">
+		<cflocation url="messages.cfm?msg=#urlEncodedFormat(msg)#" addToken="false">
 	</cfif>
 </cfif>
 
@@ -94,58 +93,66 @@
 <cfmodule template="../tags/layout.cfm" templatename="admin" title="Message Editor">
 
 <cfoutput>
-<p>
-<cfif isDefined("errors")><ul><b>#errors#</b></ul></cfif>
 <form action="#cgi.script_name#?#cgi.query_string#" method="post">
-<table width="100%" cellspacing=0 cellpadding=5 class="adminEditTable">
-	<tr valign="top">
-		<td align="right"><b>Title:</b></td>
-		<td><input type="text" name="title" value="#form.title#" size="100"></td>
-	</tr>
-	<tr valign="top">
-		<td align="right"><b>Body:</b></td>
-		<td>
-		<textarea name="body" cols=50 rows=20>#form.body#</textarea>
-		</td>
-	</tr>
-	<cfif isDefined("message.attachment") and len(message.attachment)>
-	<tr valign="top">
-		<td align="right"><b>Attachment:</b></td>
-		<td><a href="../attachment.cfm?id=#url.id#">#message.attachment#</a>
-		<br><input type="checkbox" name="removefile">Remove File</a></td>
-	</tr>
-	</cfif>
-	<tr valign="top">
-		<td align="right"><b>Thread:</b></td>
-		<td>
-			<select name="threadidfk">
+<cfif isDefined("errors")><ul><b>#errors#</b></ul></cfif>
+
+<div class="name_row">
+<p class="left_100"></p>
+</div>
+
+<div class="row_0">
+	<p class="input_name">Title</p>
+	<input type="text" name="title" value="#form.title#" class="inputs_01">
+	<div class="clearer"></div>
+</div>
+
+<div class="row_1">
+	<p class="input_name">Body</p>
+	<textarea name="body" class="ta_edit">#form.body#</textarea>
+	<div class="clearer"></div>
+</div>
+
+<div class="row_0">
+	<p class="input_name">Thread</p>
+		<select name="threadidfk" class="inputs_02">
 			<cfloop query="threads">
 			<option value="#id#" <cfif form.threadidfk is id>selected</cfif>>#name#</option>
 			</cfloop>
-			</select>
-		</td>
-	</tr>
-	<tr valign="top">
-		<td align="right"><b>Posted:</b></td>
-		<td><input type="text" name="posted" value="#form.posted#" size="50"></td>
-	</tr>
-	<tr valign="top">
-		<td align="right"><b>User:</b></td>
-		<td>
-			<select name="useridfk">
+		</select>
+<div class="clearer"></div>
+</div>
+
+<div class="row_1">
+	<p class="input_name">Posted</p>
+	<input type="text" name="posted" value="#form.posted#" class="inputs_01">
+	<div class="clearer"></div>
+</div>
+
+<div class="row_0">
+	<p class="input_name">User</p>
+		<select name="useridfk" class="inputs_02">
 			<cfloop query="users">
 			<option value="#id#" <cfif form.useridfk is id>selected</cfif>>#username#</option>
 			</cfloop>
-			</select>
-		</td>
-	</tr>
-	<tr>
-		<td>&nbsp;</td>
-		<td><input type="submit" name="save" value="Save"> <input type="submit" name="cancel" value="Cancel"></td>
-	</tr>
-</table>
+		</select>
+<div class="clearer"></div>
+</div>
+
+<cfif isDefined("message.attachment") and len(message.attachment)>
+<div class="row_1">
+	<p class="input_name">Attachment</p>
+	<a href="../attachment.cfm?id=#url.id#" class="cb_text">#message.attachment#</a>
+	<div class="cb_remove">Remove File</div>
+	<input type="checkbox" name="removeFile" class="inputs_cb">
+	<div class="clearer"></div>
+</div>
+</cfif>
+
+<div id="input_btns">	
+	<input type="image" src="../images/btn_save.jpg"  name="save" value="Save">
+	<input type="image" src="../images/btn_cancel.jpg" type="submit" name="cancel" value="Cancel">
+</div>
 </form>
-</p>
 </cfoutput>
 
 </cfmodule>

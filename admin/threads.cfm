@@ -3,10 +3,8 @@
 	Name         : threads.cfm
 	Author       : Raymond Camden 
 	Created      : June 09, 2004
-	Last Updated : February 26, 2007
-	History      : Removed mappings, changed cols (rkc 8/27/05)
-				   Changed cols (rkc 9/9/05)
-				   added filtering (rkc 2/26/07)				   
+	Last Updated : October 12, 2007
+	History      : Reset for V2
 	Purpose		 : 
 --->
 
@@ -39,15 +37,16 @@
 </cfif>
 
 <cfoutput>
-<p>
+<div class="top_input_misc">
 <form action="#cgi.script_name#?#cgi.query_string#" method="post">
-<input type="text" name="search" value="#form.search#"> <input type="submit" value="Filter">
+<input type="text" name="search" value="#form.search#" class="filter_input"> <input type="image" src="../images/btn_filter.jpg" value="Filter" class="filter_btn">
 </form>
-</p>
+</div>
 </cfoutput>
 
 <cfmodule template="../tags/datatable.cfm" 
-		  data="#threads#" list="name,lastpost,forum,conference,messagecount,sticky,active" 
+		  data="#threads#" list="name,lastpostcreated,forum,conference,messages,sticky,active"
+		  classList="left_15,left_15,left_20,left_15,left_10 align_center,left_10 align_center,left_10 align_center" 
 		  editlink="threads_edit.cfm" linkcol="name" label="Thread" />
 
 

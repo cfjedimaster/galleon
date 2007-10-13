@@ -3,9 +3,8 @@
 	Name         : threads_edit.cfm
 	Author       : Raymond Camden 
 	Created      : June 09, 2004
-	Last Updated : July 27, 2006
-	History      : Removed mappings, added sticky (rkc 8/27/05)
-				 : Simple size change (rkc 7/27/06)
+	Last Updated : October 12, 2007
+	History      : Reset for V2
 	Purpose		 : 
 --->
 
@@ -25,7 +24,6 @@
 	<cfif not len(errors)>
 		<cfset thread = structNew()>
 		<cfset thread.name = trim(htmlEditFormat(form.name))>
-		<cfset thread.readonly = trim(htmlEditFormat(form.readonly))>
 		<cfset thread.active = trim(htmlEditFormat(form.active))>
 		<cfset thread.forumidfk = trim(htmlEditFormat(form.forumidfk))>
 		<cfset thread.datecreated = trim(htmlEditFormat(form.datecreated))>
@@ -37,7 +35,7 @@
 			<cfset application.thread.addThread(thread)>
 		</cfif>
 		<cfset msg = "Thread, #thread.name#, has been updated.">
-		<cflocation url="threads.cfm?msg=#urlEncodedFormat(msg)#">
+		<cflocation url="threads.cfm?msg=#urlEncodedFormat(msg)#" addToken="false">
 	</cfif>
 </cfif>
 
@@ -45,7 +43,6 @@
 <cfif url.id neq 0>
 	<cfset thread = application.thread.getThread(url.id)>
 	<cfparam name="form.name" default="#thread.name#">
-	<cfparam name="form.readonly" default="#thread.readonly#">
 	<cfparam name="form.active" default="#thread.active#">
 	<cfparam name="form.forumidfk" default="#thread.forumidfk#">
 	<cfparam name="form.datecreated" default="#dateFormat(thread.datecreated,"m/dd/yy")#">
@@ -53,7 +50,6 @@
 	<cfparam name="form.sticky" default="#thread.sticky#">
 <cfelse>
 	<cfparam name="form.name" default="">
-	<cfparam name="form.readonly" default="false">
 	<cfparam name="form.active" default="false">
 	<cfparam name="form.forumidfk" default="">
 	<cfparam name="form.datecreated" default="#dateFormat(now(),"m/dd/yy")#">
@@ -70,66 +66,70 @@
 <cfmodule template="../tags/layout.cfm" templatename="admin" title="Thread Editor">
 
 <cfoutput>
-<p>
-<cfif isDefined("errors")><ul><b>#errors#</b></ul></cfif>
 <form action="#cgi.script_name#?#cgi.query_string#" method="post">
-<table width="100%" cellspacing=0 cellpadding=5 class="adminEditTable">
-	<tr valign="top">
-		<td align="right"><b>Name:</b></td>
-		<td><input type="text" name="name" value="#form.name#" size="100"></td>
-	</tr>
-	<tr valign="top">
-		<td align="right"><b>Forum:</b></td>
-		<td>
-			<select name="forumidfk">
+<cfif isDefined("errors")><ul><b>#errors#</b></ul></cfif>
+
+<div class="name_row">
+<p class="left_100"></p>
+</div>
+
+<div class="row_0">
+	<p class="input_name">Name</p>
+	<input type="text" name="name" value="#form.name#" class="inputs_01">
+	<div class="clearer"></div>
+</div>
+
+<div class="row_1">
+	<p class="input_name">Forum</p>
+		<select name="forumidfk" class="inputs_02">
 			<cfloop query="forums">
 			<option value="#id#" <cfif form.forumidfk is id>selected</cfif>>#name#</option>
 			</cfloop>
-			</select>
-		</td>
-	</tr>
-	<tr valign="top">
-		<td align="right"><b>Date Created:</b></td>
-		<td><input type="text" name="datecreated" value="#form.datecreated#" size="50"></td>
-	</tr>
-	<tr valign="top">
-		<td align="right"><b>User:</b></td>
-		<td>
-			<select name="useridfk">
+		</select>
+<div class="clearer"></div>
+</div>
+
+<div class="row_0">
+	<p class="input_name">Date Created:</p>
+	<input type="text" name="datecreated" value="#form.datecreated#" class="inputs_01">
+	<div class="clearer"></div>
+</div>
+
+<div class="row_1">
+	<p class="input_name">User</p>
+		<select name="useridfk" class="inputs_02">
 			<cfloop query="users">
 			<option value="#id#" <cfif form.useridfk is id>selected</cfif>>#username#</option>
 			</cfloop>
-			</select>
-		</td>
-	</tr>
-	<tr valign="top">
-		<td align="right"><b>Read Only:</b></td>
-		<td><select name="readonly">
-		<option value="1" <cfif form.readonly>selected</cfif>>Yes</option>
-		<option value="0" <cfif not form.readonly>selected</cfif>>No</option>
-		</select></td>
-	</tr>
-	<tr valign="top">
-		<td align="right"><b>Active:</b></td>
-		<td><select name="active">
+		</select>
+<div class="clearer"></div>
+</div>
+
+
+<div class="row_0">
+	<p class="input_name">Active</p>
+	<select name="active" class="inputs_02">
 		<option value="1" <cfif form.active>selected</cfif>>Yes</option>
 		<option value="0" <cfif not form.active>selected</cfif>>No</option>
-		</select></td>
-	</tr>
-	<tr valign="top">
-		<td align="right"><b>Sticky:</b></td>
-		<td><select name="sticky">
+	</select>
+<div class="clearer"></div>
+</div>
+
+
+<div class="row_1">
+	<p class="input_name">Sticky</p>
+	<select name="sticky" class="inputs_02">
 		<option value="1" <cfif isBoolean(form.sticky) and form.sticky>selected</cfif>>Yes</option>
 		<option value="0" <cfif (isBoolean(form.sticky) and not form.sticky) or not isBoolean(form.sticky)>selected</cfif>>No</option>
-		</select></td>
-	</tr>
-	<tr>
-		<td>&nbsp;</td>
-		<td><input type="submit" name="save" value="Save"> <input type="submit" name="cancel" value="Cancel"></td>
-	</tr>
-</table>
+	</select>
+<div class="clearer"></div>
+</div>
+
+<div id="input_btns">	
+	<input type="image" src="../images/btn_save.jpg"  name="save" value="Save">
+	<input type="image" src="../images/btn_cancel.jpg" type="submit" name="cancel" value="Cancel">
+</div>
 </form>
-</p>
 </cfoutput>
 
 </cfmodule>

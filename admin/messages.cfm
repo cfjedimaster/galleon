@@ -3,10 +3,8 @@
 	Name         : messages.cfm
 	Author       : Raymond Camden 
 	Created      : July 5, 2004
-	Last Updated : February 26, 2007
-	History      : Removed mappings (rkc 8/27/05)
-				   Changed cols (rkc 9/9/05)
-				   added filtering (rkc 2/26/07)
+	Last Updated : October 12, 2007
+	History      : Reset for V2
 	Purpose		 : 
 --->
 
@@ -39,15 +37,16 @@
 </cfif>
 
 <cfoutput>
-<p>
+<div class="top_input_misc">
 <form action="#cgi.script_name#?#cgi.query_string#" method="post">
-<input type="text" name="search" value="#form.search#"> <input type="submit" value="Filter">
+<input type="text" name="search" value="#form.search#" class="filter_input"> <input type="image" src="../images/btn_filter.jpg" value="Filter" class="filter_btn">
 </form>
-</p>
+</div>
 </cfoutput>
 
 <cfmodule template="../tags/datatable.cfm" 
-		  data="#messages#" list="title,posted,threadname,forumname,conferencename,username" 
+		  data="#messages#" list="title,posted,threadname,forumname,conferencename,username"
+		  classList="left_20,left_15,left_20,left_15,left_15,left_10" 
 		  editlink="messages_edit.cfm" linkcol="title" label="Message" />
 
 

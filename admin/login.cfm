@@ -8,45 +8,28 @@
 	Purpose		 : 
 --->
 
-<cfoutput>
-<html>
-
-<head>
-<title>Galleon Forums Administrator Login</title>
-<link rel=stylesheet type="text/css" href="../stylesheets/style.css">
-</head>
-
+<!---
 <body bgcolor="##CCCCCC" onload="document.login.username.focus()">
+--->
+<cfmodule template="../tags/layout.cfm" templatename="admin" title="Galleon Forums Administrator Login">
 
+<cfoutput>
+<div id="login_container">
 <form action="#cgi.script_name#?#cgi.query_string#" method="post" name="login">
-<table height="400" width="100%" >
-	<tr align="center" valign="middle"><td>
-	
-		<table width="400" class="tMain" cellpadding=6>
-			<tr class="tHeader">
-				<td colspan="2">Please Login</td>
-			</tr>
-			<tr>
-				<td align="right"><b>username:</b></td>
-				<td align="left"><input type="text" name="username" size="30"></td>
-			</tr>
-			<tr>
-				<td align="right"><b>password:</b></td>
-				<td align="left"><input type="password" name="password" size="30"></td>
-			</tr>
-			<tr>
-				<td>&nbsp;</td>
-				<td><input type="submit" name="logon" value="Login"></td>
-			</tr>
-		</table>
+				
+		<p>username</p>
+		<input type="text" name="username" size="30">
+		<p>password</p>
+		<input type="password" name="password" size="30">
 		
-	</td></tr>
-	
-</table>
-</form>
+		<br /><br />
+		<input type="image" src="../images/btn_login.jpg" alt="login" name="logon" value="Login">
 
-</body>
-</html>
+</form>	
+<div class="clearer"></div>
+</div>
+
 </cfoutput>
+</cfmodule>
 
 <cfsetting enablecfoutputonly=false>

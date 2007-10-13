@@ -3,8 +3,8 @@
 	Name         : index.cfm
 	Author       : Raymond Camden 
 	Created      : January 31, 2005
-	Last Updated : August 27, 2005
-	History      : Removed mappings, use of prefix (rkc 8/27/05)
+	Last Updated : October 12, 2007
+	History      : Reset for V2
 	Purpose		 : 
 --->
 
@@ -62,43 +62,62 @@
 <cfmodule template="../tags/layout.cfm" templatename="admin" title="Galleon Search Stats">
 
 <cfoutput>
-<p>
-<table class="adminListTable" width="500">
-<tr class="adminListHeader">
-	<td colspan="2"><b>General Stats</b></td>
-</tr>
-<tr>
-	<td><b>Latest Search:</b></td>
-	<td>#latest.searchterms[1]# (#dateFormat(latest.dateSearched[1],"m/d/yy")# at #timeFormat(latest.dateSearched[1],"h:mm tt")#)</td>
-</tr>
-<tr>
-	<td><b>Most Popular (Today):</b></td>
-	<td>#todaysbest.searchterms# (#todaysbest.score#)</td>
-</tr>
-<tr>
-	<td><b>Most Popular (Past 30 Days):</b></td>
-	<td>#thismonth.searchterms# (#thismonth.score#)</td>
-</tr>
-<tr>
-	<td><b>Most Popular (Past 365 Days):</b></td>
-	<td>#thisyear.searchterms# (#thisyear.score#)</td>
-</tr>
-</table>
-</p>
+<div class="clearer"></div>
+<div class="title_row">
+<p>General Stats</p>
+</div>
 
-<p>
-<table class="adminListTable" width="500">
-<tr class="adminListHeader">
-	<td colspan="2"><b>Top 30 Search Terms</b></td>
-</tr>
-<cfloop query="top30">
-	<tr>
-		<td>#searchTerms#</td>
-		<td>#score#</td>
-	</tr>
-</cfloop>
-</table>
+<div class="row_0">
+	<p class="left_50"><span>Latest Search</span></p>
+	<p class="left40"><cfif latest.searchterms[1] neq "">#latest.searchterms[1]# (#dateFormat(latest.dateSearched[1],"m/d/yy")# at #timeFormat(latest.dateSearched[1],"h:mm tt")#)<cfelse>No data</cfif>
 </p>
+<div class="clearer"></div>
+</div>
+
+<div class="row_1">
+	<p class="left_50"><span>Most Popular (Today)</span></p>
+	<p class="left40">
+<cfif todaysbest.searchterms neq "">#todaysbest.searchterms# (#todaysbest.score#)<cfelse>No data</cfif>
+	</p>
+<div class="clearer"></div>
+</div>
+
+<div class="row_0">
+	<p class="left_50"><span>Most Popular (Past 30 Days)</span></p>
+	<p class="left40">
+<cfif thismonth.searchterms neq "">#thismonth.searchterms# (#thismonth.score#)<cfelse>No data</cfif>
+	</p>
+<div class="clearer"></div>
+</div>
+
+<div class="row_1">
+	<p class="left_50"><span>Most Popular (Past 365 Days)</span></p>
+	<p class="left40">
+<cfif thisyear.searchterms neq "">#thisyear.searchterms# (#thisyear.score#)<cfelse>No data</cfif>
+	</p>
+<div class="clearer"></div>
+</div>
+
+
+<div class="title_row">
+<p>Top 30 Search Terms</p>
+</div>
+
+<cfif top30.recordCount>
+	<cfloop query="top30">
+		<cfif currentRow mod 2>
+	<div class="row_0">
+		<cfelse>
+	<div class="row_1">
+		</cfif>		
+	<p class="left_50"><span>#searchTerms#</span></p>
+	<p class="left40">#score#</p>
+	</div>
+	<div class="clearer"></div>
+	</cfloop>
+<cfelse>
+No data.
+</cfif>
 
 </cfoutput>
 

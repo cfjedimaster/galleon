@@ -3,9 +3,8 @@
 	Name         : stats.cfm
 	Author       : Raymond Camden 
 	Created      : July 5, 2004
-	Last Updated : August 30, 2005
-	History      : Removed mappings, abstracted stats (rkc 8/27/05)
-				   Moved out charts for BD (rkc 8/30/05)
+	Last Updated : October 12, 2007
+	History      : Reset for V2
 	Purpose		 : 
 --->
 

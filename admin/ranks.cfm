@@ -26,7 +26,8 @@
 <cfset ranks = application.rank.getRanks()>
 
 <cfmodule template="../tags/datatable.cfm" 
-		  data="#ranks#" list="name,minposts" 
+		  data="#ranks#" list="name,minposts"
+		  classList="left_40,left_40" 
 		  editlink="ranks_edit.cfm" linkcol="name" label="Rank" />
 
 

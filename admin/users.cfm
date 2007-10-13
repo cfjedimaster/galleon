@@ -3,10 +3,8 @@
 	Name         : users.cfm
 	Author       : Raymond Camden 
 	Created      : July 4, 2004
-	Last Updated : July 12, 2006
-	History      : Fixed bugs related to sendnotifications change (rkc 8/3/05)
-				   Removed mappings (rkc 8/27/05)
-				   Handle requireconfirmation (rkc 7/12/06)
+	Last Updated : October 12, 2007
+	History      : Reset for V2
 	Purpose		 : 
 --->
 
@@ -44,20 +42,22 @@
 <cfelse>
 	<cfset list = "username,emailaddress,postcount,datecreated">
 </cfif>
-
+<div id="right">
 <cfoutput>
-<p>
+<div class="top_input_misc">
 <form action="#cgi.script_name#?#cgi.query_string#" method="post">
-<input type="text" name="search" value="#form.search#"> <input type="submit" value="Filter">
+<input type="text" name="search" value="#form.search#" class="filter_input"> <input type="image" src="../images/btn_filter.jpg" value="Filter" class="filter_btn">
 </form>
-</p>
+</div>
 </cfoutput>
 
 <cfmodule template="../tags/datatable.cfm" 
 		  data="#users#" list="#list#" 
+		  classList="left_20,left_25,left_20 align_center,left_15 align_center,left_15"
 		  editlink="users_edit.cfm" linkcol="username" linkval="username" label="User" linkappend="&search=#form.search#" />
 
 
 </cfmodule>
+</div>
 
 <cfsetting enablecfoutputonly=false>

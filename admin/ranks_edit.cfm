@@ -30,7 +30,7 @@
 			<cfset application.rank.addRank(rank)>
 		</cfif>
 		<cfset msg = "Rank, #rank.name#, has been updated.">
-		<cflocation url="ranks.cfm?msg=#urlEncodedFormat(msg)#">
+		<cflocation url="ranks.cfm?msg=#urlEncodedFormat(msg)#" addToken="false">
 	</cfif>
 </cfif>
 
@@ -47,25 +47,30 @@
 <cfmodule template="../tags/layout.cfm" templatename="admin" title="Rank Editor">
 
 <cfoutput>
-<p>
-<cfif isDefined("errors")><ul><b>#errors#</b></ul></cfif>
 <form action="#cgi.script_name#?#cgi.query_string#" method="post">
-<table width="100%" cellspacing=0 cellpadding=5 class="adminEditTable">
-	<tr valign="top">
-		<td align="right"><b>Name:</b></td>
-		<td><input type="text" name="name" value="#form.name#" size="50"></td>
-	</tr>
-	<tr valign="top">
-		<td align="right"><b>Minimum Number of Posts:</b></td>
-		<td><input type="text" name="minposts" value="#form.minposts#" size="50"></td>
-	</tr>
-	<tr>
-		<td>&nbsp;</td>
-		<td><input type="submit" name="save" value="Save"> <input type="submit" name="cancel" value="Cancel"></td>
-	</tr>
-</table>
+<cfif isDefined("errors")><ul><b>#errors#</b></ul></cfif>
+	
+<div class="name_row">
+<p class="left_100"></p>
+</div>
+
+<div class="row_0">
+	<p class="input_name">Name</p>
+	<input type="text" name="name" value="#form.name#" class="inputs_01">
+	<div class="clearer"></div>
+</div>
+
+<div class="row_1">
+	<p class="input_name">Minimum Number of Posts</p>
+	<input type="text" name="minposts" value="#form.minposts#" class="inputs_01">
+	<div class="clearer"></div>
+</div>
+
+<div id="input_btns">	
+	<input type="image" src="../images/btn_save.jpg"  name="save" value="Save">
+	<input type="image" src="../images/btn_cancel.jpg" type="submit" name="cancel" value="Cancel">
+</div>
 </form>
-</p>
 </cfoutput>
 
 </cfmodule>
