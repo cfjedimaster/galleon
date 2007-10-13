@@ -3,11 +3,8 @@
 	Name         : profile.cfm
 	Author       : Raymond Camden 
 	Created      : July 5, 2004
-	Last Updated : November 3, 2006
-	History      : Changes due to subscriptions (7/29/05)
-				   Removed mappings (rkc 8/27/05)
-				   title fix (rkc 8/4/06)
-				   signature fix, email fix (rkc 11/3/06)
+	Last Updated : October 12, 2007
+	History      : Reset for V2
 	Purpose		 : Displays form to edit your settings.
 --->
 
@@ -65,6 +62,15 @@
 <cfparam name="form.password_confirm" default="">
 <cfparam name="form.signature" default="#user.signature#">
 
+<cfif not structKeyExists(form, "usegravatar")>
+	<cfif user.avatar is "@gravatar">
+		<cfset form.usegravatar = true>
+	<cfelse>
+		<cfset form.usegravatar = false>
+		<cfset variables.avatar = user.avatar>
+	</cfif>
+</cfif>
+
 <!--- Loads header --->
 <cfmodule template="tags/layout.cfm" templatename="main" title="#application.settings.title# : Profile">
 
@@ -82,101 +88,158 @@
 		<cfset errors = errors & "To change your password, your confirmation password must match.<br>">
 	</cfif>
 	
+	<cfif application.settings.allowavatars>
+		<cfif len(form.newavatar)>
+			<cffile action="upload" filefield="newavatar" destination="#application.settings.avatardir#" nameConflict="makeunique">
+			<cfif cffile.fileWasSaved>
+				<!--- new file --->
+				<cfset newfile = cffile.serverfile>
+				<!--- is it an image? --->
+				<cfset res = application.image.getImageInfo("",application.settings.avatardir & "/" & newfile)>
+				<cfif res.errorcode is 1>
+					<cfset errors = errors & "File uploaded was not valid.<br>">
+					<cffile action="delete" file="#application.settings.avatardir#/#newfile#">
+				<cfelse>
+					<!--- scale --->
+					<cfset application.image.resize("", application.settings.avatardir & "/" & newfile, application.settings.avatardir & "/" & newfile,
+													150,150,true)>
+					
+					<cfset avatar = newfile>
+					<!--- delete old --->
+					<cfif len(user.avatar) and user.avatar neq "@gravatar" and fileExists(application.settings.avatardir & "/" & user.avatar)>
+						<cffile action="delete" file="#application.settings.avatardir#/#user.avatar#">
+					</cfif>
+					<cfset form.usegravatar = false>
+				</cfif>
+			</cfif>
+		<cfelseif structKeyExists(form, "usegravatar") and form.usegravatar>
+			<cfset avatar = "@gravatar">
+			<!--- delete old --->
+			<cfif len(user.avatar) and user.avatar neq "@gravatar" and fileExists(application.settings.avatardir & "/" & user.avatar)>
+				<cffile action="delete" file="#application.settings.avatardir#/#user.avatar#">
+			</cfif>
+		</cfif>
+	<cfelse>
+		<cfset avatar = "">
+	</cfif>
+	
 	<cfif not len(errors)>
 
 		<cfif len(trim(form.password_new))>
 			<cfset user.password = form.password_new>
 		</cfif>
-			
-		<cfset application.user.saveUser(username=getAuthUser(),password=user.password,emailaddress=form.emailaddress,datecreated=user.datecreated,groups=application.user.getGroupsForUser(getAuthUser()), signature=form.signature, confirmed=true)>
-				
+		<cfset application.user.saveUser(username=getAuthUser(),password=user.password,emailaddress=form.emailaddress,datecreated=user.datecreated,groups=application.user.getGroupsForUser(getAuthUser()), signature=form.signature, confirmed=true, avatar=avatar)>
+		<cfset request.udf.cachedUserInfo(getAuthUser(),false)>		
 	</cfif>
 		
 </cfif>
 
 <cfoutput>
-<p>
-<table width="500" cellpadding="6" class="tableDisplay" cellspacing="1" border="0">
-	<tr class="tableHeader">
-		<td class="tableHeader">Profile</td>
-	</tr>
-	<tr class="tableRowMain">
-		<td>
-		Please use the form below to edit your profile.
+	<!-- Content Start -->
+	<div class="content_box">
+					
+		<!-- Register Start -->
+		<div class="row_title">
+			<p>Profile</p>
+		</div>
+		
+		<div class="row_1">
+		<p>Please use the form below to edit your profile.</p>
 		<cfif isDefined("errors")>
 			<cfif len(errors)>
-				<p>
-				Please correct the following error(s):<ul><b>#errors#</b></ul>
-				</p>
+				<p>Please correct the following error(s):</p>
+				<div class="submit_errors"><p><b>#errors#</b></p></div>
+				
 			<cfelse>
-				<p>
-				Your profile has been updated.
-				</p>
+				<p>Your profile has been updated.</p>
 			</cfif>
 		</cfif>
-		</td>
-	</tr>
-	<tr class="tableRowMain">
-		<td>
-		<form action="#cgi.script_name#" method="post">
-		<input type="hidden" name="save" value="1">
-		<table>
-			<tr>
-				<td><b>Username:</b></td>
-				<td>#user.username#</td>
-			</tr>
-			<tr>
-				<td><b>Email Address:</b></td>
-				<td><input type="text" name="emailaddress" value="#user.emailaddress#" class="formBox"></td>
-			</tr>
-			<tr>
-				<td><b>New Password:</b></td>
-				<td><input type="password" name="password_new" class="formBox"></td>
-			</tr>
-			<tr>
-				<td><b>Confirm Password:</b></td>
-				<td><input type="password" name="password_confirm" class="formBox"></td>
-			</tr>
-			<tr valign="top">
-				<td><b>Signature (1000 character max):</b></td>
-				<td><textarea name="signature" class="formTextArea">#form.signature#</textarea></td>
-			</tr>
-			<tr>
-				<td>&nbsp;</td>
-				<td align="right"><input type="image" src="images/btn_save.gif" alt="Save" width="49" height="19" name="save"></td>
-			</tr>
-		</table>
-		</form>
-		</td>
-	</tr>
+		</div>	
+		
+		<div class="row_1 top_pad">
+			<form action="#cgi.script_name#" method="post" enctype="multipart/form-data" class="profile_form">
+			<input type="hidden" name="save" value="1">
+				
+			<p class="input_name">Username:</p>
+			<p class="profile_username">#user.username#</p>
+			
+			<div class="clearer"><br /></div>
+			
+			<p class="input_name">Email Address:</p>
+			<input type="text" name="emailaddress" value="#user.emailaddress#"  class="input_box">
 
-</table>
-</p>
-
-<p>
-<table width="500" cellpadding="6" class="tableDisplay" cellspacing="1" border="0">
-	<tr class="tableHeader">
-		<td class="tableHeader">Subscriptions</td>
-	</tr>
-	<cfif isDefined("subscribeMessage")>
-	<tr class="tableRowMain">
-		<td>
-		#subscribeMessage#
-		</td>
-	</tr>
-	</cfif>
-	<tr class="tableRowMain">
-		<td>
-		<cfif subs.recordCount is 0>
-			You are not currently subscribed to anything.
-		<cfelse>
-			The following are your subscription(s):
-			<p>
-			<table>
+			<div class="clearer"><br /></div>
+			
+			<p class="input_name">New Password:</p>
+			<input type="password" name="password_new" class="input_box">
+			
+			<div class="clearer"><br /></div>
+			
+			<p class="input_name">Confirm Password:</p>
+			<input type="password" name="password_confirm" class="input_box">
+			
+			<div class="clearer"><br /></div>
+			
+			<p class="input_name">Signature:</p>
+			<textarea name="signature" class="formTextArea">#form.signature#</textarea>
+			<p class="input_name_extras">(1000 Character Max)</p>
+			
+			<div class="clearer"><br /></div>
+			
+			<cfif application.settings.allowavatars>
+			<div class="avatar_title">Avatar Options:</div>
+			
+			<div class="avatar_options">
+			
+				<p>Use <a href="http://www.gravatar.com" target="_new">Gravatar</a>:<input type="checkbox" name="usegravatar" value="true" <cfif form.usegravatar>checked</cfif>></p>
+				
+				<div class="clearer"></div>
+				
+				<p>Upload Avatar (gif, jpg, and png):</p>
+				<input type="file" name="newavatar" class="input_file">
+				
+				<div class="clearer"><br /></div>
+				
+				<cfif structKeyExists(variables, "avatar") and len(variables.avatar) and variables.avatar neq "@gravatar">
+				<p>Current Avatar:</p>
+				<img src="images/avatars/#variables.avatar#"/>
+				
+				<div class="clearer"><br /></div>
+				</cfif>
+				</cfif>
+				<input type="image" src="images/btn_save.gif" alt="Save" name="save" class="submit_btns">
+				
+			</div>
+			
+			<div class="clearer"><br /></div>
+			
+			</form>
+			
+		</div>	
+		<!-- Register Ender -->
+						
+	</div>
+	<!-- Content End -->
+	
+	<!-- Content Start -->
+	<div class="content_box">
+		
+		<!-- Bottom Login Box Start -->
+		<div class="row_title">
+			<p>Subscriptions</p>
+		</div>
+		
+		<div class="row_0">
+			<cfif isDefined("subscribeMessage")>
+			<div class="left_90"><p>#subscribeMessage#</p></div>
+			</cfif>
+			<cfif subs.recordCount is 0>
+			<div class="left_90"><p>You are not currently subscribed to anything.</p></div>
+			<cfelse>
+			<div class="left_90"><p>The following are your subscription(s):</p></div>
+			
 			<cfloop query="subs">
-				<tr>
-					<td>
-					<cfif len(conferenceidfk)>
+				<cfif len(conferenceidfk)>
 						<cfset data = application.conference.getConference(conferenceidfk)>
 						<cfset label = "Conference">
 						<cfset link = "forums.cfm?conferenceid=#conferenceidfk#">
@@ -189,19 +252,19 @@
 						<cfset label = "Thread">
 						<cfset link = "messages.cfm?threadid=#threadidfk#">
 					</cfif>
-					#label#:
-					</td>
-					<td><a href="#link#">#data.name#</a></td> 
-					<td>[<a href="profile.cfm?removeSub=#id#">Unsubscribe</a>]</td>
+			<div class="left_90">
+				<p class="left_20">#label#:</p>
+				<p class="left_40"><a href="#link#">#data.name#</a></p>
+				<p class"left_30">[<a href="profile.cfm?removeSub=#id#">Unsubscribe</a>]</p>
+			</div>
 			</cfloop>
-			</table>
-			</p>
-		</cfif>
-		</td>
-	</tr>
-
-</table>
-</p>
+			</cfif>
+			
+		</div>
+		<!-- Bottom Login Box Ender -->
+					
+	</div>
+	<!-- Content End -->
 
 </cfoutput>
 	

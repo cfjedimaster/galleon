@@ -3,24 +3,8 @@
 	Name         : messages.cfm
 	Author       : Raymond Camden 
 	Created      : June 10, 2004
-	Last Updated : May 1, 2007
-	History      : Support for UUID (rkc 1/27/05)
-				   Update to allow posting here (rkc 3/31/05)
-				   Fixed code that gets # of pages (rkc 4/8/05)
-				   Hide the darn error msg if errors is blank, links to messages (rkc 7/15/05)
-				   Form posts so that if error, you go back down to form. If no error, you cflocate to top (rkc 7/29/05)
-				   Have subscribe option (rkc 7/29/05)
-				   Refresh user cache on post, change links a bit (rkc 8/3/05)				
-				   Fix typo (rkc 8/9/05)
-				   Fix pages. Add anchor for last post (rkc 9/15/05)
-				   It's possible form.title and form.body may not exist and my code didn't handle it (rkc 10/7/05)
-				   IE cflocation bug fix, ensure logged on before posting (rkc 10/10/05)
-				   Simple size change (rkc 7/27/06)
-				   gravatar, sig, attachments (rkc 11/3/06)
-				   bug when no attachment (rkc 11/6/06)
-				   lcase the hash for gravatar (rkc 12/18/06)
-				   Use renderMessage, bd fix (rkc 2/21/07)
-				   Changed calls to isUserInAnyRole to isTheUserInAnyRole (rkc 5/1/07)				   									   
+	Last Updated : October 12, 2007
+	History      : Reset for V2
 	Purpose		 : Displays messages for a thread
 --->
 
@@ -38,11 +22,17 @@
 	</cfcatch>
 </cftry>
 
-<!--- determine if read only --->
-<cfif request.forum.readonly or request.thread.readonly>
-	<cfset readonly = true>
+<!--- Am I allowed to look at this? --->
+<cfif not application.permission.allowed(application.rights.CANVIEW, request.forum.id, request.udf.getGroups()) or 
+		not application.permission.allowed(application.rights.CANVIEW, request.conference.id, request.udf.getGroups())>
+	<cflocation url="denied.cfm" addToken="false">
+</cfif>
+<!--- Am I allowed to post here? --->
+<cfif application.permission.allowed(application.rights.CANPOST, request.forum.id, request.udf.getGroups()) and
+	  application.permission.allowed(application.rights.CANPOST, request.conference.id, request.udf.getGroups())>
+	<cfset canPost = true>
 <cfelse>
-	<cfset readonly = false>
+	<cfset canPost = false>
 </cfif>
 
 <!--- handle new post --->
@@ -53,7 +43,7 @@
 <cfparam name="form.attachment" default="">
 <cfparam name="form.filename" default="">
 
-<cfif isDefined("form.post") and request.udf.isLoggedOn() and (application.utils.isTheUserInAnyRole("forumsadmin,forumsmoderator") or (not readonly))>
+<cfif isDefined("form.post") and canPost>
 
 	<cfset errors = "">
 	<!--- clean the fields --->
@@ -137,154 +127,170 @@
 </cfif>
 
 <!--- Displays pagination on right side, plus left side buttons for threads --->
-<cfmodule template="tags/pagination.cfm" pages="#pages#" mode="messages" />
+<cfmodule template="tags/pagination.cfm" pages="#pages#" mode="messages" canPost="#canPost#" />
 
 <!--- Now display the table. This changes based on what our data is. --->
 <cfoutput>
-<a name="top" />
-<p>
-<table width="100%" cellpadding="6" class="tableDisplay" cellspacing="1" border="0">
-	<tr class="tableHeader">
-		<td colspan="2" class="tableHeader">Thread: #request.thread.name#</td>
-	</tr>
-	<tr class="tableSubHeader">
-		<td class="tableSubHeader" colspan="2">
-			<table width="100%" cellpadding="0" cellspacing="0" border="0">
-				<tr>
-				<td><b>Created on:</b> #dateFormat(request.thread.dateCreated,"mm/dd/yy")# #timeFormat(request.thread.dateCreated,"hh:mm tt")#</td>
-				<td align="right"><b>Replies:</b> #max(0,data.recordCount-1)#</td>
-				</tr>
-			</table>
-		</td>
-	</tr>
-	<cfif data.recordCount>
+	
+	
+	
+		<!-- Content Start -->
+	<div class="content_box">
+		
+		<!-- Post Box Start -->
+		<div class="row_title">
+			<p><a name="top"></a>Thread: #request.thread.name#</p>
+		</div>
+		
+		<div class="row_0">
+			<div class="left_70"><p><span class="bolder">Created on:</span> #dateFormat(request.thread.dateCreated,"mm/dd/yy")# #timeFormat(request.thread.dateCreated,"hh:mm tt")#</p></div>
+			<div class="right_20 align_right right_pad"><p><span class="bolder">Replies:</span> #max(0,data.recordCount-1)#</p></div>
+		</div>
+		
+		<!-- Post start -->
+		<cfif data.recordCount>
 		<cfloop query="data" startrow="#(url.page-1)*application.settings.perpage+1#" endrow="#(url.page-1)*application.settings.perpage+application.settings.perpage#">
-			<cfset uinfo = request.udf.cachedUserInfo(username)>
-			<tr class="tableRow#currentRow mod 2#" valign="top">
-				<td width="170" class="tableMessageCell" rowspan="2"><b>#username#</b><br>
+		<cfset uinfo = request.udf.cachedUserInfo(username)>
+		<div class="forum_post">
+			
+			<div class="forum_post_identity">
+		
+				<p class="bolder">#username#</p><br />
 				#uInfo.rank#<br>
-				<cfif application.settings.allowgravatars>
-				<img src="http://www.gravatar.com/avatar.php?gravatar_id=#lcase(hash(uinfo.emailaddress))#&amp;rating=PG&amp;size=80&amp;default=#application.settings.rooturl#/images/gravatar.gif" alt="#username#'s Gravatar" border="0">
-				</cfif>
-				<br>
-				<b>Joined:</b> #dateFormat(uInfo.dateCreated,"mm/dd/yy")#<br>
-				<b>Posts:</b> #uInfo.postcount#</td>
-				<td class="tableMessageCellRight">
-					<a name="#currentRow#"></a>
-					<cfif currentRow is recordCount><a name="last"></a></cfif>
-					<b>#title#</b><br>
-					#dateFormat(posted,"mm/dd/yy")# #timeFormat(posted,"h:mm tt")#<br>
-					<cfif len(attachment)>Attachment: <a href="attachment.cfm?id=#id#">#attachment#</a><br></cfif>
-					<br>
-					<!---
-					#request.udf.paragraphFormat2(request.udf.activateURL(body))#
-					--->
-					#application.message.renderMessage(body)#
-					
-					<cfif len(uinfo.signature)><div class="signature">#uinfo.signature#</div></cfif>
-					
-					<cfif request.udf.isLoggedOn() and application.utils.isTheUserInAnyRole("forumsadmin,forumsmoderator")>
-					<p align="right"><a href="message_edit.cfm?id=#id#">[Edit Post]</a></p>
+				<cfif application.settings.allowavatars>
+					<cfif uinfo.avatar is "@gravatar">
+					<img src="http://www.gravatar.com/avatar.php?gravatar_id=#lcase(hash(uinfo.emailaddress))#&amp;rating=PG&amp;size=80&amp;default=#application.settings.rooturl#/images/gravatar.gif" alt="#username#'s Gravatar">
+					<cfelseif len(uinfo.avatar)>
+					<img src="images/avatars/#uinfo.avatar#" alt="#username#'s Gravatar">
 					</cfif>
-				</td>
-			</tr>
-			<tr>
-				<td class="tableMessageCellRight" align="right">
+				</cfif>
+				<br /><br />
+				<p><span class="bolder">Joined:</span> #dateFormat(uInfo.dateCreated,"mm/dd/yy")#</p>
+				<p><span class="bolder">Posts:</span> #uInfo.postcount#</p>
+			</div>
+			
+			<div class="forum_post_right keep_on">
+			<div class="post_padding">
+				<a name="#currentRow#"></a>
+				<cfif currentRow is recordCount><a name="last"></a></cfif>
+				<p><span class="bolder">#title#</span><br />
+				#dateFormat(posted,"mm/dd/yy")# #timeFormat(posted,"h:mm tt")#<br>
+				<cfif len(attachment)>Attachment: <a href="attachment.cfm?id=#id#">#attachment#</a></cfif></p>
+
+				<div class="forum_post_content">
+				<!--- #application.message.renderMessage(body)# --->
+				<cfmodule template="tags/DP_ParseBBML.cfm" input="#body#" outputvar="result" convertsmilies="true" smileypath="images/Smilies/Default/">
+				#result.output#
+				<cfif len(uinfo.signature)><div class="signature">#uinfo.signature#</div></cfif>
+				<cfif request.udf.isLoggedOn() and application.utils.isTheUserInAnyRole("forumsadmin,forumsmoderator")>
+				<br />
+				<p align="right"><a href="message_edit.cfm?id=#id#">[Edit Post]</a></p>
+				</cfif>
+				</div> 		
+				
+			</div>
 				<cfif isBoolean(cgi.server_port_secure) and cgi.server_port_secure>
 					<cfset pre = "https">
 				<cfelse>
 					<cfset pre = "http">
 				</cfif>
 				<cfset link = "#pre#://#cgi.server_name##cgi.script_name#?#cgi.query_string####currentrow#">
-				<span class="linktext"><a href="#link#">Link</a> | <a href="##top">Top</a> | <a href="##bottom">Bottom</a></span>
-				</td>
-			</tr>
+				<div class="forum_post_links"><p>
+					<a href="#link#">Link</a> | 
+					<a href="##top">Top</a> | 
+					<a href="##bottom">Bottom</a>
+				</p></div>
+				
+			</div>
+			
+		<div class="clearer"></div>
+		</div>
 		</cfloop>
-	<cfelse>
-		<tr class="tableRow1">
-			<td colspan="2">Sorry, but there are no messages available for this thread.</td>
-		</tr>
-	</cfif>
-</table>
-</p>
-<a name="bottom" />
-</cfoutput>
+		<cfelse>
+		<div class="row_1">
+			<p>Sorry, but there are no messages available for this thread.</p>
+		</div>
+		</cfif>
+		<!-- Post end -->
+		<a name="bottom" /></a>
+		
+		
+					
+	</div>
+	<!-- Content End -->
+	
 
-<cfoutput>
-<a name="newpost" />
-<p>
-<table width="100%" cellpadding="6" class="tableDisplay" cellspacing="1" border="0">
-	<tr class="tableHeader">
-		<td class="tableHeader">New Post</td>
-	</tr>
-	<cfif isDefined("errors") and len(errors)>
-	<tr class="tableRowMain">
-		<td>
-		Please correct the following error(s):<ul><b>#errors#</b></ul>
-		</td>
-	</tr>
-	</cfif>
-	<tr class="tableRowMain">
-		<td>
-		<form action="#cgi.script_name#?#cgi.query_string#&##newpost" method="post" enctype="multipart/form-data">
-		<input type="hidden" name="post" value="1">
-
-		<table>
-			<cfif not request.udf.isLoggedOn()>
-				<cfset thisPage = cgi.script_name & "?" & cgi.query_string & "&##newpost">
-				<cfset link = "login.cfm?ref=#urlEncodedFormat(thisPage)#">
-
-				<tr>
-					<td>Please <a href="#link#">login</a> to post a response.</td>
-				</tr>
-			<cfelseif application.utils.isTheUserInAnyRole("forumsadmin,forumsmoderator") or not readonly>
-				<tr>
-					<td><b>Title: </b></td>
-					<td><input type="text" name="title" value="#form.title#" class="formBox"></td>
-				</tr>
-				<tr>
-					<td colspan="2"><b>Body: </b><br>
-					<p>
-					#application.message.renderHelp()#
-					</p>
-					<textarea name="body" cols="50" rows="20">#form.body#</textarea></td>
-				</tr>
-				<tr>
-					<td><b>Subscribe to Thread: </b></td>
-					<td><select name="subscribe">
-					<option value="true" <cfif form.subscribe>selected</cfif>>Yes</option>
-					<option value="false" <cfif not form.subscribe>selected</cfif>>No</option>
-					</select></td>
-				</tr>
-				<cfif isBoolean(request.forum.attachments) and request.forum.attachments>
-				<tr>
-					<td><b>Attach File:</b></td>
-					<td>
-					<input type="file" name="attachment">
-					<cfif len(form.oldattachment)>
-					<input type="hidden" name="oldattachment" value="#form.oldattachment#">
-					<input type="hidden" name="filename" value="#form.filename#">
-					<br>
-					File already attached: #form.oldattachment#
-					</cfif>
-					</td>
-				</tr>
-				</cfif>								
-				<tr>
-					<td>&nbsp;</td>
-					<td align="right"><cfif not isDefined("request.thread")><input type="image" src="images/btn_new_topic.gif" alt="New Topic" title="New Topic" width="71" height="19" name="post"><cfelse><input type="image" src="images/btn_reply.gif" alt="Reply" title="Reply" width="52" height="19" name="post"></cfif></td>
-				</tr>
-			<cfelse>
-				<tr>
-					<td><b>Sorry, but this area is readonly.</b></td>
-				</tr>
+	
+	<!-- Edit Message Container Start -->
+	<div class="content_box">
+	
+		<!-- Message Edit Start -->
+		<div class="row_title">
+			<p>New Post</p>
+		</div>
+		<cfif isDefined("errors") and len(errors)>
+		<div class="row_0">
+			<div class="clearer"></div>
+			<p>Please correct the following error(s):</p>
+			<div class="submit_error"><p><b>#errors#</b></p></div><br />
+		</div>
+		</cfif>
+		<cfif not request.udf.isLoggedOn()>
+		<cfset thisPage = cgi.script_name & "?" & cgi.query_string & "&##newpost">
+		<cfset link = "login.cfm?ref=#urlEncodedFormat(thisPage)#">
+		<div class="row_0">
+			<div class="left_90"><p>Please <a href="#link#">login</a> to post a response.</p></div>
+		</div>
+		<cfelseif canPost>	
+		<div class="row_1 top_pad">
+			<form action="#cgi.script_name#?#cgi.query_string#&##newpost" method="post" enctype="multipart/form-data" class="basic_forms">
+			<input type="hidden" name="post" value="1">	
+			<p class="input_name">Title:</p>
+			<div class="clearer"></div>
+			<input type="text" name="title" value="#form.title#" class="formBox">
+			<div class="clearer"><br /></div>
+			
+			
+			<p class="input_name">Body:</p>
+			<div class="clearer"></div>
+			#application.message.renderHelp()#
+			<textarea class="edit_textarea" name="body" cols="100" rows="20">#form.body#</textarea>
+			
+			<div class="clearer"><br /></div>
+			
+			<p class="input_name">Subscribe:</p>
+			<select name="subscribe">
+				<option value="true" <cfif form.subscribe>selected</cfif>>Yes</option>
+				<option value="false" <cfif not form.subscribe>selected</cfif>>No</option>
+			</select>
+															
+			<div class="clearer"><br /></div>
+			<cfif isBoolean(request.forum.attachments) and request.forum.attachments>
+			<p>Attach File:</p>
+			<input type="file" name="attachment">
+			<cfif len(form.oldattachment)>
+			<input type="hidden" name="oldattachment" value="#form.oldattachment#">
+			<input type="hidden" name="filename" value="#form.filename#">
+			<br>
+			File already attached: #form.oldattachment#
 			</cfif>
-		</table>
-		</form>
-		</td>
-	</tr>
-</table>
-</p>
+			<div class="clearer"><br /></div>								
+			</cfif>
+			<cfif not isDefined("request.thread")><input type="image" src="images/btn_new_topic.gif" alt="New Topic" title="New Topic" name="post" class="submit_btns"><cfelse><input type="image" src="images/btn_reply.gif" alt="Reply" title="Reply" name="post" class="submit_btns"></cfif>
+			<div class="clearer"><br /></div>
+			</form>
+		</div>
+		<cfelse>
+		<div class="row_0">
+			<div class="clearer"></div>
+			<p><b>Sorry, but you may not post here.</b></p>
+		</div>
+		</cfif>
+		<!-- Message Edit Ender -->
+		
+	</div>
+	<!-- Edit Message Container Ender -->
+
 </cfoutput>
 	
 </cfmodule>

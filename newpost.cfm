@@ -3,18 +3,8 @@
 	Name         : newpost.cfm
 	Author       : Raymond Camden 
 	Created      : June 10, 2004
-	Last Updated : May 1, 2007
-	History      : Maxlength on title (rkc 8/30/04)
-				   Support for UUID (rkc 1/27/05)
-				   Now only does new threads (rkc 3/28/05)
-				   Subscribe (rkc 7/29/05)
-				   Refresh user cache on post (rkc 8/3/05)
-				   Removed mappings (rkc 8/27/05)
-				   Simple size change (rkc 7/27/06)				   
-				   title fix (rkc 8/4/06)
-				   attachment support (rkc 11/3/06)
-				   error if attachments disabled (rkc 11/6/06)
-				   Changed calls to isUserInAnyRole to isTheUserInAnyRole (rkc 5/1/07)				   
+	Last Updated : October 12, 2007
+	History      : Reset for V2
 	Purpose		 : Displays form to add a thread.
 --->
 
@@ -34,11 +24,9 @@
 <cftry>
 	<cfset request.forum = application.forum.getForum(url.forumid)>
 	<cfset request.conference = application.conference.getConference(request.forum.conferenceidfk)>
-	<!--- check both thread and forum for readonly and not admin --->
-	<cfif request.forum.readonly or (isDefined("request.thread") and request.thread.readonly)>
-		<cfif not application.utils.isTheUserInAnyRole("forumsadmin,forumsmoderator")>
+	<cfif not application.permission.allowed(application.rights.CANPOST, url.forumid, request.udf.getGroups()) or 
+		not application.permission.allowed(application.rights.CANPOST, request.conference.id, request.udf.getGroups())>
 			<cfset blockedAttempt = true>
-		</cfif>
 	</cfif>
 	<cfcatch>
 		<cflocation url="index.cfm" addToken="false">
@@ -124,72 +112,76 @@
 <cfmodule template="tags/layout.cfm" templatename="main" title="#application.settings.title# : New Post">
 
 <cfoutput>
-<p>
-<table width="500" cellpadding="6" class="tableDisplay" cellspacing="1" border="0">
-	<tr class="tableHeader">
-		<td class="tableHeader">New Post</td>
-	</tr>
-	<cfif isDefined("errors")>
-	<tr class="tableRowMain">
-		<td>
-		Please correct the following error(s):<ul><b>#errors#</b></ul>
-		</td>
-	</tr>
-	</cfif>
-	<tr class="tableRowMain">
-		<td>
-		<form action="#cgi.script_name#?#cgi.query_string#" method="post" enctype="multipart/form-data">
-		<input type="hidden" name="post" value="1">
-
-		<table>
+	
+	
+	
+<!-- Edit Message Container Start -->
+	<div class="content_box">
+	
+		<!-- Message Edit Start -->
+		<div class="row_title">
+			<p>New Post</p>
+		</div>
+		<cfif isDefined("errors") and len(errors)>
+		<div class="row_0">
+			<div class="clearer"></div>
+			<p>Please correct the following error(s):</p>
+			<div class="submit_error"><p><b>#errors#</b></p></div><br />
+		</div>
+		</cfif>
+		
+		<div class="row_1 top_pad">
+			<form action="#cgi.script_name#?#cgi.query_string#" method="post" enctype="multipart/form-data" class="basic_forms">
+			<input type="hidden" name="post" value="1">
+			
 			<cfif not blockedAttempt>
-				<tr>
-					<td><b>Title: </b></td>
-					<td><input type="text" name="title" value="#form.title#" class="formBox"></td>
-				</tr>
-				<tr>
-					<td colspan="2"><b>Body: </b><br>
-					<p>
-					#application.message.renderHelp()#
-					</p>
-					<textarea name="body" cols="50" rows="20">#form.body#</textarea></td>
-				</tr>
-				<tr>
-					<td><b>Subscribe to Thread: </b></td>
-					<td><select name="subscribe">
-					<option value="true" <cfif form.subscribe>selected</cfif>>Yes</option>
-					<option value="false" <cfif not form.subscribe>selected</cfif>>No</option>
-					</select></td>
-				</tr>
-				<cfif isBoolean(request.forum.attachments) and request.forum.attachments>
-				<tr>
-					<td><b>Attach File:</b></td>
-					<td>
-					<input type="file" name="attachment">
-					<cfif len(form.oldattachment)>
-					<input type="hidden" name="oldattachment" value="#form.oldattachment#">
-					<input type="hidden" name="filename" value="#form.filename#">
-					<br>
-					File already attached: #form.oldattachment#
-					</cfif>
-					</td>
-				</tr>
-				</cfif>				
-				<tr>
-					<td>&nbsp;</td>
-					<td align="right"><input type="image" src="images/btn_new_topic.gif" alt="New Topic" title="New Topic" width="71" height="19" name="post"></td>
-				</tr>
-			<cfelse>
-				<tr>
-					<td><b>Sorry, but this area is readonly.</b></td>
-				</tr>
+			<p class="input_name">Title:</p>
+			<div class="clearer"></div>
+			<input type="text" name="title" value="#form.title#" class="formBox">
+			<div class="clearer"><br /></div>
+			
+			
+			<p class="input_name">Body:</p>
+			<div class="clearer"></div>
+			#application.message.renderHelp()#
+			<textarea class="edit_textarea" name="body" cols="100" rows="20">#form.body#</textarea>
+			
+			<div class="clearer"><br /></div>
+			
+			<p class="input_name">Subscribe:</p>
+			<select name="subscribe">
+				<option value="true" <cfif form.subscribe>selected</cfif>>Yes</option>
+				<option value="false" <cfif not form.subscribe>selected</cfif>>No</option>
+			</select>
+															
+			<div class="clearer"><br /></div>
+			<cfif isBoolean(request.forum.attachments) and request.forum.attachments>
+			<p>Attach File:</p>
+			<input type="file" name="attachment">
+			<cfif len(form.oldattachment)>
+			<input type="hidden" name="oldattachment" value="#form.oldattachment#">
+			<input type="hidden" name="filename" value="#form.filename#">
+			<br>
+			File already attached: #form.oldattachment#
 			</cfif>
-		</table>
-		</form>
-		</td>
-	</tr>
-</table>
-</p>
+			<div class="clearer"><br /></div>								
+			</cfif>
+			<cfif not isDefined("request.thread")><input type="image" src="images/btn_new_topic.gif" alt="New Topic" title="New Topic" name="post" class="submit_btns"><cfelse><input type="image" src="images/btn_reply.gif" alt="Reply" title="Reply" name="post" class="submit_btns"></cfif>
+			<div class="clearer"><br /></div>
+			<cfelse>
+			<div class="row_0">
+			<div class="clearer"></div>
+			<p><b>Sorry, but you may not post here.</b></p>
+			</div>
+			</cfif>
+			</form>
+		</div>
+		
+		<!-- Message Edit Ender -->
+		
+	</div>
+	<!-- Edit Message Container Ender -->
+
 </cfoutput>
 
 </cfmodule>

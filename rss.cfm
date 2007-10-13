@@ -3,10 +3,8 @@
 	Name         : rss.cfm
 	Author       : Raymond Camden 
 	Created      : July 5, 2004
-	Last Updated : March 2, 2007
-	History      : Support for UUID (rkc 1/27/05)
-				   You can't have 2 or more of the same link, so I add r=X to make it unique. Thanks to Tom Thomas for finding this bug (rkc 8/3/05)
-				   Title used in RSS wasn't dynamic (rkc 3/2/07)
+	Last Updated : October 12, 2007
+	History      : Reset for V2
 	Purpose		 : Displays RSS for a Conference
 --->
 
@@ -21,6 +19,10 @@
 		<cflocation url="index.cfm" addToken="false">
 	</cfcatch>
 </cftry>
+
+<cfif not application.permission.allowed(application.rights.CANVIEW, url.conferenceid, request.udf.getGroups())>
+	<cfabort>
+</cfif>
 
 <!--- get my latest posts --->
 <cfset data = application.conference.getLatestPosts(conferenceid=url.conferenceid)>

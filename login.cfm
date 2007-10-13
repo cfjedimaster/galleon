@@ -3,14 +3,8 @@
 	Name         : newthread.cfm
 	Author       : Raymond Camden 
 	Created      : June 10, 2004
-	Last Updated : February 21, 2007
-	History      : Support password reminders (rkc 2/18/05)
-				   No more notifications (rkc 7/29/05)
-				   Removed mappings (rkc 8/27/05)
-				   require confirmation changes (rkc 7/12/06)
-				   make title work (rkc 8/4/06)
-				   handle encryption and auto-focus (rkc 11/3/06)
-				   param a few fields I was assuming existed (rkc 2/21/07)
+	Last Updated : October 12, 2007
+	History      : Reset for V2
 	Purpose		 : Displays form to add a thread.
 --->
 
@@ -107,27 +101,30 @@ Your password is: #data.password#
 </cfif>
 
 <cfoutput>
-<p>
-<table width="500" cellpadding="6" class="tableDisplay" cellspacing="1" border="0">
-	<cfif structKeyExists(variables, "showRequireConfirmation")>
-		<tr class="tableHeader">
-			<td class="tableHeader">Confirmation Required</td>
-		</tr>
-		<tr class="tableRowMain">
-			<td>
-			In order to complete your registration, you must confirm your email
-			address. An email has been sent to the address you used during registration.
-			Follow the link in the email to complete registration. 
-			</td>
-		</tr>
 	
-	<cfelse>
-		<tr class="tableHeader">
-			<td class="tableHeader">Login</td>
-		</tr>
-		<tr class="tableRowMain">
-			<td>
-			Please use the form below to login.
+	
+	<!-- Content Start -->
+	<div class="content_box">
+		
+		
+		<cfif structKeyExists(variables, "showRequireConfirmation")>
+		<div class="row_title">
+			<p>Confirmation Required</p>
+		</div>
+		
+		<div class="row_1">
+			<p>In order to complete your registration, you must confirm your email
+			address. An email has been sent to the address you used during registration.
+			Follow the link in the email to complete registration. </p>
+		</div>	
+		<cfelse>
+		<!-- Login Start -->
+		<div class="row_title">
+			<p>Login</p>
+		</div>
+		
+		<div class="row_1">
+			<p>Please use the form below to login.</p>
 			<cfif failedLogon>
 			<p>
 			<cfif application.settings.requireconfirmation>
@@ -137,115 +134,120 @@ Your password is: #data.password#
 			</cfif>
 			</p>
 			</cfif>
-			</td>
-		</tr>
-		<tr class="tableRowMain">
-			<td>
-			<form action="#cgi.script_name#?#cgi.query_string#" method="post">
+		</div>	
+		
+		<div class="row_1 top_pad">
+			<form action="#cgi.script_name#?#cgi.query_string#" method="post" class="login_forms">
 			<input type="hidden" name="logon" value="1">
-			<table>
-				<tr>
-					<td><b>Username:</b></td>
-					<td><input type="text" name="username" id="username" class="formBox"></td>
-				</tr>
-				<tr>
-					<td><b>Password:</b></td>
-					<td><input type="password" name="password" class="formBox"></td>
-				</tr>
-				<tr>
-					<td>&nbsp;</td>
-					<td align="right"><input type="image" src="images/btn_login.gif" alt="Login" width="71" height="19" name="logon"></td>
-				</tr>
-			</table>
+
+				
+			<p class="input_name">Username:</p>
+			<input type="text" name="username" id="username" class="input_box">
+			
+			<div class="clearer"><br /></div>
+			
+			<p class="input_name">Password:</p>
+			<input type="password" name="password" class="input_box">
+			
+			<div class="clearer"><br /></div>
+			
+			<input type="image" src="images/btn_login.gif" alt="Login" name="logon" class="submit_btns">
+			
+			<div class="clearer"><br /></div>
+			
 			</form>
-			</td>
-		</tr>
-		<tr class="tableHeader">
-			<td class="tableHeader">Register</td>
-		</tr>
-		<tr class="tableRowMain">
-			<td>
-			In order to create threads or reply to threads, you must register. All of the
-			fields below are required.
+			
+		</div>
+		<!-- Login Ender -->
+			
+		<!-- Register Start -->
+		<div class="row_title">
+			<p>Register</p>
+		</div>
+		
+		<div class="row_1">
+			<p>In order to create threads or reply to threads, you must register. All of the fields below are required.</p>
 			<cfif isDefined("errors")>
-				<p>
-				Please correct the following error(s):<ul><b>#errors#</b></ul>
-				</p>
+			<p>Please correct the following error(s):</p>
+			<div class="input_errors"><p><b>#errors#</b></p></div>
 			</cfif>
-			</td>
-		</tr>
-		<tr class="tableRowMain">
-			<td>
-			<form action="#cgi.script_name#?#cgi.query_string#" method="post">
+		</div>	
+		
+		<div class="row_1 top_pad">
+			<form action="#cgi.script_name#?#cgi.query_string#" method="post" class="login_forms">
 			<input type="hidden" name="register" value="1">
-			<table>
-				<tr>
-					<td><b>Username: </b></td>
-					<td><input type="text" name="username_new" value="#form.username_new#" class="formBox"></td>
-				</tr>
-				<tr>
-					<td><b>Email Address: </b></td>
-					<td><input type="text" name="emailaddress" value="#form.emailaddress#" class="formBox"></td>
-				</tr>
-				<tr>
-					<td><b>Password: </b></td>
-					<td><input type="password" name="password_new" class="formBox"></td>
-				</tr>
-				<tr>
-					<td><b>Confirm Password: </b></td>
-					<td><input type="password" name="password_new2" class="formBox"></td>
-				</tr>
-				<tr>
-					<td>&nbsp;</td>
-					<td align="right"><input type="image" src="images/btn_register.gif" alt="Register" width="71" height="19"></td>
-				</tr>
-			</table>
+
+				
+			<p class="input_name">Username:</p>
+			<input type="text" name="username_new" value="#form.username_new#" class="input_box">
+			
+			<div class="clearer"><br /></div>
+			
+			<p class="input_name">Email Address:</p>
+			<input type="text" name="emailaddress" value="#form.emailaddress#" class="input_box">
+			
+			<div class="clearer"><br /></div>
+			
+			<p class="input_name">Password:</p>
+			<input type="password" name="password_new" class="input_box">
+			
+			<div class="clearer"><br /></div>
+			
+			<p class="input_name">Confirm Password:</p>
+			<input type="password" name="password_new2" class="input_box">
+			
+			<div class="clearer"><br /></div>
+			
+			<input type="image" src="images/btn_register.gif" alt="Register" class="submit_btns">
+
+			
+			<div class="clearer"><br /></div>
+			
 			</form>
-			</td>
-		</tr>
+			
+		</div>	
+		<!-- Register Ender -->
+					
+		<!-- Register Start -->
 		<cfif application.settings.encryptpasswords>
 		<cfelse>
-		<tr class="tableHeader">
-			<td class="tableHeader">Password Reminder</td>
-		</tr>
-		<tr class="tableRowMain">
-			<td>
-			If you cannot remember your password, enter your username in the form below and your login information will be sent to you.
+		<div class="row_title">
+			<p>Password Reminder</p>
+		</div>
+		
+		<div class="row_1">
+			<p>If you cannot remember your password, enter your username in the form below and your login information will be sent to you.</p>
 			<cfif isDefined("form.reminder")>
 				<cfif isDefined("variables.sentInfo")>
-				<p>
-				A reminder has been sent to your email address.
-				</p>
+				<p><b>A reminder has been sent to your email address.</b></p>
 				<cfelse>
-				<p>
-				Sorry, but your username could not be found in our system.
-				</p>
+				<p><b>Sorry, but your username could not be found in our system.</b></p>
 				</cfif>
 			</cfif>
-			</td>
-		</tr>
-		<tr class="tableRowMain">
-			<td>
-			<form action="#cgi.script_name#?#cgi.query_string#" method="post">
-			<input type="hidden" name="reminder" value="1">
-			<table>
-				<tr>
-					<td><b>Username:</b></td>
-					<td><input type="text" name="username_lookup" class="formBox"></td>
-				</tr>
-				<tr>
-					<td>&nbsp;</td>
-					<td align="right"><input type="image" src="images/btn_sendpasswordreminder.gif" alt="Login" width="149" height="19" name="logon"></td>
-				</tr>
-			</table>
-			</form>
-			</td>
-		</tr>
-		</cfif>
-	</cfif>
-</table>
-</p>
+		</div>	
+		
+		<div class="row_1 top_pad">
 
+			<form action="#cgi.script_name#?#cgi.query_string#" method="post" class="login_forms">
+			<input type="hidden" name="reminder" value="1">
+				
+			<p class="input_name">Username:</p>
+			<input type="text" name="username_lookup" class="input_box">
+						
+			<div class="clearer"><br /></div>
+			
+			<input type="image" src="images/btn_sendpasswordreminder.gif" alt="Send-Password" name="logon" class="submit_btns">
+			<div class="clearer"><br /></div>
+			
+			</form>
+			
+		</div>	
+		<!-- Register Ender -->
+		</cfif>
+		</cfif>
+	</div>
+	<!-- Content End -->
+	
 <script>
 window.onload = function() {document.getElementById("username").focus();}
 </script>

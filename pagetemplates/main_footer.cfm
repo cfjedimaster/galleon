@@ -3,33 +3,25 @@
 	Name         : main_footer.cfm
 	Author       : Raymond Camden 
 	Created      : June 02, 2004
-	Last Updated : July 12, 2006
-	History      : forgot to turn off cfoutputonly (rkc 11/22/05)
-				   show version (rkc 7/12/06)
+	Last Updated : October 12, 2007
+	History      : Reset for V2
 	Purpose		 : 
 --->
 
 <cfoutput>
-	</td>
-</tr>
-<tr>
-	<td colspan="2"><img src="images/shim.gif" height="20" width="1"></td>
-</tr>
-<tr bgcolor="##235577">
-	<td colspan=2 height="1"><img src="images/shim.gif" height="1"></td>
-</tr>
-<tr>
-	<td colspan="2">
-	<p class="footer">
-	<a href="http://galleon.riaforge.org">Galleon Forums V#application.settings.version#</a> was created by <a href="http://ray.camdenfamily.com">Raymond Camden</a>
-	</p>
-	</td>
-</tr>
-</table>
+	
+	<!-- Footer Start -->
+	<div id="footer">
+		<a href="http://galleon.riaforge.org">Galleon Forums V#application.settings.version#</a> was created by <a href="http://www.coldfusionjedi.com">Raymond Camden</a><br />
+		<a href="http://galleon.riaforge.org"><img src="images/glogo.png" alt="Galleon" title="Galleon" border="0"></a>
+	</div>
+	<!-- Footer Ender -->
 
+</div>
 
 </body>
-</html>
+</html>	
+
 </cfoutput>
 
 <cfsetting enablecfoutputonly=false>

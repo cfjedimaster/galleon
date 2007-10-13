@@ -3,49 +3,86 @@
 	Name         : admin_header.cfm
 	Author       : Raymond Camden 
 	Created      : June 02, 2004
-	Last Updated : November 22, 2005
-	History      : bogus (rkc 1/31/05)
-				   Small formatting changes (rkc 8/29/05)
-				   ditto (rkc 9/9/05)
-				   turn off cfoutput (rkc 11/22/05)
+	Last Updated : October 12, 2007
+	History      : Reset for V2
 	Purpose		 : 
 --->
 
-<cfoutput>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<cfscript>
+function navon(s) {
+	var l = "";
+	var i = "";
+	for(i=1; i lte listLen(s);i=i+1) { 
+		l = listGetAt(s, i);
+		if(find(l,cgi.script_name)) return "nav_on";
+	}
+	return "navs";
+}
+</cfscript>
 
-<html>
+<cfoutput>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US" lang="en-US">
 <head>
 	<title>#attributes.title#</title>
-	<link rel="stylesheet" type="text/css" href="../stylesheets/style.css">
-</head>
+	<meta name="author" content="" />
+	<meta name="copyright" content="" />
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<link rel="shortcut icon" href="../images/favicon.ico" type="image/x-icon" />
+	<link rel="stylesheet" type="text/css" href="../stylesheets/admin_style.css" />
+</head> 
 
 <body>
 
-<div class="adminAppTitle">Galleon Administrator</div>
-<table width="100%" cellpadding="10" border="0">
-	<tr valign="top">
-		<td class="adminLeftMenu" width="150">
-		<img src="/images/shim.gif" width="150" height="1">
-		<b>Conference Options</b><br>
-		<a href="conferences.cfm">Conferences</a><br>
-		<a href="forums.cfm">Forums</a><br>
-		<a href="threads.cfm">Threads</a><br>
-		<a href="messages.cfm">Messages</a><br>
-		<a href="ranks.cfm">Ranks</a><br>
-		<br>
-		<b>Security Options</b><br>
-		<a href="users.cfm">User Editor</a><br>
-		<br>
-		<b>Stats</b><br>
-		<a href="stats.cfm">General Reporting</a><br>
-		<a href="search_stats.cfm">Search Reporting</a><br>
-		<br>
-		<a href="index.cfm">Admin Home</a><br>
-		<a href="../">Galleon Home</a><br>
-		</td>
-		<td width="100%">
-		<h2>#attributes.title#</h2>
+	<div id="header">
+		<div class="middle_man"><a href="index.cfm"><img src="../images/glogo2.jpg" alt="Galleon Forums" class="logo"/></a></div>
+	</div>
+
+	<div id="white_container">
+	<div class="middle_man">
+	
+	<cfif request.udf.isLoggedOn()>
+		<div id="left">
+		<div class="nav_title">Forum Options</div>
+		<a href="conferences.cfm" name="Conferences" class="#navOn('conferences.cfm,conferences_edit.cfm')#">Conferences</a>
+		<a href="forums.cfm" name="Forums" class="#navOn('forums.cfm,forums_edit.cfm')#">Forums</a>
+		<a href="threads.cfm" name="Threads" class="#navOn('threads.cfm,threads_edit.cfm')#">Threads</a>
+
+		<a href="messages.cfm" name="Messages" class="#navOn('messages.cfm,messages_edit.cfm')#">Messages</a>
+		<a href="ranks.cfm" name="Ranks" class="#navOn('ranks.cfm,ranks_edit.cfm')#">Ranks</a>
+		<a href="settings.cfm" name="Galleon Settings" class="#navOn('settings.cfm')#">Galleon Settings</a>
+				
+		<div class="nav_breaker"></div>
+		
+		<div class="nav_title">Security Options</div>
+		<a href="groups.cfm" name="Group Editor" class="#navOn('groups.cfm,groups_edit.cfm')#">Group Editor</a>
+		<a href="users.cfm" name="User Editor" class="#navOn('users.cfm,users_edit.cfm')#">User Editor</a>
+		
+		<div class="nav_breaker"></div>
+		
+		<div class="nav_title">Stats</div>
+		<a href="stats.cfm" name="General Reporting" class="#navOn('/stats.cfm')#">General Reporting</a>
+		<a href="search_stats.cfm" name="Search Reporting" class="#navOn('search_stats.cfm')#">Search Reporting</a>
+		
+		<div class="nav_breaker"></div>
+		
+		<div class="nav_title">Main</div>
+
+		<a href="index.cfm" name="Admin Home" class="#navOn('index.cfm')#">Admin Home</a>
+		<a href="../" name="Galleon Home" class="navs">Galleon Home</a>
+
+		<div class="clearer"></div>
+		</div>
+	
+		<div id="right">
+				<div class="top_title">				
+				<p>#attributes.title#</p>
+				</div>
+				
+	</cfif>
+					
 </cfoutput>
 
 <cfsetting enablecfoutputonly=false>

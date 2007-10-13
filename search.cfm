@@ -3,13 +3,8 @@
 	Name         : search.cfm
 	Author       : Raymond Camden 
 	Created      : July 5, 2004
-	Last Updated : September 6, 2006
-	History      : Add search log
-				   Removed mappings (rkc 8/27/05)
-				   Limit search length (rkc 10/30/05)
-				   auto focus on search box (rkc 7/12/06)
-				   title fix (rkc 8/4/06)
-				   js fix by imtiyaz (rkc 9/6/06)
+	Last Updated : October 12, 2007
+	History      : Reset for V2
 	Purpose		 : Displays form to search.
 --->
 
@@ -41,51 +36,58 @@
 	<cfset messages = application.message.search(form.searchterms, form.searchtype)>
 	
 	<cfset application.utils.logSearch(form.searchTerms, application.settings.dsn, application.settings.tableprefix)>
-	<cfset totalResults = conferences.recordCount + forums.recordCount + threads.recordCount + messages.recordCount>
-	
+
 </cfif>
 
 <cfoutput>
-<p>
-<table width="500" cellpadding="6" class="tableDisplay" cellspacing="1" border="0">
-	<tr class="tableHeader">
-		<td class="tableHeader">Search</td>
-	</tr>
-	<tr class="tableRowMain">
-		<td>
-		<form action="#cgi.script_name#?#cgi.query_string#" method="post" id="searchForm">
-		<table>
-			<tr>
-				<td><b>Search Terms:</b></td>
-				<td><input type="text" name="searchterms" value="#form.searchterms#" class="formBox" maxlength="100"></td>
-			</tr>
-			<tr>
-				<td><b>Match:</b></td>
-				<td>
-				<select name="searchtype" class="formDropDown">
+	
+	<!-- Content Start -->
+	<div class="content_box">
+		
+		<!-- Search Start -->
+		<div class="row_title">
+			<p>Search</p>
+		</div>
+		
+		<div class="row_1 top_pad">
+			<form action="#cgi.script_name#?#cgi.query_string#" method="post" class="search_forms">
+				
+			<p class="input_name">Search Terms:</p>
+			<input type="text" name="searchterms" value="#form.searchterms#"  class="input_box" maxlength="100">
+						
+			<div class="clearer"><br /></div>
+			
+			<p class="input_name">Match:</p>
+				<select name="searchtype" class="select_box">
 					<option value="phrase" <cfif form.searchtype is "phrase">selected</cfif>>Phrase</option>
 					<option value="any" <cfif form.searchtype is "any">selected</cfif>>Any Word</option>
 					<option value="all" <cfif form.searchtype is "all">selected</cfif>>All Words</option>
 				</select>	
-				</td>
-			</tr>
-			<tr>
-				<td>&nbsp;</td>
-				<td align="right"><input type="image" src="images/btn_search.gif" alt="Search" width="59" height="19"></td>
-			</tr>
-		</table>
-		</form>
-		</td>
-	</tr>
-	<cfif isDefined("variables.totalResults")>
-		<tr class="tableRowMain">
-			<td>
-				<p>
+						
+			<div class="clearer"><br /></div>
+			
+			<input type="image" src="images/btn_search.gif" alt="Search" name="search" class="submit_btns">
+			
+			<div class="clearer"><br /></div>
+			
+			</form>
+			
+		</div>
+		<cfif len(form.searchterms)>
+		<div class="row_1 top_pad">
+			<p>
 				<b>Results in Conferences:</b><br>
 				<cfif conferences.recordCount>
+					<cfset didOne = false>
 					<cfloop query="conferences">
-					<a href="forums.cfm?conferenceid=#id#">#name#</a><br>
+						<cfif application.permission.allowed(application.rights.CANVIEW, id, request.udf.getGroups())>
+							<a href="forums.cfm?conferenceid=#id#">#name#</a><br>
+							<cfset didOne = true>
+						</cfif>
 					</cfloop>
+					<cfif not didOne>
+						No matches.
+					</cfif>
 				<cfelse>
 				No matches.
 				</cfif>
@@ -93,9 +95,17 @@
 				<p>
 				<b>Results in Forums:</b><br>
 				<cfif forums.recordCount>
+					<cfset didOne = false>
 					<cfloop query="forums">
-					<a href="threads.cfm?forumid=#id#">#name#</a><br>
+						<cfif application.permission.allowed(application.rights.CANVIEW, id, request.udf.getGroups()) and
+							application.permission.allowed(application.rights.CANVIEW, conferenceidfk, request.udf.getGroups())>
+							<a href="threads.cfm?forumid=#id#">#name#</a><br>
+							<cfset didOne = true>
+						</cfif>
 					</cfloop>
+					<cfif not didOne>
+						No matches.
+					</cfif>
 				<cfelse>
 				No matches.
 				</cfif>
@@ -103,9 +113,17 @@
 				<p>
 				<b>Results in Threads:</b><br>
 				<cfif threads.recordCount>
+					<cfset didOne = false>
 					<cfloop query="threads">
-					<a href="messages.cfm?threadid=#id#">#name#</a><br>
+						<cfif application.permission.allowed(application.rights.CANVIEW, forumidfk, request.udf.getGroups()) and
+							  application.permission.allowed(application.rights.CANVIEW, conferenceidfk, request.udf.getGroups())>
+							<a href="messages.cfm?threadid=#id#">#name#</a><br>
+							<cfset didOne = true>
+						</cfif>
 					</cfloop>
+					<cfif not didOne>
+						No matches.
+					</cfif>
 				<cfelse>
 				No matches.
 				</cfif>
@@ -113,19 +131,28 @@
 				<p>
 				<b>Results in Messages:</b><br>
 				<cfif messages.recordCount>
+					<cfset didOne = false>
 					<cfloop query="messages">
-					<a href="messages.cfm?threadid=#threadidfk#">#title#</a><br>
+						<cfif application.permission.allowed(application.rights.CANVIEW, forumidfk, request.udf.getGroups()) and
+							  application.permission.allowed(application.rights.CANVIEW, conferenceidfk, request.udf.getGroups())>
+							<a href="messages.cfm?threadid=#threadidfk#">#title#</a><br>
+							<cfset didOne = true>
+						</cfif>
 					</cfloop>
+					<cfif not didOne>
+						No matches.
+					</cfif>
 				<cfelse>
 				No matches.
 				</cfif>
 				</p>
-
-			</td>
-		</tr>
-	</cfif>
-</table>
-</p>
+		</div>
+		</cfif>
+		<!-- Search Ender -->
+	
+	</div>
+	<!-- Content End -->
+	
 <script>
 window.onload = function() {document.getElementById("searchForm").searchterms.focus();}
 </script>

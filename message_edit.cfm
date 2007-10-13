@@ -3,12 +3,8 @@
 	Name         : message_edit.cfm
 	Author       : Raymond Camden 
 	Created      : July 6, 2004
-	Last Updated : May 1, 2007
-	History      : Removed mappings (rkc 8/29/05)
-				 : title+cfcatch change (rkc 8/4/06)
-				 : attachment support (rkc 11/3/06)
-				 : fix bug if attachments turned off (rkc 11/14/06)
-				   Changed calls to isUserInAnyRole to isTheUserInAnyRole (rkc 5/1/07)				   									   				 
+	Last Updated : October 12, 2007
+	History      : Reset for V2
 	Purpose		 : Allows moderators/admins to edit post.
 --->
 
@@ -100,58 +96,70 @@
 <cfmodule template="tags/layout.cfm" templatename="main" title="#application.settings.title# : Edit Post">
 
 <cfoutput>
-<p>
-<table width="500" cellpadding="6" class="tableDisplay" cellspacing="1" border="0">
-	<tr class="tableHeader">
-		<td class="tableHeader">Edit Post</td>
-	</tr>
-	<cfif isDefined("errors")>
-	<tr class="tableRowMain">
-		<td>
-		Please correct the following error(s):<ul><b>#errors#</b></ul>
-		</td>
-	</tr>
-	</cfif>
-	<tr class="tableRowMain">
-		<td>
-		<form action="#cgi.script_name#?#cgi.query_string#" method="post" enctype="multipart/form-data">
-		<input type="hidden" name="post" value="1">
-
-		<table>
-			<tr>
-				<td><b>Title: </b></td>
-				<td><input type="text" name="title" value="#form.title#" class="formBox" maxlength="50"></td>
-			</tr>
-			<tr>
-				<td colspan="2"><b>Body: </b><br>
-				<textarea name="body" cols="50" rows="20">#form.body#</textarea></td>
-			</tr>
-			<cfif isBoolean(request.forum.attachments) and request.forum.attachments>
-				<tr valign="top">
-					<td><b>Attach File:</b></td>
-					<td>
-					<input type="file" name="attachment">
-					<cfif len(form.oldattachment)>
-					<input type="hidden" name="oldattachment" value="#form.oldattachment#">
-					<input type="hidden" name="filename" value="#form.filename#">
-					<br>
-					File already attached: #form.oldattachment#<br>
-					<input type="checkbox" name="removefile"> Remove Attachment
-					</cfif>
-					</td>
-				</tr>
-			</cfif>				
+	
+	
+	
+	<!-- Content Start -->
+	<div class="content_box">
+					
+		<!-- Message Edit Start -->
+		<div class="row_title">
+			<p>Edit Post</p>
+		</div>
+		<cfif isDefined("errors")>
+		<div class="row_1">
+			<p>Please correct the following error(s):</p>
+			<div class="submit_errors"><p><b>#errors#</b></p></div>
+		</div>	
+		</cfif>
+		
+		<div class="row_1 top_pad">
+			<form action="#cgi.script_name#?#cgi.query_string#" method="post" enctype="multipart/form-data" class="basic_forms">
+			<input type="hidden" name="post" value="1">
+				
+			<p class="input_name">Title:</p>
+			<input type="text" name="title" value="#form.title#"  class="input_box" maxlength="50">
 			
-			<tr>
-				<td>&nbsp;</td>
-				<td align="right"><input type="image" src="images/btn_update.gif" alt="Update" title="Update" width="59" height="19" name="post"></td>
-			</tr>
-		</table>
-		</form>
-		</td>
-	</tr>
-</table>
-</p>
+			<div class="clearer"><br /></div>
+			
+			<p class="input_name">Body:</p>
+			<textarea name="body" class="edit_textarea">#form.body#</textarea>
+			
+			<div class="clearer"><br /></div>
+			<cfif isBoolean(request.forum.attachments) and request.forum.attachments>
+			
+			<div class="avatar_title">Attach File:</div>
+				
+				<div class="avatar_options">
+								
+				<div class="clearer"><br /></div>
+				<input type="file" name="attachment" class="input_file">
+				<cfif len(form.oldattachment)>
+				<p class="file_text">File already attached: #form.oldattachment#</p>
+
+				<input type="hidden" name="oldattachment" value="#form.oldattachment#">
+				<input type="hidden" name="filename" value="#form.filename#">
+					
+				<p><input type="checkbox" name="removefile">Remove Attachment</p>
+				</cfif>
+				
+				<div class="clearer"></div>
+				</cfif>
+				
+			</div>
+			
+			<div class="clearer"><br /></div>
+			<input type="image" src="images/btn_update.gif" alt="Update" title="Update" class="submit_btns"  name="post">
+			<div class="clearer"><br /></div>
+			
+			</form>
+			
+		</div>	
+		<!-- Message Edit Ender -->
+						
+	</div>
+	<!-- Content End -->
+
 </cfoutput>
 
 </cfmodule>
