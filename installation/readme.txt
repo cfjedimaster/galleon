@@ -26,10 +26,15 @@ Gifts are always welcome. ;)
 
 
 ---- LATEST VERSION ----
+2.001 (October 15, 2007)
+/stylesheets/admin_style.css - Fix to CSS used for filter
+/Application.cfm - fix for IE login issue
+/cfcs/settings.ini.cfm - Version
+
+---- ARCHIVED UPDATES ----
 2.0 (October 12, 2007)
 Please read the Migration Guide in the to2 folder. This guide covers everything you need to do.
 
----- ARCHIVED UPDATES ----
 1.7.012 (May 1, 2007)
 /admin/users_edit.cfm - Do not htmleditformat the password or email address.
 /cfcs/settings.ini.cfm - Version 
