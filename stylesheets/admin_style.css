@@ -301,6 +301,7 @@ a.nav_on:active {
 	width: 250px;
 	height: 20px;
 	padding: 6px 0px 0px 250px;
+	z-index: 1;
 	}
 	
 .records {
