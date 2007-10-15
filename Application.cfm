@@ -3,8 +3,9 @@
 	Name         : Application.cfm
 	Author       : Raymond Camden 
 	Created      : June 01, 2004
-	Last Updated : October 12, 2007
+	Last Updated : October 15, 2007
 	History      : Reset for V2
+				 : Fix for IE login issue (rkc 10/15/07)
 	Purpose		 : 
 --->
 
@@ -100,7 +101,7 @@ folder. See: http://ray.camdenfamily.com/index.cfm/2005/9/21/Galleon-Issue-with-
 <cflogin>
 
 	<!--- are we trying to logon? --->
-	<cfif isDefined("form.logon")>
+	<cfif isDefined("form.logon") or isDefined("form.logon.x")>
 		<cfif isDefined("form.username") and isDefined("form.password")>
 			<cfif application.user.authenticate(trim(form.username), trim(form.password))>
 				<!--- good logon, grab their groups --->
