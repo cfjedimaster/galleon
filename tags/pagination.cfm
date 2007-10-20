@@ -34,19 +34,19 @@
 		<!-- Top Button Start -->
 		<div class="top_btn">
 			<cfif (attributes.mode is "threads" or attributes.mode is "messages") and attributes.canpost>
-				<a href="newpost.cfm?forumid=#request.forum.id#"><img src="/images/btn_new_topic.gif" alt="New Topic" title="New Topic"/></a>
+				<a href="newpost.cfm?forumid=#request.forum.id#"><img src="images/btn_new_topic.gif" alt="New Topic" title="New Topic"/></a>
 				<cfif attributes.mode is "messages">
 					<cfif not request.udf.isLoggedOn()>
 						<cfset thisPage = cgi.script_name & "?" & cgi.query_string & "&##newpost">
 						<cfset link = "login.cfm?ref=#urlEncodedFormat(thisPage)#">
-						<a href="#link#"><img src="/images/btn_reply.gif" alt="Reply" title="New Topic"/></a>
+						<a href="#link#"><img src="images/btn_reply.gif" alt="Reply" title="New Topic"/></a>
 					<cfelse>
-						<a href="##newpost"><img src="/images/btn_reply.gif" alt="Reply" title="New Topic"/></a>
+						<a href="##newpost"><img src="images/btn_reply.gif" alt="Reply" title="New Topic"/></a>
 					</cfif>
 				</cfif>
 			</cfif>
 			<cfif request.udf.isLoggedOn() and attributes.mode is not "na">
-				<a href="profile.cfm?#cgi.query_string#&s=1"><img src="/images//btn_subscribe.gif" alt="Reply" title="New Topic"/></a>
+				<a href="profile.cfm?#cgi.query_string#&s=1"><img src="images/btn_subscribe.gif" alt="Reply" title="New Topic"/></a>
 			</cfif>
 		</div>
 		<!-- Top Button Ender -->

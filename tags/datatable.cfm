@@ -3,8 +3,12 @@
 	Name         : datatable.cfm
 	Author       : Raymond Camden 
 	Created      : June 02, 2004
-	Last Updated : October 12, 2007
-	History      : Reset for V2
+	Last Updated : February 26, 2007
+	History      : JS fix (7/23/04)
+				   Minor formatting updates (rkc 8/29/05)
+				   finally add sorting (rkc 9/9/05)
+				   mods for new stuff (rkc 11/3/06)
+				   added linkappend (rkc 2/26/07)
 	Purpose		 : A VERY app specific datable tag. 
 --->
 
@@ -35,13 +39,6 @@
 	<cfset url.page = 1>
 </cfif>
 
-<cfif isDefined("url.msg")>
-	<cfoutput>
-	<p>
-	<b>#url.msg#</b>
-	</p>
-	</cfoutput>
-</cfif>
 
 <cfscript>
 function displayHeader(col) { 
@@ -102,6 +99,8 @@ function checksubmit() {
 	</div>
 </cfif>
 <div class="clearer"></div>
+
+
 <form name="listing" action="#cgi.script_name#?#attributes.linkappend#" method="post">
 <div class="name_row">
 	<p class="left_5">.</p>
@@ -124,9 +123,18 @@ function checksubmit() {
 		</cfloop>
 </div>
 </cfoutput>
-
+<cfif isDefined("url.msg")>
+	<div class="clearer"></div>
+	<cfoutput>
+	<div class="secondary_row">
+	<p class="left_100 align_center">#url.msg#</span></p>
+	<div class="clearer"></div>
+	</div>
+	</cfoutput>
+</cfif>
 <cfif len(attributes.message)>
 	<cfoutput>
+	<div class="clearer"></div>
 	<div class="secondary_row">
 	<p class="left_100 align_center">#attributes.message#</span></p>
 	<div class="clearer"></div>
