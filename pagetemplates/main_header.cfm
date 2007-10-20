@@ -38,7 +38,7 @@
 		<div class="top_menu">
 			<a href="index.cfm">Home</a> | 
 			<a href="profile.cfm">Profile</a> | 
-			<a href="search.cfm">Search</a>
+			<a href="search.cfm">Search</a> 
 			<cfset thisPage = cgi.script_name & "?" & reReplace(cgi.query_string,"logout=1","")>
 			<cfif not isDefined("url.ref")>
 				<cfset link = "login.cfm?ref=#urlEncodedFormat(thisPage)#">
@@ -46,7 +46,7 @@
 				<cfset link = "login.cfm?ref=#urlEncodedFormat(ref)#">
 			</cfif>		
 			<cfif request.udf.isLoggedOn()>
-				|  <a href="index.cfm?logout=1">Logout</a><cfelse><a href="#link#">Login</a>
+				|  <a href="index.cfm?logout=1">Logout</a><cfelse>| <a href="#link#">Login</a>
 			</cfif>
 			<cfif isDefined("request.conference") and application.permission.allowed(application.rights.CANVIEW, request.conference.id, "")> 
 				|  <a href="rss.cfm?conferenceid=#request.conference.id#">RSS</a>
