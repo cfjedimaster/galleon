@@ -26,12 +26,29 @@ Gifts are always welcome. ;)
 
 
 ---- LATEST VERSION ----
+2.002 (October 20, 2007)
+/admin/* - All of the admin files were updated (well, not all, but most) to deal with IE and other
+display issues when items were updated or deleted.
+/tags/datatable.cfm, pagination.cfm - related to above. pagination.cfm also had bad image urls
+/stylesheets/admin_style.css - ditto above again
+/pagetemplates/main_header.cfm - small tweak to the top nav
+/cfcs/user.cfc:
+	addGroup was broken in mysql
+	deleteGroup didn't exist (oops)
+	encryptpasswords wasn't being passed in as a setting
+/cfcs/conference.cfc:
+	When updating, don't assume a date exists in the db. It should - I believe this bug
+	only fired for me do to my testing, but it won't hurt.
+/cfcs/settings.ini.cfm - just the version
+
+Zip had some SVN crap in it. Hopefully cleaner now.
+
+---- ARCHIVED UPDATES ----
 2.001 (October 15, 2007)
 /stylesheets/admin_style.css - Fix to CSS used for filter
 /Application.cfm - fix for IE login issue
 /cfcs/settings.ini.cfm - Version
 
----- ARCHIVED UPDATES ----
 2.0 (October 12, 2007)
 Please read the Migration Guide in the to2 folder. This guide covers everything you need to do.
 
