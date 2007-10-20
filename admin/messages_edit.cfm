@@ -11,7 +11,7 @@
 	I do let them remove them.
 --->
 
-<cfif isDefined("form.cancel") or not isDefined("url.id") or not len(url.id)>
+<cfif isDefined("form.cancel.x") or not isDefined("url.id") or not len(url.id)>
 	<cflocation url="messages.cfm" addToken="false">
 </cfif>
 
@@ -21,7 +21,7 @@
 <!--- get all users --->
 <cfset users = application.user.getUsers()>
 
-<cfif isDefined("form.save")>
+<cfif isDefined("form.save.x")>
 	<cfset errors = "">
 	<cfif not len(trim(form.title))>
 		<cfset errors = errors & "You must specify a title.<br>">
@@ -94,7 +94,8 @@
 
 <cfoutput>
 <form action="#cgi.script_name#?#cgi.query_string#" method="post">
-<cfif isDefined("errors")><ul><b>#errors#</b></ul></cfif>
+<div class="clearer"></div>
+<cfif isDefined("errors")><div class="input_error"><ul><b>#errors#</b></ul></div></cfif>
 
 <div class="name_row">
 <p class="left_100"></p>

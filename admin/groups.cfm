@@ -15,11 +15,7 @@
 	<cfloop index="id" list="#form.mark#">
 		<cfset application.user.deleteGroup(id)>
 	</cfloop>
-	<cfoutput>
-	<p>
-	<b>Group(s) deleted.</b>
-	</p>
-	</cfoutput>
+	<cfset url.msg = "Group(s) deleted.">
 </cfif>
 
 <!--- get groups --->

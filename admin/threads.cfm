@@ -18,11 +18,7 @@
 	<cfloop index="id" list="#form.mark#">
 		<cfset application.thread.deleteThread(id)>
 	</cfloop>
-	<cfoutput>
-	<p>
-	<b>Thread(s) deleted.</b>
-	</p>
-	</cfoutput>
+	<cfset url.msg = "Thread(s) deleted.">
 </cfif>
 
 <!--- get threads --->

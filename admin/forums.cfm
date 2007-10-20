@@ -15,11 +15,7 @@
 	<cfloop index="id" list="#form.mark#">
 		<cfset application.forum.deleteForum(id)>
 	</cfloop>
-	<cfoutput>
-	<p>
-	<b>Forum(s) deleted.</b>
-	</p>
-	</cfoutput>
+	<cfset url.msg = "Forum(s) deleted.">
 </cfif>
 
 <!--- get forums --->

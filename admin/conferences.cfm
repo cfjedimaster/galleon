@@ -15,11 +15,7 @@
 	<cfloop index="id" list="#form.mark#">
 		<cfset application.conference.deleteConference(id)>
 	</cfloop>
-	<cfoutput>
-	<p>
-	<b>Conference(s) deleted.</b>
-	</p>
-	</cfoutput>
+	<cfset url.msg = "Conference(s) deleted.">
 </cfif>
 
 <!--- get conferences --->

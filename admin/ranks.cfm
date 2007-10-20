@@ -15,11 +15,7 @@
 	<cfloop index="id" list="#form.mark#">
 		<cfset application.rank.deleteRank(id)>
 	</cfloop>
-	<cfoutput>
-	<p>
-	<b>Rank(s) deleted.</b>
-	</p>
-	</cfoutput>
+	<cfset url.msg = "Rank(s) deleted.">
 </cfif>
 
 <!--- get conferences --->

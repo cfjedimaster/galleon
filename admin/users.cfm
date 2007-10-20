@@ -18,11 +18,7 @@
 	<cfloop index="id" list="#form.mark#">
 		<cfset application.user.deleteUser(id)>
 	</cfloop>
-	<cfoutput>
-	<p>
-	<b>User(s) deleted.</b>
-	</p>
-	</cfoutput>
+	<cfset url.msg = "User(s) deleted.">
 </cfif>
 
 <!--- get users --->

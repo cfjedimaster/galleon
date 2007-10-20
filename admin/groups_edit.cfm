@@ -8,11 +8,11 @@
 	Purpose		 : 
 --->
 
-<cfif isDefined("form.cancel") or not isDefined("url.id")>
+<cfif isDefined("form.cancel.x") or not isDefined("url.id")>
 	<cflocation url="groups.cfm" addToken="false">
 </cfif>
 
-<cfif isDefined("form.save")>
+<cfif isDefined("form.save.x")>
 	<cfset errors = "">
 
 	<cfif not len(trim(form.group))>
@@ -24,14 +24,14 @@
 			<cftry>
 				<cfset application.user.saveGroup(form.id, form.group)>
 				<cfcatch>
-					<cfset errors = cfcatch.message>
+					<cfset errors = cfcatch.message & " " & cfcatch.detail>
 				</cfcatch>
 			</cftry>
 		<cfelse>
 			<cftry>
 				<cfset application.user.addGroup(form.group)>
 				<cfcatch>
-					<cfset errors = cfcatch.message>
+					<cfset errors = cfcatch.message & " " & cfcatch.detail>
 				</cfcatch>
 			</cftry>
 		</cfif>
@@ -54,7 +54,8 @@
 
 <cfoutput>
 <form action="#cgi.script_name#?#cgi.query_string#" method="post">
-<cfif isDefined("errors")><ul><b>#errors#</b></ul></cfif>
+<div class="clearer"></div>
+<cfif isDefined("errors")><div class="input_error"><ul><b>#errors#</b></ul></div></cfif>
 
 <div class="clearer"></div>
 <div class="name_row">
