@@ -32,7 +32,14 @@
 			<cfquery name="checkgroup" datasource="#variables.dsn#">
 				select	id
 				from	#variables.tableprefix#groups
-				where	#variables.tableprefix#groups.[group] = <cfqueryparam value="#arguments.group#" cfsqltype="CF_SQL_VARCHAR" maxlength="255">
+				where	 
+				<cfif variables.dbtype is not "mysql">
+					#variables.tableprefix#groups.[group] 
+				<cfelse>
+					#variables.tableprefix#groups.`group`
+				</cfif> =
+				
+				<cfqueryparam value="#arguments.group#" cfsqltype="CF_SQL_VARCHAR" maxlength="255">
 			</cfquery>
 			
 			<cfif checkgroup.recordCount>
@@ -178,6 +185,22 @@ To complete your registration at #variables.title#, please click on the link bel
 		</cfif>
 		
 		<cfreturn q.recordCount is 1>
+		
+	</cffunction>
+
+	<cffunction name="deleteGroup" access="public" returnType="void" output="false"
+				hint="Deletes a group.">
+		<cfargument name="group" type="uuid" required="true">	
+		
+		<cfquery datasource="#variables.dsn#">
+			delete from #variables.tableprefix#groups
+			where  id = <cfqueryparam value="#arguments.group#" cfsqltype="CF_SQL_VARCHAR" maxlength="35">
+		</cfquery>
+			
+		<cfquery datasource="#variables.dsn#">
+			delete from #variables.tableprefix#users_groups
+			where  groupidfk = <cfqueryparam value="#arguments.group#" cfsqltype="CF_SQL_VARCHAR" maxlength="35">
+		</cfquery>
 		
 	</cffunction>
 	
@@ -569,6 +592,7 @@ To complete your registration at #variables.title#, please click on the link bel
 		<cfset variables.title = cfg.title>
 		<cfset variables.fromAddress = cfg.fromAddress>
 		<cfset variables.rooturl = cfg.rooturl>
+		<cfset variables.encryptpasswords = cfg.encryptpasswords>
 		
 	</cffunction>
 	
