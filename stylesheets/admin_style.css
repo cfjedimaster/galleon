@@ -298,10 +298,10 @@ a.nav_on:active {
 
 .top_input_misc {
 	position: absolute;	
+	z-index: 1;
 	width: 250px;
 	height: 20px;
 	padding: 6px 0px 0px 250px;
-	z-index: 1;
 	}
 	
 .records {
@@ -313,6 +313,9 @@ a.nav_on:active {
 	padding: 10px 10px 0px 490px;
 	}
 
+.input_error {
+	color: red;
+	}
 	
 .input_name {
 	width: 200px;
