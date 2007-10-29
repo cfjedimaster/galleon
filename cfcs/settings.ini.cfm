@@ -1,13 +1,13 @@
 <!---
 [settings]
 dsn=galleon2
-perpage=17
+perpage=10
 fromAddress=galleon@localhost.com
 rootURL=http://127.0.0.1/forums
 sendonpost=youremail@goeshere.com
 dbtype=mysql
 tableprefix=galleon_
-version=2.002
+version=2.003
 requireconfirmation=true
 title=Galleon Forums
 fullemails=true
