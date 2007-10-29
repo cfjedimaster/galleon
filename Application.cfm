@@ -3,9 +3,10 @@
 	Name         : Application.cfm
 	Author       : Raymond Camden 
 	Created      : June 01, 2004
-	Last Updated : October 15, 2007
+	Last Updated : October 29, 2007
 	History      : Reset for V2
 				 : Fix for IE login issue (rkc 10/15/07)
+				 : Remove BlueDragon mod (not needed in latest BD, thanks to Vince B for letting me know!) (rkc 10/29/07)
 	Purpose		 : 
 --->
 
@@ -16,19 +17,7 @@
 
 <cfapplication name="#prefix##appName#" sessionManagement=true loginstorage="session">
 
-<!---
-BD wants error.cfm to be relative when the app.cfm is run inside the admin
-folder. See: http://ray.camdenfamily.com/index.cfm/2005/9/21/Galleon-Issue-with-BlueDragon
---->
-<cfif server.coldfusion.productname is "BlueDragon">
-	<cfif findNoCase("/admin", cgi.script_name)>
-	   <cferror type="exception" template="../error.cfm">
-	<cfelse>
-	   <cferror type="exception" template="error.cfm">
-	</cfif>
-<cfelse>
-	<cferror type="exception" template="error.cfm">
-</cfif>
+<cferror type="exception" template="error.cfm">
 
 <cfif not isDefined("application.init") or isDefined("url.reinit")>
 
