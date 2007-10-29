@@ -25,7 +25,15 @@ If you find this app worthy, I have a Amazon wish list set up (www.amazon.com/o/
 Gifts are always welcome. ;)
 
 
+
 ---- LATEST VERSION ----
+2.003 (October 29, 2007)
+/settings.cfm - IE fix.
+/cfcs/settings.ini.cfm had an odd perpage value. Also changed version.
+/tags/pagination.cfm - bug in pagination, fix by Scott Pinkston.
+/Application.cfm - Remove BlueDragon mod (not needed in latest BD, thanks to Vince B for letting me know!)
+
+---- ARCHIVED UPDATES ----
 2.002 (October 20, 2007)
 /admin/* - All of the admin files were updated (well, not all, but most) to deal with IE and other
 display issues when items were updated or deleted.
@@ -43,7 +51,6 @@ display issues when items were updated or deleted.
 
 Zip had some SVN crap in it. Hopefully cleaner now.
 
----- ARCHIVED UPDATES ----
 2.001 (October 15, 2007)
 /stylesheets/admin_style.css - Fix to CSS used for filter
 /Application.cfm - fix for IE login issue
