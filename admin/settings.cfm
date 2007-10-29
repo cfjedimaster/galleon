@@ -8,7 +8,7 @@
 	Purpose		 : 
 --->
 
-<cfif structKeyExists(form, "save")>
+<cfif structKeyExists(form, "save.x")>
 
 	<cfset errors = arrayNew(1)>
 	
