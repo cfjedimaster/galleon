@@ -3,8 +3,9 @@
 	Name         : pagination.cfm
 	Author       : Raymond Camden 
 	Created      : June 02, 2004
-	Last Updated : October 12, 2007
+	Last Updated : October 29, 2007
 	History      : Reset for V2
+				 : scottp fixed bug with pagination (rkc 10/29/07)
 	Purpose		 : 
 --->
 
@@ -53,6 +54,7 @@
 			
 		<!-- Pages Start -->
 		<div class="pages">
+			<cfset qs = reReplaceNoCase(cgi.query_string,"\&*page=[^&]*","")>			
 			<cfif url.page is attributes.pages>
 				<img src="images/arrow_right_grey.gif" alt="Next Page"/>
 			<cfelse>
@@ -63,7 +65,6 @@
 					<cfif url.page is not x><a href="#cgi.script_name#?#qs#&page=#x#">#x#</a><cfelse>#x#</cfif>
 				</cfloop>
 			</p>	
-			<cfset qs = reReplaceNoCase(cgi.query_string,"\&*page=[^&]*","")>
 			<cfif url.page is 1>
 				<img src="images/arrow_left_grey.gif" alt="Previous Page"/>
 			<cfelse>
