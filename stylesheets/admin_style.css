@@ -217,7 +217,7 @@ a.nav_on:active {
 	height: 32px;
 	clear: both;
 	border-bottom: 1px solid #2878b5;
-	margin: 15px 0px 0px 0px;
+	margin: 40px 0px 0px 0px;
 	}
 	.title_row p {
 		font-size: 16px;
@@ -231,7 +231,7 @@ a.nav_on:active {
 	height: 32px;
 	clear: both;
 	border-bottom: 1px solid #2878b5;
-	margin: 15px 0px 0px 0px;
+	margin: 40px 0px 0px 0px;
 	}
 	.name_row p {
 		padding: 7px 0px 4px 0px;
@@ -287,6 +287,7 @@ a.nav_on:active {
 		.row_1 p span { padding: 0px 0px 0px 10px; }
 		
 .top_title {
+	position: absolute;
 	color: #ff6c00;
 	font-size: 20px;
 	padding: 5px 0px 10px 0px;
