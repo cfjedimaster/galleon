@@ -2,8 +2,9 @@
 	Name         : message.cfc
 	Author       : Raymond Camden 
 	Created      : January 25, 2005
-	Last Updated : October 12, 2007
+	Last Updated : November 10, 2007
 	History      : Reset for V2
+				 : mod to get latest posts (rkc 11/10/07)
 	Purpose		 : 
 --->
 <cfcomponent displayName="Conference" hint="Handles Conferences, the highest level container for Forums.">
@@ -126,7 +127,12 @@
 				<cfif variables.dbtype is not "mysql">
 				top 20 
 				</cfif>
-						#variables.tableprefix#messages.title, #variables.tableprefix#threads.name as thread, #variables.tableprefix#messages.posted, #variables.tableprefix#users.username, #variables.tableprefix#messages.threadidfk as threadid, #variables.tableprefix#messages.body
+						#variables.tableprefix#messages.title, #variables.tableprefix#threads.name as thread, 
+						#variables.tableprefix#messages.posted, #variables.tableprefix#users.username, 
+						#variables.tableprefix#messages.threadidfk as threadid, 
+						#variables.tableprefix#messages.body,
+						#variables.tableprefix#threads.forumidfk,
+						#variables.tableprefix#forums.conferenceidfk
 			from		#variables.tableprefix#messages, #variables.tableprefix#threads, #variables.tableprefix#users, #variables.tableprefix#forums
 			where		#variables.tableprefix#messages.threadidfk = #variables.tableprefix#threads.id
 			and			#variables.tableprefix#messages.useridfk = #variables.tableprefix#users.id
