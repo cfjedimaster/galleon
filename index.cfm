@@ -3,8 +3,9 @@
 	Name         : index.cfm
 	Author       : Raymond Camden 
 	Created      : June 10, 2004
-	Last Updated : October 12, 2007
+	Last Updated : November 10, 2007
 	History      : Reset for V2
+				 : New link to last past (rkc 11/10/07)
 	Purpose		 : Displays conferences
 --->
 
@@ -64,7 +65,7 @@
 			<div class="left_10 keep_on border_right"><p>#messages#</p></div>
 			<div class="left_auto keep_on"><p><cfif len(lastpostuseridfk)>
 				<cfset uinfo = cachedUserInfo(username=lastpostuseridfk,userid=true)>
-				<a href="messages.cfm?threadid=#lastpost###last">#dateFormat(lastpostcreated,"m/d/yy")# #timeFormat(lastpostcreated,"h:mm tt")#</a> by #uinfo.username#
+				<a href="messages.cfm?threadid=#lastpost#&last##last">#dateFormat(lastpostcreated,"m/d/yy")# #timeFormat(lastpostcreated,"h:mm tt")#</a> by #uinfo.username#
 				<cfelse>&nbsp;</cfif></p>
 			</div>
 		</div>
