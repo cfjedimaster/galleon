@@ -3,8 +3,9 @@
 	Name         : messages.cfm
 	Author       : Raymond Camden 
 	Created      : June 10, 2004
-	Last Updated : October 12, 2007
+	Last Updated : November 10, 2007
 	History      : Reset for V2
+				 : New link to last past (rkc 11/10/07)
 	Purpose		 : Displays messages for a thread
 --->
 
@@ -124,6 +125,11 @@
 	<cfset pages = ceiling(data.recordCount / application.settings.perpage)>
 <cfelse>
 	<cfset pages = 1>
+</cfif>
+
+<!--- last page cheat --->
+<cfif structKeyExists(url, "last")>
+	<cfset url.page = pages>
 </cfif>
 
 <!--- Displays pagination on right side, plus left side buttons for threads --->
