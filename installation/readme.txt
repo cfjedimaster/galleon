@@ -27,13 +27,26 @@ Gifts are always welcome. ;)
 
 
 ---- LATEST VERSION ----
+2.005 (November 10, 2007)
+/forums.cfm - new link to last page
+/index.cfm - ditto 
+/threads.cfm - ditto
+/messages.cfm - new support for Last page
+/rss.cfm - checks security on messages to ensure you can view, thanks to Scott P for finding this
+/cfcs/conference.cfc - mod to get latest posts
+
+---- ARCHIVED UPDATES ----
+2.004 (November 7, 2007)
+Hi, this is the "Someone please pick up the Orange Box on the wishlist" edition:
+/cfcs/settings.ini.cfm - just changed the version
+/stylesheets/admin_style.css - yet another IE7 CSS fix. I love IE7. Really. Thanks to Chaz again at Full City Media
+
 2.003 (October 29, 2007)
 /settings.cfm - IE fix.
 /cfcs/settings.ini.cfm had an odd perpage value. Also changed version.
 /tags/pagination.cfm - bug in pagination, fix by Scott Pinkston.
 /Application.cfm - Remove BlueDragon mod (not needed in latest BD, thanks to Vince B for letting me know!)
 
----- ARCHIVED UPDATES ----
 2.002 (October 20, 2007)
 /admin/* - All of the admin files were updated (well, not all, but most) to deal with IE and other
 display issues when items were updated or deleted.
