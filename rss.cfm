@@ -5,7 +5,7 @@
 	Created      : July 5, 2004
 	Last Updated : November 10, 2007
 	History      : Reset for V2
-				 : New link to last past (rkc 11/10/07)
+				 : security fix (rkc 11/10/07)
 	Purpose		 : Displays RSS for a Conference
 --->
 
