@@ -3,8 +3,9 @@
 	Name         : rss.cfm
 	Author       : Raymond Camden 
 	Created      : July 5, 2004
-	Last Updated : October 12, 2007
+	Last Updated : November 10, 2007
 	History      : Reset for V2
+				 : New link to last past (rkc 11/10/07)
 	Purpose		 : Displays RSS for a Conference
 --->
 
@@ -43,7 +44,10 @@
 	<items>
 		<rdf:Seq>
 			<cfloop query="data">
-			<rdf:li rdf:resource="#application.settings.rootURL#messages.cfm?#xmlFormat("threadid=#threadid#")##xmlFormat("&r=#currentRow#")#" />
+				<cfif application.permission.allowed(application.rights.CANVIEW, forumidfk, request.udf.getGroups()) and
+					  application.permission.allowed(application.rights.CANVIEW, conferenceidfk, request.udf.getGroups())>
+				<rdf:li rdf:resource="#application.settings.rootURL#messages.cfm?#xmlFormat("threadid=#threadid#")##xmlFormat("&r=#currentRow#")#" />
+				</cfif>
 			</cfloop>
 		</rdf:Seq>
 	</items>
@@ -51,19 +55,25 @@
 	</channel>
 
 	<cfloop query="data">
-		<cfset dateStr = dateFormat(posted,"yyyy-mm-dd")>
-		<cfset z = getTimeZoneInfo()>
-		<cfset dateStr = dateStr & "T" & timeFormat(posted,"HH:mm:ss") & "-" & numberFormat(z.utcHourOffset,"00") & ":00">
-	
-		<item rdf:about="#application.settings.rootURL#messages.cfm?#xmlFormat("threadid=#threadid#")##xmlFormat("&r=#currentRow#")#">
-		<title>#xmlFormat(title)#</title>
-		<description>#xmlFormat(body)#</description>
-		<link>#application.settings.rootURL#messages.cfm?#xmlFormat("threadid=#threadid#")##xmlFormat("&r=#currentRow#")#</link>
-		<dc:date>#dateStr#</dc:date>
-		<dc:subject>#thread#</dc:subject>
-		</item>
+		<cfif application.permission.allowed(application.rights.CANVIEW, forumidfk, request.udf.getGroups()) and
+			  application.permission.allowed(application.rights.CANVIEW, conferenceidfk, request.udf.getGroups())>
+
+			<cfset dateStr = dateFormat(posted,"yyyy-mm-dd")>
+			<cfset z = getTimeZoneInfo()>
+			<cfset dateStr = dateStr & "T" & timeFormat(posted,"HH:mm:ss") & "-" & numberFormat(z.utcHourOffset,"00") & ":00">
+		
+			<item rdf:about="#application.settings.rootURL#messages.cfm?#xmlFormat("threadid=#threadid#")##xmlFormat("&r=#currentRow#")#">
+			<title>#xmlFormat(title)#</title>
+			<description>#xmlFormat(body)#</description>
+			<link>#application.settings.rootURL#messages.cfm?#xmlFormat("threadid=#threadid#")##xmlFormat("&r=#currentRow#")#</link>
+			<dc:date>#dateStr#</dc:date>
+			<dc:subject>#thread#</dc:subject>
+			</item>
+		
+		</cfif>
+		
 	</cfloop>
-	
+
 </rdf:RDF>
 </cfoutput>
 
