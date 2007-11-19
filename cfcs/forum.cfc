@@ -2,8 +2,9 @@
 	Name         : forum.cfc
 	Author       : Raymond Camden 
 	Created      : January 26, 2005
-	Last Updated : October 12, 2007
+	Last Updated : November 19, 2007
 	History      : Reset for V2
+				 : access fix (rkc 11/19/07)
 	Purpose		 : 
 --->
 <cfcomponent displayName="Forum" hint="Handles Forums which contain a collection of threads.">
@@ -121,7 +122,7 @@
 			from	#variables.tableprefix#forums f, #variables.tableprefix#conferences c
 			where	f.conferenceidfk = c.id
 			<cfif structKeyExists(arguments, "bactiveonly") and arguments.bactiveonly>
-			and		f.active != 0
+			and		f.active <> 0
 			</cfif>
 			<cfif structKeyExists(arguments, "conferenceid")>
 			and		f.conferenceidfk = <cfqueryparam cfsqltype="cf_sql_varchar" maxlength="35" value="#arguments.conferenceid#">
