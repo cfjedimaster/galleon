@@ -27,6 +27,14 @@ Gifts are always welcome. ;)
 
 
 ---- LATEST VERSION ----
+2.006 (November 19, 2007)
+/cfcs/forum.cfc - Access fix
+/cfcs/thread.cfc - ditto
+/cfcs/settings.ini.cfm - version
+/installation/to2/IMPORTANT NOTE.txt - note about missing avatar column in PDF
+/installation/forums.mdb - updated Access db
+
+---- ARCHIVED UPDATES ----
 2.005 (November 10, 2007)
 /forums.cfm - new link to last page
 /index.cfm - ditto 
@@ -35,7 +43,6 @@ Gifts are always welcome. ;)
 /rss.cfm - checks security on messages to ensure you can view, thanks to Scott P for finding this
 /cfcs/conference.cfc - mod to get latest posts
 
----- ARCHIVED UPDATES ----
 2.004 (November 7, 2007)
 Hi, this is the "Someone please pick up the Orange Box on the wishlist" edition:
 /cfcs/settings.ini.cfm - just changed the version
