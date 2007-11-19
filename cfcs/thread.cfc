@@ -2,8 +2,9 @@
 	Name         : thread.cfc
 	Author       : Raymond Camden 
 	Created      : January 26, 2005
-	Last Updated : October 12, 2007
+	Last Updated : November 19, 2007
 	History      : Reset for V2
+				 : Access fix (rkc 11/19/07)
 	Purpose		 : 
 --->
 <cfcomponent displayName="Thread" hint="Handles Threads which contain a collection of message.">
@@ -128,9 +129,9 @@
 		select	t.id, t.name, t.active, t.forumidfk, t.useridfk, t.datecreated, t.messages, t.lastpostuseridfk,
 			   	t.lastpostcreated, f.name as forum, u.username, sticky, c.name as conference
 		
-		from	#variables.tableprefix#threads t
-		inner join #variables.tableprefix#forums f on t.forumidfk = f.id
-		inner join #variables.tableprefix#conferences c on f.conferenceidfk = c.id
+		from	((#variables.tableprefix#threads t
+		inner join #variables.tableprefix#forums f on t.forumidfk = f.id)
+		inner join #variables.tableprefix#conferences c on f.conferenceidfk = c.id)
 		inner join #variables.tableprefix#users u on t.useridfk = u.id
 		
 		where 1=1 
