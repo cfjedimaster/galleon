@@ -27,6 +27,13 @@ Gifts are always welcome. ;)
 
 
 ---- LATEST VERSION ----
+2.007 (November 21, 2007)
+/stylesheets/admin_style.css - another CSS fix. Thanks to Chaz again at Full City Media
+/admin/users_edit.cfm - When using encrypted passwords, do NOT display password in form, and warn the admin 
+/cfcs/user.cfc - when saving a user, hash password if encrypting
+/cfcs/settings.ini.cfm - version
+
+---- ARCHIVED UPDATES ----
 2.006 (November 19, 2007)
 /cfcs/forum.cfc - Access fix
 /cfcs/thread.cfc - ditto
@@ -34,7 +41,6 @@ Gifts are always welcome. ;)
 /installation/to2/IMPORTANT NOTE.txt - note about missing avatar column in PDF
 /installation/forums.mdb - updated Access db
 
----- ARCHIVED UPDATES ----
 2.005 (November 10, 2007)
 /forums.cfm - new link to last page
 /index.cfm - ditto 
