@@ -316,6 +316,7 @@ a.nav_on:active {
 
 .input_error {
 	color: red;
+	padding: 20px 0px 0px 0px;	margin: 0px 0px 0px -40px;
 	}
 	
 .input_name {
