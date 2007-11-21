@@ -3,8 +3,9 @@
 	Name         : users_edit.cfm
 	Author       : Raymond Camden 
 	Created      : July 5, 2004
-	Last Updated : October 12, 2007
+	Last Updated : November 21, 2007
 	History      : Reset for V2
+				 : Handle encrypted passwords (rkc 11/21/07)
 	Purpose		 : 
 --->
 
@@ -61,7 +62,11 @@
 	<cfset user = application.user.getUser(url.id)>
 	<cfparam name="form.username" default="#user.username#">
 	<cfparam name="form.emailaddress" default="#user.emailaddress#">
-	<cfparam name="form.password" default="#user.password#">
+	<cfif application.settings.encryptpasswords>
+		<cfparam name="form.password" default="">
+	<cfelse>
+		<cfparam name="form.password" default="#user.password#">
+	</cfif>
 	<cfparam name="form.datecreated" default="#dateFormat(user.datecreated,"m/dd/yy")# #timeFormat(user.datecreated,"h:mm tt")#">
 	<cfparam name="form.groups" default="#user.groups#">
 	<cfparam name="form.confirmed" default="#user.confirmed#">
@@ -107,6 +112,9 @@
 <div class="row_0">
 	<p class="input_name">Password</p>
 	<input type="text" name="password" value="#form.password#" class="inputs_01">
+	<cfif application.settings.encryptpasswords>
+	<br/><i>Password is hashed. You must enter a new password.</i>
+	</cfif>
 	<div class="clearer"></div>
 </div>
 
