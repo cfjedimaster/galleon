@@ -11,7 +11,7 @@ version=2.007
 requireconfirmation=true
 title=Galleon Forums
 fullemails=true
-encryptpasswords=true
+encryptpasswords=false
 allowavatars=true
 safeExtensions=zip,tar,jpg,gif,png,wpd,doc,pdf,xls,ppt,txt,odt
 --->
