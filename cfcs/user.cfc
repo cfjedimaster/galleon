@@ -2,8 +2,9 @@
 	Name         : user.cfc
 	Author       : Raymond Camden 
 	Created      : January 25, 2005
-	Last Updated : October 12, 2007
+	Last Updated : November 21, 2007
 	History      : Reset for V2
+				 : Hash the password on user save (rkc 11/21/07)
 	Purpose		 : 
 --->
 <cfcomponent displayName="User" hint="Handles all user/security issues for the application.">
@@ -499,6 +500,11 @@ To complete your registration at #variables.title#, please click on the link bel
 		<cfargument name="avatar" type="string" required="false">
 		
 		<cfset var uid = getUserId(arguments.username)>
+
+		<!--- hash password --->
+		<cfif variables.encryptpasswords>
+			<cfset arguments.password = hash(arguments.password)>
+		</cfif>
 
 		<cfquery datasource="#variables.dsn#">
 			update	#variables.tableprefix#users
