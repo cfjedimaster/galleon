@@ -109,7 +109,7 @@
 		<!--- clear my user info --->
 		<cfset uinfo = request.udf.cachedUserInfo(getAuthUser(), false)>
 
-		<cflocation url="messages.cfm?threadid=#url.threadid#&##top" addToken="false">
+		<cflocation url="messages.cfm?threadid=#url.threadid#&last=true" addToken="false">
 	</cfif>
 	
 </cfif>
@@ -129,7 +129,10 @@
 
 <!--- last page cheat --->
 <cfif structKeyExists(url, "last")>
+	<!---
 	<cfset url.page = pages>
+	--->
+	<cflocation url="messages.cfm?threadid=#url.threadid#&page=#pages#&###data.recordCount#" addToken="false">
 </cfif>
 
 <!--- Displays pagination on right side, plus left side buttons for threads --->
@@ -201,6 +204,7 @@
 					<cfset pre = "http">
 				</cfif>
 				<cfset link = "#pre#://#cgi.server_name##cgi.script_name#?#cgi.query_string####currentrow#">
+				
 				<div class="forum_post_links"><p>
 					<a href="#link#">Link</a> | 
 					<a href="##top">Top</a> | 
@@ -225,6 +229,8 @@
 	</div>
 	<!-- Content End -->
 	
+	<!--- Displays pagination on right side, plus left side buttons for threads --->
+	<cfmodule template="tags/pagination.cfm" pages="#pages#" mode="messages" canPost="#canPost#" />
 
 	
 	<!-- Edit Message Container Start -->
