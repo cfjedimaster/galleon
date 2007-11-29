@@ -291,6 +291,7 @@ a:active {
 		line-height: 11px;
 		height: 100%;
 		}
+		.forum_post_content p { padding: 0px 0px 10px 0px; }
 	.forum_post_links {
 		border-top: 1px solid #98acb4;
 		width: 100%;
