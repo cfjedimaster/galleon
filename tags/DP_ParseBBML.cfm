@@ -1,3 +1,4 @@
+﻿<cfprocessingdirective pageencoding="utf-8">
 <cfsetting enablecfoutputonly="Yes">
 <!--- DP_ParseBBML version 1.1 --->
 <!---
@@ -206,22 +207,22 @@ eInfo.e0111 = StructNew();
 
 	// Convert to character entities any instances of the special characters we'll be using as markers
 	// The angle quotes substitute angle brackets
-Input = Replace(Input, "�", "&laquo;", "All");
-Input = Replace(Input, "�", "&raquo;", "All");
+Input = Replace(Input, "«", "&laquo;", "All");
+Input = Replace(Input, "»", "&raquo;", "All");
 	// The O Graves substitute angle brackets withing in Lists
-Input = Replace(Input, "�", "&Ograve;", "All");
-Input = Replace(Input, "�", "&ograve;", "All");
+Input = Replace(Input, "Ò", "&Ograve;", "All");
+Input = Replace(Input, "ò", "&ograve;", "All");
 	// The O Slash replaces list items
-Input = Replace(Input, "�", "&Oslash;", "All");
+Input = Replace(Input, "Ø", "&Oslash;", "All");
 	// The Section mark substitutes quotes in generated HTML
-Input = Replace(Input, "�", "&sect;", "All");
+Input = Replace(Input, "§", "&sect;", "All");
 	// U graves/acutes are used to protect non-tag square brackets
-Input = Replace(Input, "�", "&Ugrave;", "All");
-Input = Replace(Input, "�", "&Uacute;", "All");
-Input = Replace(Input, "�", "&ugrave;", "All");
-Input = Replace(Input, "�", "&uacute;", "All");
+Input = Replace(Input, "Ù", "&Ugrave;", "All");
+Input = Replace(Input, "Ú", "&Uacute;", "All");
+Input = Replace(Input, "ù", "&ugrave;", "All");
+Input = Replace(Input, "ú", "&uacute;", "All");
 	// The british Pound sign is used to mark beginings of links
-Input = Replace(Input, "�", "&pound;", "All");
+Input = Replace(Input, "£", "&pound;", "All");
 
 	// Set up the complex object arrays
 SQLBlocks = ArrayNew(1);
@@ -272,25 +273,25 @@ if ( ConvertBBML AND Find("[", Input) AND Find("]", Input) ) {
 			/* Pointer to Attributes.Data */
 			this = CurCodeBlock;
 			/* Convert special characters so they do not get interpreted literally; italicize and boldface */
-			this = REReplaceNoCase(this, "&([[:alpha:]]{2,});", "�B��I�&amp;\1;�/I��/B�", "ALL");
+			this = REReplaceNoCase(this, "&([[:alpha:]]{2,});", "«B»«I»&amp;\1;«/I»«/B»", "ALL");
 			/* Convert many standalone (not within quotes) numbers to blue, ie. myValue = 0 */
-			this = REReplaceNoCase(this, "(gt|lt|eq|is|,|\(|\))([[:space:]]?[0-9]{1,})", "\1�FONT COLOR=BLUE�\2�/FONT�", "ALL");
+			this = REReplaceNoCase(this, "(gt|lt|eq|is|,|\(|\))([[:space:]]?[0-9]{1,})", "\1«FONT COLOR=BLUE»\2«/FONT»", "ALL");
 			/* Convert normal tags to navy blue */
-			this = REReplaceNoCase(this, "<(/?)((!d|b|c(e|i|od|om)|d|e|f(r|o)|h|i|k|l|m|n|o|p|q|r|s|t(e|i|t)|u|v|w|x)[^>]*)>", "�FONT COLOR=NAVY�<\1\2>�/FONT�", "ALL");
+			this = REReplaceNoCase(this, "<(/?)((!d|b|c(e|i|od|om)|d|e|f(r|o)|h|i|k|l|m|n|o|p|q|r|s|t(e|i|t)|u|v|w|x)[^>]*)>", "«FONT COLOR=NAVY»<\1\2>«/FONT»", "ALL");
 			/* Convert all table-related tags to teal */
-			this = REReplaceNoCase(this, "<(/?)(t(a|r|d|b|f|h)([^>]*)|c(ap|ol)([^>]*))>", "�FONT COLOR=TEAL�<\1\2>�/FONT�", "ALL");
+			this = REReplaceNoCase(this, "<(/?)(t(a|r|d|b|f|h)([^>]*)|c(ap|ol)([^>]*))>", "«FONT COLOR=TEAL»<\1\2>«/FONT»", "ALL");
 			/* Convert all form-related tags to orange */
-			this = REReplaceNoCase(this, "<(/?)((bu|f(i|or)|i(n|s)|l(a|e)|se|op|te)([^>]*))>", "�FONT COLOR=FF8000�<\1\2>�/FONT�", "ALL");
+			this = REReplaceNoCase(this, "<(/?)((bu|f(i|or)|i(n|s)|l(a|e)|se|op|te)([^>]*))>", "«FONT COLOR=FF8000»<\1\2>«/FONT»", "ALL");
 			/* Convert all tags starting with 'a' to green, since the others aren't used much and we get a speed gain */
-			this = REReplaceNoCase(this, "<(/?)(a[^>]*)>", "�FONT COLOR=GREEN�<\1\2>�/FONT�", "ALL");
+			this = REReplaceNoCase(this, "<(/?)(a[^>]*)>", "«FONT COLOR=GREEN»<\1\2>«/FONT»", "ALL");
 			/* Convert all image and style tags to purple */
-			this = REReplaceNoCase(this, "<(/?)((im[^>]*)|(sty[^>]*))>", "�FONT COLOR=PURPLE�<\1\2>�/FONT�", "ALL");
+			this = REReplaceNoCase(this, "<(/?)((im[^>]*)|(sty[^>]*))>", "«FONT COLOR=PURPLE»<\1\2>«/FONT»", "ALL");
 			/* Convert all ColdFusion, SCRIPT and WDDX tags to maroon */
-			this = REReplaceNoCase(this, "<(/?)((cf[^>]*)|(sc[^>]*)|(wddx[^>]*))>", "�FONT COLOR=MAROON�<\1\2>�/FONT�", "ALL");
+			this = REReplaceNoCase(this, "<(/?)((cf[^>]*)|(sc[^>]*)|(wddx[^>]*))>", "«FONT COLOR=MAROON»<\1\2>«/FONT»", "ALL");
 			/* Convert all inline "//" comments to gray (revised) */
-			this = REReplaceNoCase(this, "([^:/]\/{2,2})([^[:cntrl:]]+)($|[[:cntrl:]])", "�FONT COLOR=GRAY��I�\1\2�/I��/FONT�", "ALL");
+			this = REReplaceNoCase(this, "([^:/]\/{2,2})([^[:cntrl:]]+)($|[[:cntrl:]])", "«FONT COLOR=GRAY»«I»\1\2«/I»«/FONT»", "ALL");
 			/* Convert all multi-line script comments to gray */
-			this = REReplaceNoCase(this, "(\/\*[^\*]*\*\/)", "�FONT COLOR=GRAY��I�\1�/I��/FONT�", "ALL");
+			this = REReplaceNoCase(this, "(\/\*[^\*]*\*\/)", "«FONT COLOR=GRAY»«I»\1«/I»«/FONT»", "ALL");
 			/* Convert all HTML and ColdFusion comments to gray */	
 			/* The next 10 lines of code can be replaced with the commented-out line following them, if you do care whether HTML and CFML 
 			   comments contain colored markup. */
@@ -299,19 +300,19 @@ if ( ConvertBBML AND Find("[", Input) AND Find("]", Input) ) {
 				Match = REFindNoCase("<!---?([^-]*)-?-->", this, BOF, True);
 				if (Match.pos[1]) {
 					Orig = Mid(this, Match.pos[1], Match.len[1]);
-					Chunk = REReplaceNoCase(Orig, "�(/?[^�]*)�", "", "ALL");
+					Chunk = REReplaceNoCase(Orig, "«(/?[^»]*)»", "", "ALL");
 					BOF = ((Match.pos[1] + Len(Chunk)) + 31); // 31 is the length of the FONT tags in the next line
-					this = Replace(this, Orig, "�FONT COLOR=GRAY��I�#Chunk#�/I��/FONT�");
+					this = Replace(this, Orig, "«FONT COLOR=GRAY»«I»#Chunk#«/I»«/FONT»");
 				} else EOF = 1;
 			}
 			// Use this next line of code instead of the last 10 lines if you want (faster)
-			// this = REReplaceNoCase(this, "(<!---?[^-]*-?-->)", "�FONT COLOR=GRAY��I�\1�/I��/FONT�", "ALL");
+			// this = REReplaceNoCase(this, "(<!---?[^-]*-?-->)", "«FONT COLOR=GRAY»«I»\1«/I»«/FONT»", "ALL");
 			/* Convert all quoted values to blue */
-			this = REReplaceNoCase(this, """([^""]*)""", "�FONT COLOR=BLUE�""\1""�/FONT�", "ALL");
+			this = REReplaceNoCase(this, """([^""]*)""", "«FONT COLOR=BLUE»""\1""«/FONT»", "ALL");
 			/* Convert left containers to their ASCII equivalent */
 			this = REReplaceNoCase(this, "<", "&lt;", "ALL");
 			/* Revert all pseudo-containers back to their real values to be interpreted literally (revised) */
-			this = REReplaceNoCase(this, "�([^�]*)�", "<\1>", "ALL");
+			this = REReplaceNoCase(this, "«([^»]*)»", "<\1>", "ALL");
 			/* ***New Feature*** Convert all FILE and UNC paths to active links (i.e, file:///, \\server\, c:\myfile.cfm) */
 			this = REReplaceNoCase(this, "(((file:///)|([a-z]:\\)|(\\\\[[:alpha:]]))+(\.?[[:alnum:]\/=^@*|:~`+$%?_##& -])+)", "<A TARGET=""_blank"" HREF=""\1"">\1</A>", "ALL");
 			/* Convert all URLs to active links (revised) */
@@ -329,11 +330,11 @@ if ( ConvertBBML AND Find("[", Input) AND Find("]", Input) ) {
 	};
 
 		// Set non-tag brackets to safe entities
-	Input = ReReplaceNoCase(Input, "\[(/?)((\*)|(b)|(bold)|(i)|(italic)|(u)|(underline)|(s)|(strikethrough)|(sup)|(superscript)|(center)|(sub)|(subscript)|(size(=[0-9]*)?)|(color(=[##0-9A-Za-z]*)?)|(q)|(quote)|(sql)|(code)|(pre)|(preformatted)|((url|link)(=([^]]*))?)|(email(=([^]]*))?)|(img)|(image)|(list(=(1|a|A|i|I))?))\]", "�\1\2�", "All");
-	Input = Replace(Input, "[", "�", "All");
-	Input = Replace(Input, "]", "�", "All");
-	Input = Replace(Input, "�", "[", "All");
-	Input = Replace(Input, "�", "]", "All");
+	Input = ReReplaceNoCase(Input, "\[(/?)((\*)|(b)|(bold)|(i)|(italic)|(u)|(underline)|(s)|(strikethrough)|(sup)|(superscript)|(center)|(sub)|(subscript)|(size(=[0-9]*)?)|(color(=[##0-9A-Za-z]*)?)|(q)|(quote)|(sql)|(code)|(pre)|(preformatted)|((url|link)(=([^]]*))?)|(email(=([^]]*))?)|(img)|(image)|(list(=(1|a|A|i|I))?))\]", "ù\1\2ú", "All");
+	Input = Replace(Input, "[", "Ù", "All");
+	Input = Replace(Input, "]", "Ú", "All");
+	Input = Replace(Input, "ù", "[", "All");
+	Input = Replace(Input, "ú", "]", "All");
 
 		// Validate the [size] tag's limits	
 	MaximumFontSize = 25;
@@ -350,55 +351,55 @@ if ( ConvertBBML AND Find("[", Input) AND Find("]", Input) ) {
 		};
 		CurPos = CurPos.pos[1] + CurPos.Len[1];
 	};
-		// Do all simple BBML conversion to psuedo HTML using "�" and "�"
+		// Do all simple BBML conversion to psuedo HTML using "«" and "»"
 		// The recursive loop, coupled with the regular expressions will validate for proper tag pairs and nesting
 	do {
 
 			// Set a temporary variable equal to the input - if it changes that means there was some work to be done and another pass is needed.
 		TempInput = Input;
 			// Convert Simple Formatting
-		Input = ReReplaceNoCase(Input, "\[(b|bold)\]([^[]*)\[/\1\]", "�b�\2�/b�", "All");
-		Input = ReReplaceNoCase(Input, "\[(i|italic)\]([^[]*)\[/\1\]", "�i�\2�/i�", "All");
-		Input = ReReplaceNoCase(Input, "\[(u|underline)\]([^[]*)\[/\1\]", "�u�\2�/u�", "All");
-		Input = ReReplaceNoCase(Input, "\[(s|strikethrough)\]([^[]*)\[/\1\]", "�s�\2�/s�", "All");
-		Input = ReReplaceNoCase(Input, "\[(sup|superscript)\]([^[]*)\[/\1\]", "�sup�\2�/sup�", "All");
-		Input = ReReplaceNoCase(Input, "\[(sub|subscript)\]([^[]*)\[/\1\]", "�sub�\2�/sub�", "All");
-		Input = ReReplaceNoCase(Input, "\[center\]([^[]*)\[/center\]", "�div align=�center��\1�/div�", "All");
+		Input = ReReplaceNoCase(Input, "\[(b|bold)\]([^[]*)\[/\1\]", "«b»\2«/b»", "All");
+		Input = ReReplaceNoCase(Input, "\[(i|italic)\]([^[]*)\[/\1\]", "«i»\2«/i»", "All");
+		Input = ReReplaceNoCase(Input, "\[(u|underline)\]([^[]*)\[/\1\]", "«u»\2«/u»", "All");
+		Input = ReReplaceNoCase(Input, "\[(s|strikethrough)\]([^[]*)\[/\1\]", "«s»\2«/s»", "All");
+		Input = ReReplaceNoCase(Input, "\[(sup|superscript)\]([^[]*)\[/\1\]", "«sup»\2«/sup»", "All");
+		Input = ReReplaceNoCase(Input, "\[(sub|subscript)\]([^[]*)\[/\1\]", "«sub»\2«/sub»", "All");
+		Input = ReReplaceNoCase(Input, "\[center\]([^[]*)\[/center\]", "«div align=§center§»\1«/div»", "All");
 			// Convert "Color" and "Size"
-		Input = ReReplaceNoCase(Input, "\[size=([0-9]+)\]([^[]*)\[/size(=\1)?\]", "�span style=�font-size: \1pt��\2�/span�", "All");
-		Input = ReReplaceNoCase(Input, "\[color=([##0-9A-Za-z]+)\]([^[]*)\[/color(=\1)?\]", "�span style=�color: \1��\2�/span�", "All");
+		Input = ReReplaceNoCase(Input, "\[size=([0-9]+)\]([^[]*)\[/size(=\1)?\]", "«span style=§font-size: \1pt§»\2«/span»", "All");
+		Input = ReReplaceNoCase(Input, "\[color=([##0-9A-Za-z]+)\]([^[]*)\[/color(=\1)?\]", "«span style=§color: \1§»\2«/span»", "All");
 
 			// Convert Special Formatting
-		Input = ReReplaceNoCase(Input, "\[(q|quote)\]([^[]*)\[/\1\]", "�blockquote�\2�/blockquote�", "All");
-		Input = ReReplaceNoCase(Input, "\[(code)\]([^[]*)\[/\1\]", "�code�\2�/code�", "All");
-		Input = ReReplaceNoCase(Input, "\[(sql)\]([^[]*)\[/\1\]", "�sql�\2�/sql�", "All");
-		Input = ReReplaceNoCase(Input, "\[(pre|preformatted)\]([^[]*)\[/\1\]", "�pre�\2�/pre�", "All");
+		Input = ReReplaceNoCase(Input, "\[(q|quote)\]([^[]*)\[/\1\]", "«blockquote»\2«/blockquote»", "All");
+		Input = ReReplaceNoCase(Input, "\[(code)\]([^[]*)\[/\1\]", "«code»\2«/code»", "All");
+		Input = ReReplaceNoCase(Input, "\[(sql)\]([^[]*)\[/\1\]", "«sql»\2«/sql»", "All");
+		Input = ReReplaceNoCase(Input, "\[(pre|preformatted)\]([^[]*)\[/\1\]", "«pre»\2«/pre»", "All");
 
 			// Convert Images
-		Input = ReReplaceNoCase(Input, "\[(img|image)\]([^[�]*)\[/(img|image)\]", "�img src=�\2��", "All");
+		Input = ReReplaceNoCase(Input, "\[(img|image)\]([^[«]*)\[/(img|image)\]", "«img src=§\2§»", "All");
 	
 			// Convert Links
-		Input = ReReplaceNoCase(Input, "\[(url|link)=([^]]*)\]([^[�]*)\[/\1\]", "� href=�\2��\3�/a�", "All");
-		Input = ReReplaceNoCase(Input, "\[(url|link)\]([^[�]*)\[/\1\]", "� href=�\2��\2�/a�", "All");
+		Input = ReReplaceNoCase(Input, "\[(url|link)=([^]]*)\]([^[£]*)\[/\1\]", "£ href=§\2§»\3«/a»", "All");
+		Input = ReReplaceNoCase(Input, "\[(url|link)\]([^[£]*)\[/\1\]", "£ href=§\2§»\2«/a»", "All");
 	
 			// Convert Email Links
-		Input = ReReplaceNoCase(Input, "\[email=([^]]*)\]([^[�]*)\[/email\]", "� href=�mailto:\1��\2�/a�", "All");
-		Input = ReReplaceNoCase(Input, "\[email\]([^[(�]*)\[/email\]", "� href=�mailto:\1��\1�/a�", "All");
+		Input = ReReplaceNoCase(Input, "\[email=([^]]*)\]([^[£]*)\[/email\]", "£ href=§mailto:\1§»\2«/a»", "All");
+		Input = ReReplaceNoCase(Input, "\[email\]([^[(£]*)\[/email\]", "£ href=§mailto:\1§»\1«/a»", "All");
 	
 			// Convert Lists
-			// List brackets get replaced with "�" and "�" to distingush them for validation
-		Input = Replace(Input, "[*]", "�", "ALL");
-		Input = ReReplaceNoCase(Input, "\[list\][[:space:]]*�([^[]*)\[/list\]", "�ul��\1�/ul�", "All");
-		Input = ReReplaceNoCase(Input, "\[list=(1|a|A|i|I)\][[:space:]]*�([^[]*)\[/list(=\1)?\]", "�ol type=�\1���\2�/ol�", "All");
+			// List brackets get replaced with "Ò" and "ò" to distingush them for validation
+		Input = Replace(Input, "[*]", "Ø", "ALL");
+		Input = ReReplaceNoCase(Input, "\[list\][[:space:]]*Ø([^[]*)\[/list\]", "ÒulòØ\1Ò/ulò", "All");
+		Input = ReReplaceNoCase(Input, "\[list=(1|a|A|i|I)\][[:space:]]*Ø([^[]*)\[/list(=\1)?\]", "Òol type=§\1§òØ\2Ò/olò", "All");
 
 			// Clean Up lists
 			// Add end item tags and remove line feeds and carriage returns
 		do {
-			bList = ReFind("�(ul|ol)( type=�.�)?�", Input, 1);
+			bList = ReFind("Ò(ul|ol)( type=§.§)?ò", Input, 1);
 			if ( bList NEQ 0 ) {
 				CurPos = bList;
 				ItemCnt = 0;
-				Input = Insert("�", Input, CurPos);
+				Input = Insert("«", Input, CurPos);
 				Input = RemoveChars(Input, CurPos, 1);
 				while (true) {
 					if ( (Mid(Input, CurPos, 1) EQ Chr(10)) OR (Mid(Input, CurPos, 1) EQ Chr(13)) )  {
@@ -406,20 +407,20 @@ if ( ConvertBBML AND Find("[", Input) AND Find("]", Input) ) {
 						CurPos = CurPos - 1;
 					};
 						// Convert item tags to pseudo code and insert End item tags
-					if ( Compare(Mid(Input, CurPos, 1), "�" ) EQ 0 ) {
+					if ( Compare(Mid(Input, CurPos, 1), "Ø" ) EQ 0 ) {
 						Input = RemoveChars(Input, CurPos, 1);
-						Input = Insert("�li�", Input, CurPos - 1);
+						Input = Insert("«li»", Input, CurPos - 1);
 						ItemCnt = ItemCnt + 1;
 						if (ItemCnt GT 1) {
-							Input = Insert("�/li�", Input, CurPos - 1);
+							Input = Insert("«/li»", Input, CurPos - 1);
 							CurPos = CurPos + 5;
 						};
 					};
 						// When we find the beginning of the list end tag, stop
-					if ( Compare(Mid(Input, CurPos, 1), "�" ) EQ 0 ) {
+					if ( Compare(Mid(Input, CurPos, 1), "Ò" ) EQ 0 ) {
 						Input = RemoveChars(Input, CurPos, 1);
-						Input = Insert("�", Input, CurPos - 1);
-						Input = Insert("�/li�", Input, CurPos - 1);
+						Input = Insert("«", Input, CurPos - 1);
+						Input = Insert("«/li»", Input, CurPos - 1);
 						break;
 					};
 					CurPos = CurPos + 1;
@@ -428,45 +429,45 @@ if ( ConvertBBML AND Find("[", Input) AND Find("]", Input) ) {
 		} while (bList NEQ 0);
 
 			// Set the List tags back to psuedo-code
-		Input = Replace(Input, "�", "�", "ALL");
+		Input = Replace(Input, "ò", "»", "ALL");
 
 		// If no changes have been made, break out of the loop - we're done!
 	} while (TempInput NEQ Input);
 
 		// Convert Orphaned List Items back to BBML code
-	Input = Replace(Input, "�", "[*]", "ALL");
+	Input = Replace(Input, "Ø", "[*]", "ALL");
 };
 
 	// Convert Smilies if Needed
 if (ConvertSmilies) {
-	Input = ReReplace(Input,	"(:(\^|')\))",			"�img src=�#SmileyPath#Happy.gif� alt=�::\1::� height=�15� width=�15� vspace=�1� hspace=�1��","ALL");
-	Input = ReReplace(Input,	"(:(\^|')D)",			"�img src=�#SmileyPath#VeryHappy.gif� alt=�::\1::� height=�15� width=�15� vspace=�1� hspace=�1��","ALL");
-	Input = ReReplace(Input,	"(:(\^|')\|)",			"�img src=�#SmileyPath#Neutral.gif� alt=�::\1::� height=�15� width=�15� vspace=�1� hspace=�1��","ALL");
-	Input = ReReplace(Input,	"(:(\^|')\()",			"�img src=�#SmileyPath#Sad.gif� alt=�::\1::� height=�15� width=�15� vspace=�1� hspace=�1��","ALL");
-	Input = ReReplace(Input,	"(L(\^|')\()",			"�img src=�#SmileyPath#VerySad.gif� alt=�::\1::� height=�15� width=�15� vspace=�1� hspace=�1��","ALL");
-	Input = ReReplace(Input,	"(>(\^|')\()",			"�img src=�#SmileyPath#Mad.gif� alt=�::\1::� height=�15� width=�15� vspace=�1� hspace=�1��","ALL");
-	Input = ReReplace(Input,	"(>(\^|')(X|x))",		"�img src=�#SmileyPath#VeryMad.gif� alt=�::\1::� height=�15� width=�15� vspace=�1� hspace=�1��","ALL");
-	Input = ReReplace(Input,	"(;(\^|')\))",			"�img src=�#SmileyPath#Wink.gif� alt=�::\1::� height=�15� width=�15� vspace=�1� hspace=�1��","ALL");
-	Input = ReReplace(Input,	"(;(\^|')\|)",			"�img src=�#SmileyPath#Wincing.gif� alt=�::\1::� height=�15� width=�15� vspace=�1� hspace=�1��","ALL");
-	Input = ReReplace(Input,	"(:(\^|')(o|O|0))",		"�img src=�#SmileyPath#Shouting.gif� alt=�::\1::� height=�15� width=�15� vspace=�1� hspace=�1��","ALL");
-	Input = ReReplace(Input,	"(=(\^|')\))",			"�img src=�#SmileyPath#Interested.gif� alt=�::\1::� height=�15� width=�15� vspace=�1� hspace=�1��","ALL");
-	Input = ReReplace(Input,	"(;(\^|')`)",			"�img src=�#SmileyPath#ThinkingHard.gif� alt=�::\1::� height=�15� width=�15� vspace=�1� hspace=�1��","ALL");
-	Input = ReReplace(Input,	"(;(\^|')d)",			"�img src=�#SmileyPath#Confused.gif� alt=�::\1::� height=�15� width=�15� vspace=�1� hspace=�1��","ALL");
-	Input = ReReplace(Input,	"(=(\^|')~)",			"�img src=�#SmileyPath#SlightlyShocked.gif� alt=�::\1::� height=�15� width=�15� vspace=�1� hspace=�1��","ALL");
-	Input = ReReplace(Input,	"(=(\^|')(o|O|0))",		"�img src=�#SmileyPath#Shocked.gif� alt=�::\1::� height=�15� width=�15� vspace=�1� hspace=�1��","ALL");
-	Input = ReReplace(Input,	"(=(\^|')\*)",			"�img src=�#SmileyPath#Kiss.gif� alt=�::\1::� height=�15� width=�15� vspace=�1� hspace=�1��","ALL");
-	Input = ReReplace(Input,	"(8(\^|')\))",			"�img src=�#SmileyPath#Cool.gif� alt=�::\1::� height=�15� width=�15� vspace=�1� hspace=�1��","ALL");
-	Input = ReReplace(Input,	"(:(\^|')\})",			"�img src=�#SmileyPath#Drooling.gif� alt=�::\1::� height=�15� width=�15� vspace=�1� hspace=�1��","ALL");
-	Input = ReReplace(Input,	"(:(\^|')(b|p))",		"�img src=�#SmileyPath#StickingOutTounge.gif� alt=�::\1::� height=�15� width=�15� vspace=�1� hspace=�1��","ALL");
-	Input = ReReplace(Input,	"(\{(\^|')(o|O|0))",	"�img src=�#SmileyPath#Yawning.gif� alt=�::\1::� height=�15� width=�15� vspace=�1� hspace=�1��","ALL");
-	Input = ReReplace(Input,	"(\{(\^|')\))",			"�img src=�#SmileyPath#Sleeping.gif� alt=�::\1::� height=�15� width=�15� vspace=�1� hspace=�1��","ALL");
-	Input = ReReplace(Input,	"(##(\^|')\))",			"�img src=�#SmileyPath#Embarassed.gif� alt=�::\1::� height=�15� width=�15� vspace=�1� hspace=�1��","ALL");
-	Input = ReReplace(Input,	"(%(\^|')\))",			"�img src=�#SmileyPath#Crazy.gif� alt=�::\1::� height=�15� width=�15� vspace=�1� hspace=�1��","ALL");
-	Input = ReReplace(Input,	"(B(\^|')>)",			"�img src=�#SmileyPath#Evil.gif� alt=�::\1::� height=�15� width=�15� vspace=�1� hspace=�1��","ALL");
-	Input = ReReplace(Input,	"((o|O|0)(\^|')\))",	"�img src=�#SmileyPath#Angelic.gif� alt=�::\1::� height=�15� width=�15� vspace=�1� hspace=�1��","ALL");
-	Input = ReReplace(Input,	"(\?(\^|')\))",			"�img src=�#SmileyPath#Question.gif� alt=�::\1::� height=�15� width=�15� vspace=�1� hspace=�1��","ALL");
-	Input = ReReplace(Input,	"(!(\^|')\))",			"�img src=�#SmileyPath#Exclamation.gif� alt=�::\1::� height=�15� width=�15� vspace=�1� hspace=�1��","ALL");
-	Input = ReReplace(Input,	"(\$(\^|')\))",			"�img src=�#SmileyPath#Idea.gif� alt=�::\1::� height=�15� width=�15� vspace=�1� hspace=�1��","ALL");
+	Input = ReReplace(Input,	"(:(\^|')\))",			"«img src=§#SmileyPath#Happy.gif§ alt=§::\1::§ height=§15§ width=§15§ vspace=§1§ hspace=§1§»","ALL");
+	Input = ReReplace(Input,	"(:(\^|')D)",			"«img src=§#SmileyPath#VeryHappy.gif§ alt=§::\1::§ height=§15§ width=§15§ vspace=§1§ hspace=§1§»","ALL");
+	Input = ReReplace(Input,	"(:(\^|')\|)",			"«img src=§#SmileyPath#Neutral.gif§ alt=§::\1::§ height=§15§ width=§15§ vspace=§1§ hspace=§1§»","ALL");
+	Input = ReReplace(Input,	"(:(\^|')\()",			"«img src=§#SmileyPath#Sad.gif§ alt=§::\1::§ height=§15§ width=§15§ vspace=§1§ hspace=§1§»","ALL");
+	Input = ReReplace(Input,	"(L(\^|')\()",			"«img src=§#SmileyPath#VerySad.gif§ alt=§::\1::§ height=§15§ width=§15§ vspace=§1§ hspace=§1§»","ALL");
+	Input = ReReplace(Input,	"(>(\^|')\()",			"«img src=§#SmileyPath#Mad.gif§ alt=§::\1::§ height=§15§ width=§15§ vspace=§1§ hspace=§1§»","ALL");
+	Input = ReReplace(Input,	"(>(\^|')(X|x))",		"«img src=§#SmileyPath#VeryMad.gif§ alt=§::\1::§ height=§15§ width=§15§ vspace=§1§ hspace=§1§»","ALL");
+	Input = ReReplace(Input,	"(;(\^|')\))",			"«img src=§#SmileyPath#Wink.gif§ alt=§::\1::§ height=§15§ width=§15§ vspace=§1§ hspace=§1§»","ALL");
+	Input = ReReplace(Input,	"(;(\^|')\|)",			"«img src=§#SmileyPath#Wincing.gif§ alt=§::\1::§ height=§15§ width=§15§ vspace=§1§ hspace=§1§»","ALL");
+	Input = ReReplace(Input,	"(:(\^|')(o|O|0))",		"«img src=§#SmileyPath#Shouting.gif§ alt=§::\1::§ height=§15§ width=§15§ vspace=§1§ hspace=§1§»","ALL");
+	Input = ReReplace(Input,	"(=(\^|')\))",			"«img src=§#SmileyPath#Interested.gif§ alt=§::\1::§ height=§15§ width=§15§ vspace=§1§ hspace=§1§»","ALL");
+	Input = ReReplace(Input,	"(;(\^|')`)",			"«img src=§#SmileyPath#ThinkingHard.gif§ alt=§::\1::§ height=§15§ width=§15§ vspace=§1§ hspace=§1§»","ALL");
+	Input = ReReplace(Input,	"(;(\^|')d)",			"«img src=§#SmileyPath#Confused.gif§ alt=§::\1::§ height=§15§ width=§15§ vspace=§1§ hspace=§1§»","ALL");
+	Input = ReReplace(Input,	"(=(\^|')~)",			"«img src=§#SmileyPath#SlightlyShocked.gif§ alt=§::\1::§ height=§15§ width=§15§ vspace=§1§ hspace=§1§»","ALL");
+	Input = ReReplace(Input,	"(=(\^|')(o|O|0))",		"«img src=§#SmileyPath#Shocked.gif§ alt=§::\1::§ height=§15§ width=§15§ vspace=§1§ hspace=§1§»","ALL");
+	Input = ReReplace(Input,	"(=(\^|')\*)",			"«img src=§#SmileyPath#Kiss.gif§ alt=§::\1::§ height=§15§ width=§15§ vspace=§1§ hspace=§1§»","ALL");
+	Input = ReReplace(Input,	"(8(\^|')\))",			"«img src=§#SmileyPath#Cool.gif§ alt=§::\1::§ height=§15§ width=§15§ vspace=§1§ hspace=§1§»","ALL");
+	Input = ReReplace(Input,	"(:(\^|')\})",			"«img src=§#SmileyPath#Drooling.gif§ alt=§::\1::§ height=§15§ width=§15§ vspace=§1§ hspace=§1§»","ALL");
+	Input = ReReplace(Input,	"(:(\^|')(b|p))",		"«img src=§#SmileyPath#StickingOutTounge.gif§ alt=§::\1::§ height=§15§ width=§15§ vspace=§1§ hspace=§1§»","ALL");
+	Input = ReReplace(Input,	"(\{(\^|')(o|O|0))",	"«img src=§#SmileyPath#Yawning.gif§ alt=§::\1::§ height=§15§ width=§15§ vspace=§1§ hspace=§1§»","ALL");
+	Input = ReReplace(Input,	"(\{(\^|')\))",			"«img src=§#SmileyPath#Sleeping.gif§ alt=§::\1::§ height=§15§ width=§15§ vspace=§1§ hspace=§1§»","ALL");
+	Input = ReReplace(Input,	"(##(\^|')\))",			"«img src=§#SmileyPath#Embarassed.gif§ alt=§::\1::§ height=§15§ width=§15§ vspace=§1§ hspace=§1§»","ALL");
+	Input = ReReplace(Input,	"(%(\^|')\))",			"«img src=§#SmileyPath#Crazy.gif§ alt=§::\1::§ height=§15§ width=§15§ vspace=§1§ hspace=§1§»","ALL");
+	Input = ReReplace(Input,	"(B(\^|')>)",			"«img src=§#SmileyPath#Evil.gif§ alt=§::\1::§ height=§15§ width=§15§ vspace=§1§ hspace=§1§»","ALL");
+	Input = ReReplace(Input,	"((o|O|0)(\^|')\))",	"«img src=§#SmileyPath#Angelic.gif§ alt=§::\1::§ height=§15§ width=§15§ vspace=§1§ hspace=§1§»","ALL");
+	Input = ReReplace(Input,	"(\?(\^|')\))",			"«img src=§#SmileyPath#Question.gif§ alt=§::\1::§ height=§15§ width=§15§ vspace=§1§ hspace=§1§»","ALL");
+	Input = ReReplace(Input,	"(!(\^|')\))",			"«img src=§#SmileyPath#Exclamation.gif§ alt=§::\1::§ height=§15§ width=§15§ vspace=§1§ hspace=§1§»","ALL");
+	Input = ReReplace(Input,	"(\$(\^|')\))",			"«img src=§#SmileyPath#Idea.gif§ alt=§::\1::§ height=§15§ width=§15§ vspace=§1§ hspace=§1§»","ALL");
 };
 
 	// Convert HTML, if needed
@@ -477,35 +478,38 @@ if (ConvertHTML) {
 };
 
 	// Set up Paragraphs and breaks
-Input = "�p�" & Input & "�/p�";
-Input = Replace(Input, "#Chr(13)##Chr(10)##Chr(13)##Chr(10)#", "�/p��p�", "ALL");
-Input = Replace(Input, "#Chr(13)##Chr(10)#", "�br�", "ALL");
+
+Input = "«p»" & Input & "«/p»";
+Input = Replace(Input, "#Chr(13)##Chr(10)##Chr(13)##Chr(10)#", "«/p»«p»", "ALL");
+Input = Replace(Input, "#Chr(13)##Chr(10)#", "«br»", "ALL");
 
 	// Reset non-tag brackets to brackets
-Input = Replace(Input, "�", "[", "All");
-Input = Replace(Input, "�", "]", "All");
+Input = Replace(Input, "Ù", "[", "All");
+Input = Replace(Input, "Ú", "]", "All");
 
 	// Reinsert code blocks
 if (ArrayLen(CodeBlocks) GT 0) {
 	for (Cnt = 1; Cnt LTE ArrayLen(CodeBlocks); Cnt = Cnt + 1) {
-		Input = ReplaceNoCase(Input, "�code�***#Cnt#***�/code�", CodeBlocks[Cnt]);
+		Input = ReplaceNoCase(Input, "«code»***#Cnt#***«/code»", CodeBlocks[Cnt]);
 	};
 };
+
+
 
 	// Reinsert SQL blocks
 if (ArrayLen(SQLBlocks) GT 0) {
 	for (Cnt = 1; Cnt LTE ArrayLen(SQLBlocks); Cnt = Cnt + 1) {
-		Input = ReplaceNoCase(Input, "�sql�***#Cnt#***�/sql�", SQLBlocks[Cnt]);
+		Input = ReplaceNoCase(Input, "«sql»***#Cnt#***«/sql»", SQLBlocks[Cnt]);
 	};
 };
 
 	// Convert Psuedo-Tags to angle brackets
 	// All code-HTML conversion must be completed by this point!
-Input = Replace(Input, "�", """", "ALL");
-Input = Replace(Input, "�", "<", "ALL");
-Input = Replace(Input, "�", ">", "ALL");
-Input = Replace(Input, "�", "<a", "ALL");
-
+Input = Replace(Input, "§", """", "ALL");
+Input = Replace(Input, "«", "<", "ALL");
+Input = Replace(Input, "»", ">", "ALL");
+Input = Replace(Input, "£", "<a", "ALL");
+writeOutput(input);
 </cfscript>
 
 <cfelse>
