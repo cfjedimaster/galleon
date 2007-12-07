@@ -1,4 +1,4 @@
-﻿<cfprocessingdirective pageencoding="utf-8">
+<cfprocessingdirective pageencoding="utf-8">
 <cfsetting enablecfoutputonly="Yes">
 <!--- DP_ParseBBML version 1.1 --->
 <!---
@@ -509,7 +509,7 @@ Input = Replace(Input, "§", """", "ALL");
 Input = Replace(Input, "«", "<", "ALL");
 Input = Replace(Input, "»", ">", "ALL");
 Input = Replace(Input, "£", "<a", "ALL");
-writeOutput(input);
+//writeOutput(input);
 </cfscript>
 
 <cfelse>
