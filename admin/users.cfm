@@ -3,8 +3,9 @@
 	Name         : users.cfm
 	Author       : Raymond Camden 
 	Created      : July 4, 2004
-	Last Updated : October 12, 2007
+	Last Updated : December 13, 2007
 	History      : Reset for V2
+				   Fixed filtering code (rkc 12/13/07)
 	Purpose		 : 
 --->
 
@@ -41,7 +42,9 @@
 <div id="right">
 <cfoutput>
 <div class="top_input_misc">
-<form action="#cgi.script_name#?#cgi.query_string#" method="post">
+	<cfset qs = cgi.query_string>
+	<cfset qs = rereplace(qs, "&*page=[0-9]+", "")>
+<form action="#cgi.script_name#?#qs#" method="post">
 <input type="text" name="search" value="#form.search#" class="filter_input"> <input type="image" src="../images/btn_filter.jpg" value="Filter" class="filter_btn">
 </form>
 </div>
@@ -50,7 +53,7 @@
 <cfmodule template="../tags/datatable.cfm" 
 		  data="#users#" list="#list#" 
 		  classList="left_20,left_25,left_20 align_center,left_15 align_center,left_15"
-		  editlink="users_edit.cfm" linkcol="username" linkval="username" label="User" linkappend="&search=#form.search#" />
+		  editlink="users_edit.cfm" linkcol="username" linkval="username" label="User" linkappend="&search=#urlEncodedFormat(form.search)#" />
 
 
 </cfmodule>
