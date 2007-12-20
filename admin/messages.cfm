@@ -3,8 +3,9 @@
 	Name         : messages.cfm
 	Author       : Raymond Camden 
 	Created      : July 5, 2004
-	Last Updated : October 12, 2007
+	Last Updated : December 13, 2007
 	History      : Reset for V2
+				   Fixed filtering code (rkc 12/13/07)
 	Purpose		 : 
 --->
 
@@ -34,7 +35,9 @@
 
 <cfoutput>
 <div class="top_input_misc">
-<form action="#cgi.script_name#?#cgi.query_string#" method="post">
+	<cfset qs = cgi.query_string>
+	<cfset qs = rereplace(qs, "&*page=[0-9]+", "")>
+<form action="#cgi.script_name#?#qs#" method="post">
 <input type="text" name="search" value="#form.search#" class="filter_input"> <input type="image" src="../images/btn_filter.jpg" value="Filter" class="filter_btn">
 </form>
 </div>
@@ -43,7 +46,7 @@
 <cfmodule template="../tags/datatable.cfm" 
 		  data="#messages#" list="title,posted,threadname,forumname,conferencename,username"
 		  classList="left_20,left_15,left_20,left_15,left_15,left_10" 
-		  editlink="messages_edit.cfm" linkcol="title" label="Message" />
+		  editlink="messages_edit.cfm" linkcol="title" label="Message" linkappend="&search=#urlEncodedFormat(form.search)#" />
 
 
 </cfmodule>
