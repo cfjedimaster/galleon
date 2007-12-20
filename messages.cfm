@@ -3,9 +3,10 @@
 	Name         : messages.cfm
 	Author       : Raymond Camden 
 	Created      : June 10, 2004
-	Last Updated : November 10, 2007
+	Last Updated : December 13, 2007
 	History      : Reset for V2
 				 : New link to last past (rkc 11/10/07)
+				 : Format sigs a bit nicer. (rkc 12/13/07)
 	Purpose		 : Displays messages for a thread
 --->
 
@@ -190,7 +191,14 @@
 				<!--- #application.message.renderMessage(body)# --->
 				<cfmodule template="tags/DP_ParseBBML.cfm" input="#body#" outputvar="result" convertsmilies="true" smileypath="images/Smilies/Default/">
 				#result.output#
-				<cfif len(uinfo.signature)><div class="signature">#uinfo.signature#</div></cfif>
+				<cfif len(uinfo.signature)>
+					<cfset sig = uinfo.signature>
+					<cfset sig = replaceList(sig, "#chr(10)#,#chr(13)#","<br>,<br>")>
+					<cfset sig = replace(uinfo.signature,chr(13)&chr(10),chr(10),"ALL")>
+					<cfset sig = replace(sig,chr(13),chr(10),"ALL")>
+					<cfset sig = replace(sig,chr(10),"<br />","ALL")>
+					<div class="signature">#sig#</div>
+				</cfif>
 				<cfif request.udf.isLoggedOn() and application.utils.isTheUserInAnyRole("forumsadmin,forumsmoderator")>
 				<br />
 				<p align="right"><a href="message_edit.cfm?id=#id#">[Edit Post]</a></p>
