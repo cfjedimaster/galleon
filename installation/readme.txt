@@ -19,7 +19,7 @@ read the word documentation. For folks who are upgrading, BE SURE to read the no
 what changes in each release.
 
 This application was created by Raymond Camden (ray@camdenfamily.com). 
-You may use this application as you will. I ask that you link back to my blog (http://ray.camdenfamily.com).
+You may use this application as you will. I ask that you link back to my blog (http://www.coldfusionjedi.com).
 
 If you find this app worthy, I have a Amazon wish list set up (www.amazon.com/o/registry/2TCL1D08EZEYE ). 
 Gifts are always welcome. ;)
