@@ -27,6 +27,14 @@ Gifts are always welcome. ;)
 
 
 ---- LATEST VERSION ----
+2.009 (December 20, 2007)
+/messages.cfm - format the sig a bit nicer
+/tags/DP_ParseBBML.cfm updated again
+/admin/messages.cfm - handle pagination better
+/admin/threads.cfm - ditto
+/admin/users.cfm - ditto
+
+---- ARCHIVED UPDATES ----
 2.008 (November 29, 2007)
 /stylesheets/style.css - fix for P
 /messages.cfm - a few changes: When you post, you end up on the page your post was posted to. I also put pagination
@@ -34,7 +42,6 @@ at the bottom as well as the top.
 /cfcs/settings.ini.cfm - version
 /tags/DP_ParseBBML.cfm - saved in UTF-8, fixes weird format issue on some machine
 
----- ARCHIVED UPDATES ----
 2.007 (November 21, 2007)
 /stylesheets/admin_style.css - another CSS fix. Thanks to Chaz again at Full City Media
 /admin/users_edit.cfm - When using encrypted passwords, do NOT display password in form, and warn the admin 
