@@ -35,7 +35,7 @@
 
 <cfparam name="form.title" default="">
 <cfparam name="form.body" default="">
-<cfparam name="form.subscribe" default="true">
+<cfparam name="form.subscribe" default="false">
 <cfparam name="form.oldattachment" default="">
 <cfparam name="form.attachment" default="">
 <cfparam name="form.filename" default="">
@@ -149,11 +149,7 @@
 			<div class="clearer"><br /></div>
 			
 			<p class="input_name">Subscribe:</p>
-			<select name="subscribe">
-				<option value="true" <cfif form.subscribe>selected</cfif>>Yes</option>
-				<option value="false" <cfif not form.subscribe>selected</cfif>>No</option>
-			</select>
-															
+			<input type="checkbox" name="subscribe" value="true" <cfif form.subscribe>checked</cfif>>
 			<div class="clearer"><br /></div>
 			<cfif isBoolean(request.forum.attachments) and request.forum.attachments>
 			<p>Attach File:</p>
