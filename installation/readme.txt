@@ -1,5 +1,5 @@
 LICENSE 
-Copyright 2006 Raymond Camden
+Copyright 2006, 2007, 2008 Raymond Camden
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -27,6 +27,17 @@ Gifts are always welcome. ;)
 
 
 ---- LATEST VERSION ----
+2.010 (February 25, 2008)
+/cfcs/galleon.cfc - I had to mod it a bit to work with some settings that can't be in the ini file.
+/cfcs/message.cfc - fix bug where we threw an error deleting a thread with messages with attachments
+/cfcs/objectfactory.cfm - now we pass in a few settings, and add them to the settings bean
+/Application.cfm - support for the above
+
+/cfcs/settings.ini.cfm - version
+/messages.cfm - subscribe defaults to false, and we use a check box now
+/newpost.cfm - ditto
+
+---- ARCHIVED UPDATES ----
 2.009 (December 20, 2007)
 /messages.cfm - format the sig a bit nicer
 /tags/DP_ParseBBML.cfm updated again
@@ -34,7 +45,6 @@ Gifts are always welcome. ;)
 /admin/threads.cfm - ditto
 /admin/users.cfm - ditto
 
----- ARCHIVED UPDATES ----
 2.008 (November 29, 2007)
 /stylesheets/style.css - fix for P
 /messages.cfm - a few changes: When you post, you end up on the page your post was posted to. I also put pagination
