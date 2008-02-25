@@ -15,10 +15,11 @@
 		notes:	usually initialized in application
 	 --->
 	<cffunction name="init" access="public" output="No" returntype="objectFactory">
-	
+		<cfargument name="settings" type="struct" required="false">
 		<cfscript>
 			// persistance of objects
 			variables.com = structNew();
+			variables.settings = arguments.settings;
 		</cfscript>
 
 		<cfreturn this />
@@ -36,6 +37,7 @@
 		
 		<cfscript>
 			var obj = ''; //local var to hold object
+			var key = '';
 			if (arguments.singleton and singletonExists(arguments.objName)) {
 				return getSingleton(arguments.objName);
 			}
@@ -68,9 +70,17 @@
 
 				case "galleonSettings":
 					obj = createObject('component','galleon');
-						if (arguments.singleton) { // scope singleton
-							addSingleton(arguments.objName, obj);
-						}
+					obj.loadSettings();
+					//Added by Ray on Feb 24, 2008
+					//We now pass in a struct of settings that we need to append
+					//to the existing values
+					for(key in variables.settings) {
+						obj.addSetting(key, variables.settings[key]);
+					}
+					if (arguments.singleton) { // scope singleton
+						addSingleton(arguments.objName, obj);
+					}
+					
 					return obj;
 				break;
 
