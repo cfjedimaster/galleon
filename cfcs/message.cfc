@@ -176,7 +176,7 @@ User:		#arguments.username#
 			delete	from #variables.tableprefix#messages
 			where	id = <cfqueryparam value="#arguments.id#" cfsqltype="CF_SQL_VARCHAR" maxlength="35">
 		</cfquery>
-		
+
 		<cfif len(q.filename) and fileExists("#variables.attachmentdir#/#q.filename#")>
 			<cffile action="delete" file="#variables.attachmentdir#/#q.filename#">
 		</cfif>
@@ -537,12 +537,13 @@ No HTML is allowed in your message. Basic Formatting Rules:<br />
 		<cfreturn true>
 		
 	</cffunction>
-	
+
 	<cffunction name="setSettings" access="public" output="No" returntype="void">
 		<cfargument name="settings" required="true" hint="Setting">
 		<cfset variables.dsn = arguments.settings.getSettings().dsn>
 		<cfset variables.dbtype = arguments.settings.getSettings().dbtype>
 		<cfset variables.tableprefix = arguments.settings.getSettings().tableprefix>
+		<cfset variables.attachmentdir = arguments.settings.getSettings().attachmentdir>
 		<cfset variables.settings = arguments.settings.getSettings()>
 	</cffunction>
 	
