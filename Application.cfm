@@ -23,11 +23,12 @@
 
 	<cfset structDelete(application, "userCache")>
 
-	<cfset application.settings.attachmentdir = getDirectoryFromPath(getCurrentTemplatePath()) & "attachments">
-	<cfset application.settings.avatardir = getDirectoryFromPath(getCurrentTemplatePath()) & "images/avatars">
+	<cfset settings = structNew()>
+	<cfset settings.attachmentdir = getDirectoryFromPath(getCurrentTemplatePath()) & "attachments">
+	<cfset settings.avatardir = getDirectoryFromPath(getCurrentTemplatePath()) & "images/avatars">
 
 	<!--- get user CFC --->
-	<cfset application.factory = createObject("component","cfcs.objectfactory").init(application.settings)>
+	<cfset application.factory = createObject("component","cfcs.objectfactory").init(settings)>
 	
 	<!--- Get main settings --->
 	<cfset application.settings = application.factory.get('galleonSettings').getSettings()>
