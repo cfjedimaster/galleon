@@ -27,6 +27,11 @@ Gifts are always welcome. ;)
 
 
 ---- LATEST VERSION ----
+2.011 (February 26, 2008)
+/Application.cfm - Minor fix to my settings change.
+cfcs/settings.ini.cfm - just version
+
+---- ARCHIVED UPDATES ----
 2.010 (February 25, 2008)
 /cfcs/galleon.cfc - I had to mod it a bit to work with some settings that can't be in the ini file.
 /cfcs/message.cfc - fix bug where we threw an error deleting a thread with messages with attachments
@@ -37,7 +42,6 @@ Gifts are always welcome. ;)
 /messages.cfm - subscribe defaults to false, and we use a check box now
 /newpost.cfm - ditto
 
----- ARCHIVED UPDATES ----
 2.009 (December 20, 2007)
 /messages.cfm - format the sig a bit nicer
 /tags/DP_ParseBBML.cfm updated again
