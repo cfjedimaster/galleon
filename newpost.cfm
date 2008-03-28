@@ -144,7 +144,7 @@
 			<p class="input_name">Body:</p>
 			<div class="clearer"></div>
 			#application.message.renderHelp()#
-			<textarea class="edit_textarea" name="body" cols="100" rows="20">#form.body#</textarea>
+			<textarea id="markitup" class="edit_textarea" name="body" cols="100" rows="20">#form.body#</textarea>
 			
 			<div class="clearer"><br /></div>
 			

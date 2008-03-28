@@ -122,8 +122,8 @@
 			
 			<div class="clearer"><br /></div>
 			
-			<p class="input_name">Body:</p>
-			<textarea name="body" class="edit_textarea">#form.body#</textarea>
+			<p class="input_name">Body:</p><br />
+			<textarea id="markitup" name="body" class="edit_textarea">#form.body#</textarea>
 			
 			<div class="clearer"><br /></div>
 			<cfif isBoolean(request.forum.attachments) and request.forum.attachments>

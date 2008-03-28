@@ -274,8 +274,10 @@
 			<p class="input_name">Body:</p>
 			<div class="clearer"></div>
 			#application.message.renderHelp()#
-			<textarea class="edit_textarea" name="body" cols="100" rows="20">#form.body#</textarea>
-			
+			<textarea id="markitup" class="edit_textarea" name="body" cols="100" rows="20">#form.body#</textarea>
+			<cfif application.settings.bbcode_editor>
+			Markup editor credit: <a href="http://markitup.jaysalvat.com/home/">markitup</a>
+			</cfif>
 			<div class="clearer"><br /></div>
 			
 			<p class="input_name">Subscribe:</p>
