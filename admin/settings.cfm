@@ -46,7 +46,7 @@
 	
 	<cfif not arrayLen(errors)>
 
-		<cfset keylist = "dsn,perpage,fromaddress,rooturl,sendonpost,dbtype,tableprefix,requireconfirmation,title,version,fullemails,encryptpasswords,allowavatars,safeextensions">
+		<cfset keylist = "bbcode_editor,dsn,perpage,fromaddress,rooturl,sendonpost,dbtype,tableprefix,requireconfirmation,title,version,fullemails,encryptpasswords,allowavatars,safeextensions">
 		<cfloop index="key" list="#keylist#">
 			<cfif structKeyExists(form, key)>
 				<cfset application.factory.get('galleonSettings').setSetting(key, trim(form[key]))>
@@ -174,6 +174,13 @@
 <div class="row_1">
 	<p class="input_name">Safe Extensions</p>
 	<input type="text" name="safeextensions" value="#form.safeextensions#" class="inputs_01">
+<div class="clearer"></div>
+</div>
+
+<div class="row_1">
+	<p class="input_name">Use markItUp! Beta for rich text editing</p>
+	<input type="radio" name="bbcode_editor" value="true" <cfif form.bbcode_editor>checked</cfif>>Yes<br>
+	<input type="radio" name="bbcode_editor" value="false" <cfif not form.bbcode_editor>checked</cfif>>No<br>
 <div class="clearer"></div>
 </div>
 

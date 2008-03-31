@@ -22,10 +22,24 @@
    	<cfif isDefined("request.conference") and application.permission.allowed(application.rights.CANVIEW, request.conference.id, "")>
     <link rel="alternate" type="application/rss+xml" title="#request.conference.name# RSS" href="#application.settings.rooturl#rss.cfm?conferenceid=#request.conference.id#" />
     </cfif>
+    <cfif structKeyExists(application.settings,'bbcode_editor') IS TRUE AND application.settings.bbcode_editor IS TRUE>
+    <!-- markItUp! -->
+    <link rel="stylesheet" type="text/css" href="markitup/skins/markitup/style.css" />
+    <link rel="stylesheet" type="text/css" href="markitup/sets/default/style.css" />
+    <script src="markitup/jquery.pack.js" type="text/javascript"></script>
+    <script src="markitup/jquery.markitup.js" type="text/javascript"></script>
+    <script src="markitup/sets/default/set.js" type="text/javascript"></script>
+    </cfif>
 </head>
 
 <body>
-
+<cfif structKeyExists(application.settings,'bbcode_editor') IS TRUE AND application.settings.bbcode_editor IS TRUE>
+<script type="text/javascript">
+$(document).ready(function()	{
+	$('##markitup').markItUp(mySettings);
+});
+</script>
+</cfif>
 
 <div id="container">
 

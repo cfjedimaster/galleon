@@ -27,11 +27,17 @@ Gifts are always welcome. ;)
 
 
 ---- LATEST VERSION ----
+2.012 (March 28, 2008)
+markitup rich text editor by http://markitup.jaysalvat.com/home/
+Support added by Todd Rafferty.
+
+Multiple files updated.
+
+---- ARCHIVED UPDATES ----
 2.011 (February 26, 2008)
 /Application.cfm - Minor fix to my settings change.
 cfcs/settings.ini.cfm - just version
 
----- ARCHIVED UPDATES ----
 2.010 (February 25, 2008)
 /cfcs/galleon.cfc - I had to mod it a bit to work with some settings that can't be in the ini file.
 /cfcs/message.cfc - fix bug where we threw an error deleting a thread with messages with attachments
