@@ -177,7 +177,7 @@
 <div class="clearer"></div>
 </div>
 
-<div class="row_1">
+<div class="row_0">
 	<p class="input_name">Use markItUp! Beta for rich text editing</p>
 	<input type="radio" name="bbcode_editor" value="true" <cfif form.bbcode_editor>checked</cfif>>Yes<br>
 	<input type="radio" name="bbcode_editor" value="false" <cfif not form.bbcode_editor>checked</cfif>>No<br>
