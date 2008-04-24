@@ -138,7 +138,7 @@ User:		#arguments.username#
 
 #wrap(body,80)#
 			
-#variables.settings.rootURL#messages.cfm?threadid=#arguments.threadid#
+#variables.settings.rootURL#<cfif not right(variables.settings.rooturl,1) is "/">/</cfif>messages.cfm?threadid=#arguments.threadid#&last##last
 			</cfmail>
 
 		</cfif>
