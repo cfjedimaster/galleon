@@ -124,11 +124,11 @@
 	</cfif>
 	
 	<cfif not len(errors)>
-
+		<cfset s = structNew()>
 		<cfif len(trim(form.password_new))>
-			<cfset user.password = form.password_new>
+			<cfset s.password = form.password_new>
 		</cfif>
-		<cfset application.user.saveUser(username=getAuthUser(),password=user.password,emailaddress=form.emailaddress,datecreated=user.datecreated,groups=application.user.getGroupsForUser(getAuthUser()), signature=form.signature, confirmed=true, avatar=avatar)>
+		<cfset application.user.saveUser(username=getAuthUser(),emailaddress=form.emailaddress,datecreated=user.datecreated,groups=application.user.getGroupsForUser(getAuthUser()), signature=form.signature, confirmed=true, avatar=avatar, argumentCollection=s)>
 		<cfset request.udf.cachedUserInfo(getAuthUser(),false)>		
 	</cfif>
 		
