@@ -115,6 +115,9 @@
 	
 </cfif>
 
+<!--- clean up possible CSS attack --->
+<cfset qs = replaceList(cgi.query_string,"<,>",",")>
+
 <!--- get my messages --->
 <cfset data = application.message.getMessages(threadid=request.thread.id)>
 
@@ -211,7 +214,7 @@
 				<cfelse>
 					<cfset pre = "http">
 				</cfif>
-				<cfset link = "#pre#://#cgi.server_name##cgi.script_name#?#cgi.query_string####currentrow#">
+				<cfset link = "#pre#://#cgi.server_name##cgi.script_name#?#qs####currentrow#">
 				
 				<div class="forum_post_links"><p>
 					<a href="#link#">Link</a> | 
@@ -263,7 +266,7 @@
 		</div>
 		<cfelseif canPost>	
 		<div class="row_1 top_pad">
-			<form action="#cgi.script_name#?#cgi.query_string#&##newpost" method="post" enctype="multipart/form-data" class="basic_forms">
+			<form action="#cgi.script_name#?#qs#&##newpost" method="post" enctype="multipart/form-data" class="basic_forms">
 			<input type="hidden" name="post" value="1">	
 			<p class="input_name">Title:</p>
 			<div class="clearer"></div>

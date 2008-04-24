@@ -18,6 +18,11 @@
 
 <cfset failedLogon = false>
 
+<!--- clean up possible CSS attack --->
+<cfif isDefined("url.ref")>
+	<cfset url.ref = replaceList(url.ref,"<,>",",")>
+</cfif>
+
 <!--- did they try to logon and succeeed? --->
 <cfif isDefined("form.logon")>
 	<cfif request.udf.isLoggedOn()>
