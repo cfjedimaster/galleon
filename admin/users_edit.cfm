@@ -41,7 +41,7 @@
 		<!--- set confirmed to true if not passed --->
 		<cfparam name="form.confirmed" default="true">
 		<cfif url.id neq 0>
-			<cfset application.user.saveUser(form.username, form.password, form.emailaddress, form.datecreated,form.groups,form.confirmed)>
+			<cfset application.user.saveUser(username=form.username,emailaddress=form.emailaddress,datecreated=form.datecreated,groups=form.groups,confirmed=form.confirmed, password=form.password)>
 		<cfelse>
 			<cftry>
 				<cfset application.user.addUser(form.username, form.password, form.emailaddress, form.groups,form.confirmed)>
