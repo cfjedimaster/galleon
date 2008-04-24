@@ -32,15 +32,6 @@ CREATE TABLE `galleon_conferences` (
   PRIMARY KEY  (`Id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Dumping data for table `galleon_conferences`
---
-
-LOCK TABLES `galleon_conferences` WRITE;
-/*!40000 ALTER TABLE `galleon_conferences` DISABLE KEYS */;
-INSERT INTO `galleon_conferences` VALUES ('1904BAEA-0FF2-0E2F-1A62FD05B82B77B4','Test','Test',1,5,'19062540-FB97-A65B-1E67D7B89DF805BD','C189C5AC-7E9B-AEC8-1DAEEEA03A562CF0','2007-09-18 15:57:32'),('190719BA-F5C3-E0D8-FA798250811561F1','Test 2','Test 2',1,0,NULL,NULL,NULL);
-/*!40000 ALTER TABLE `galleon_conferences` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `galleon_forums`
