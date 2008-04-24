@@ -27,13 +27,22 @@ Gifts are always welcome. ;)
 
 
 ---- LATEST VERSION ----
+2.013 (April 24, 2008)
+/admin/users_edit.cfm - change to support note below
+/cfcs/user.cfc - correctly handle profile saves not messing up the passwords
+/cfcs/message.cfc - when we email users, use #last so that their link goes to the most recent page, also double check to include / in url
+/cfcs/settings.ini - version
+/installation/mysql.sql - the sql file accidentally had conference data in it
+/login.cfm, /messages.cfm - minor CSS fix
+/profile.cfm - related to profile fix above
+
+---- ARCHIVED UPDATES ----
 2.012 (March 28, 2008)
 markitup rich text editor by http://markitup.jaysalvat.com/home/
 Support added by Todd Rafferty.
 
 Multiple files updated.
 
----- ARCHIVED UPDATES ----
 2.011 (February 26, 2008)
 /Application.cfm - Minor fix to my settings change.
 cfcs/settings.ini.cfm - just version
