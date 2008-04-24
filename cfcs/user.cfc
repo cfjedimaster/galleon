@@ -491,25 +491,27 @@ To complete your registration at #variables.title#, please click on the link bel
 	<cffunction name="saveUser" access="public" returnType="void" output="false"
 				hint="Attempts to save a user.">
 		<cfargument name="username" type="string" required="true">
-		<cfargument name="password" type="string" required="true">
 		<cfargument name="emailaddress" type="string" required="true">
 		<cfargument name="datecreated" type="date" required="true">
 		<cfargument name="groups" type="string" required="false">
 		<cfargument name="confirmed" type="boolean" required="false" default="false">
 		<cfargument name="signature" type="string" required="false">
 		<cfargument name="avatar" type="string" required="false">
+		<cfargument name="password" type="string" required="false">
 		
 		<cfset var uid = getUserId(arguments.username)>
 
 		<!--- hash password --->
-		<cfif variables.encryptpasswords>
+		<cfif variables.encryptpasswords and structKeyExists(arguments, "password")>
 			<cfset arguments.password = hash(arguments.password)>
 		</cfif>
 
 		<cfquery datasource="#variables.dsn#">
 			update	#variables.tableprefix#users
 			set		emailaddress = <cfqueryparam value="#arguments.emailaddress#" cfsqltype="CF_SQL_VARCHAR" maxlength="255">,
+					<cfif structKeyExists(arguments, "password")>
 					password = <cfqueryparam value="#arguments.password#" cfsqltype="CF_SQL_VARCHAR" maxlength="50">,
+					</cfif>
 					datecreated = <cfqueryparam value="#arguments.datecreated#" cfsqltype="CF_SQL_TIMESTAMP">,
 					confirmed = <cfqueryparam value="#arguments.confirmed#" cfsqltype="CF_SQL_BIT">
 					<cfif structKeyExists(arguments, "signature")>
