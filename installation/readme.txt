@@ -27,6 +27,12 @@ Gifts are always welcome. ;)
 
 
 ---- LATEST VERSION ----
+2.014 (April 30, 2008)
+/stylesheets/style.css - fix to blockquote style, thanks to zomigi (user on my forums)
+/cfcs/message.cfc - for my email fix, I accidentally only did it to the Admin email, not the User email. Thanks to Jonas Eriksson
+/cfcs/settings.ini.cfm - just the version
+
+---- ARCHIVED UPDATES ----
 2.013 (April 24, 2008)
 /admin/users_edit.cfm - change to support note below
 /cfcs/user.cfc - correctly handle profile saves not messing up the passwords
@@ -36,7 +42,6 @@ Gifts are always welcome. ;)
 /login.cfm, /messages.cfm - minor CSS fix
 /profile.cfm - related to profile fix above
 
----- ARCHIVED UPDATES ----
 2.012 (March 28, 2008)
 markitup rich text editor by http://markitup.jaysalvat.com/home/
 Support added by Todd Rafferty.
