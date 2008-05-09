@@ -27,12 +27,18 @@ Gifts are always welcome. ;)
 
 
 ---- LATEST VERSION ----
+2.1 (May 9, 2008)
+/cfcs/conference.cfc, permission.cfc, rank.cfc and user.cfc modified to support Oracle. Thanks go to James Holmes. This is NOT documented yet,
+but you can specify oracle as the DB type now. Once folks test and confirm it's cool, I'll add it documentation.
+
+/cfcs/conference.cfc - fix a bug where if you delete the last thread of a conference, an error is thrown.
+
+---- ARCHIVED UPDATES ----
 2.014 (April 30, 2008)
 /stylesheets/style.css - fix to blockquote style, thanks to zomigi (user on my forums)
 /cfcs/message.cfc - for my email fix, I accidentally only did it to the Admin email, not the User email. Thanks to Jonas Eriksson
 /cfcs/settings.ini.cfm - just the version
 
----- ARCHIVED UPDATES ----
 2.013 (April 24, 2008)
 /admin/users_edit.cfm - change to support note below
 /cfcs/user.cfc - correctly handle profile saves not messing up the passwords

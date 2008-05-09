@@ -99,11 +99,17 @@
 		
 		<cfquery name="q" datasource="#variables.dsn#">
 		select	groupidfk as 
-		<cfif variables.dbtype is not "mysql">
-		[group]
-		<cfelse>
-		`group`
-		</cfif>
+		<cfswitch expression="#lCase(variables.dbtype)#" >
+        	<cfcase value="mysql">
+            	`group`
+            </cfcase>
+            <cfcase value="oracle">
+            	"GROUP"
+            </cfcase>
+            <cfdefaultcase>
+            	[group]
+            </cfdefaultcase>
+        </cfswitch>
 		from	#variables.tableprefix#permissions
 		where	rightidfk = <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.right#" maxlength="35">
 		and		resourceidfk = <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.resource#" maxlength="35">

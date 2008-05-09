@@ -57,17 +57,22 @@
 		<cfset var qGetRank = "">
 		
 		<cfquery name="qGetRank" datasource="#variables.dsn#">
-		select	
-		<cfif variables.dbtype is not "mysql">
-				top 1
-		</cfif>
+		<cfif variables.dbtype is "oracle">
+                select * from (
+            </cfif>
+            select	
+            <cfif not listFindNoCase("mysql,oracle",variables.dbtype)>
+                    top 1
+            </cfif>
 		name
 		from	#variables.tableprefix#ranks
 		where	minposts <= <cfqueryparam value="#arguments.minposts#" cfsqltype="cf_sql_numeric">
 		order by minposts desc
 		<cfif variables.dbtype is "mysql">
-				limit 1
-		</cfif>
+                    limit 1
+            <cfelseif variables.dbtype is "oracle">
+                    ) where rownum <= 1
+        	</cfif>
 		</cfquery>
 		
 		<cfreturn qGetRank.name>

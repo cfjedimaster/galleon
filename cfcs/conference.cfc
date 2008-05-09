@@ -123,8 +123,11 @@
 		<cfset var qLatestPosts = "">
 		
 		<cfquery name="qLatestPosts" datasource="#variables.dsn#">
+			<cfif variables.dbtype is "oracle">
+            	select * from (
+        	</cfif>
 			select		
-				<cfif variables.dbtype is not "mysql">
+				<cfif not listFindNoCase("mysql,oracle",variables.dbtype)>
 				top 20 
 				</cfif>
 						#variables.tableprefix#messages.title, #variables.tableprefix#threads.name as thread, 
@@ -141,7 +144,9 @@
 			order by	#variables.tableprefix#messages.posted desc
 				<cfif variables.dbtype is "mysql">
 				limit 20
-				</cfif>
+            <cfelseif variables.dbtype is "oracle">
+            	) where rownum <= 20
+        	</cfif>
 		</cfquery>
 		
 		<cfreturn qLatestPosts>
@@ -257,9 +262,14 @@
 				<cfset lasti = lastpost>
 			</cfif>
 		</cfloop>
-
+		<cflog file="galleon" text="havesome=#havesome#, last=#last#, lastu=#lastu#, lasti=#lasti#">
 		<!--- now update this conf --->
-		<cfif haveSome>
+		<cfif haveSome and lastu neq "">
+			<!---
+			As a user reported, it is possible the last X for a forum is null. This
+			can happen if you kill the last thread in a forum.
+			So haveSome is kinda meh now.
+			--->
 			<cfquery datasource="#variables.dsn#">
 			update	#variables.tableprefix#conferences
 			set		lastpost = <cfqueryparam cfsqltype="cf_sql_varchar" maxlength="35" value="#lasti#">,

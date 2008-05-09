@@ -34,11 +34,17 @@
 				select	id
 				from	#variables.tableprefix#groups
 				where	 
-				<cfif variables.dbtype is not "mysql">
-					#variables.tableprefix#groups.[group] 
-				<cfelse>
-					#variables.tableprefix#groups.`group`
-				</cfif> =
+				<cfswitch expression="#lCase(variables.dbtype)#">
+                	<cfcase value="mysql">
+                    	#variables.tableprefix#groups.`group`
+                    </cfcase>
+                    <cfcase value="oracle">
+                    	#variables.tableprefix#groups."GROUP"
+                    </cfcase>
+                    <cfdefaultcase>
+                    	#variables.tableprefix#groups.[group]
+                    </cfdefaultcase>
+                </cfswitch>  =
 				
 				<cfqueryparam value="#arguments.group#" cfsqltype="CF_SQL_VARCHAR" maxlength="255">
 			</cfquery>
@@ -239,11 +245,17 @@ To complete your registration at #variables.title#, please click on the link bel
 		
 		<cfquery name="qGetGroup" datasource="#variables.dsn#">
 			select	id, 
-			<cfif variables.dbtype is not "mysql">
-			[group]
-			<cfelse>
-			`group`
-			</cfif>
+			<cfswitch expression="#lCase(variables.dbtype)#" >
+                <cfcase value="mysql">
+                    `group`
+                </cfcase>
+                <cfcase value="oracle">
+                    "GROUP"
+                </cfcase>
+                <cfdefaultcase>
+                    [group]
+                </cfdefaultcase>
+            </cfswitch>
 			from	#variables.tableprefix#groups
 			where	id
 			 = <cfqueryparam value="#arguments.id#" cfsqltype="CF_SQL_VARCHAR" maxlength="35">
@@ -268,11 +280,17 @@ To complete your registration at #variables.title#, please click on the link bel
 			select	id
 			from	#variables.tableprefix#groups
 			where
-			<cfif variables.dbtype is not "mysql">
-			[group]
-			<cfelse>
-			#variables.tableprefix#groups.group
-			</cfif>
+			<cfswitch expression="#lCase(variables.dbtype)#">
+                <cfcase value="mysql">
+                    #variables.tableprefix#groups.`group`
+                </cfcase>
+                <cfcase value="oracle">
+                    #variables.tableprefix#groups."GROUP"
+                </cfcase>
+                <cfdefaultcase>
+                    #variables.tableprefix#groups.[group]
+                </cfdefaultcase>
+            </cfswitch> 
 			 = <cfqueryparam value="#arguments.group#" cfsqltype="CF_SQL_VARCHAR" maxlength="255">
 		</cfquery>
 		
@@ -290,11 +308,17 @@ To complete your registration at #variables.title#, please click on the link bel
 
 		<cfquery name="qGetGroups" datasource="#variables.dsn#">
 			select	id, 
-			<cfif variables.dbtype is not "mysql">
-			[group]
-			<cfelse>
-			#variables.tableprefix#groups.group
-			</cfif>
+			<cfswitch expression="#lCase(variables.dbtype)#">
+                <cfcase value="mysql">
+                    `group`
+                </cfcase>
+                <cfcase value="oracle">
+                    "GROUP"
+                </cfcase>
+                <cfdefaultcase>
+                    [group]
+                </cfdefaultcase>
+            </cfswitch> 
 			from	#variables.tableprefix#groups
 		</cfquery>
 		
@@ -308,11 +332,18 @@ To complete your registration at #variables.title#, please click on the link bel
 		<cfset var qGetGroups = "">
 		
 		<cfquery name="qGetGroups" datasource="#variables.dsn#">
-			<cfif variables.dbtype is not "mysql">
-				select	#variables.tableprefix#groups.[group]
-			<cfelse>
-				select #variables.tableprefix#groups.group
-			</cfif>
+        	select
+			<cfswitch expression="#lCase(variables.dbtype)#">
+                	<cfcase value="mysql">
+                    	#variables.tableprefix#groups.`group`
+                    </cfcase>
+                    <cfcase value="oracle">
+                    	#variables.tableprefix#groups."GROUP"
+                    </cfcase>
+                    <cfdefaultcase>
+                    	#variables.tableprefix#groups.[group]
+                    </cfdefaultcase>
+                </cfswitch> 
 			from	#variables.tableprefix#users, #variables.tableprefix#groups, #variables.tableprefix#users_groups
 			where	#variables.tableprefix#users_groups.useridfk = #variables.tableprefix#users.id
 			and		#variables.tableprefix#users_groups.groupidfk = #variables.tableprefix#groups.id
@@ -465,7 +496,17 @@ To complete your registration at #variables.title#, please click on the link bel
 				select	id
 				from	#variables.tableprefix#groups
 				where
-					#variables.tableprefix#groups.<cfif variables.dbtype is not "mysql">[group]<cfelse>group</cfif>
+					<cfswitch expression="#lCase(variables.dbtype)#">
+                	<cfcase value="mysql">
+                    	#variables.tableprefix#groups.`group`
+                    </cfcase>
+                    <cfcase value="oracle">
+                    	#variables.tableprefix#groups."GROUP"
+                    </cfcase>
+                    <cfdefaultcase>
+                    	#variables.tableprefix#groups.[group]
+                    </cfdefaultcase>
+                </cfswitch> 
 					  = <cfqueryparam value="#arguments.group#" cfsqltype="CF_SQL_VARCHAR" maxlength="255">
 				and		id != <cfqueryparam value="#arguments.id#" cfsqltype="cf_sql_varchar" maxlength="35">
 			</cfquery>
@@ -476,11 +517,17 @@ To complete your registration at #variables.title#, please click on the link bel
 				<cfquery datasource="#variables.dsn#">
 				update	#variables.tableprefix#groups
 				set
-				<cfif variables.dbtype is not "mysql">
-					[group] 
-				<cfelse>
-					`group`
-				</cfif> = <cfqueryparam value="#arguments.group#" cfsqltype="CF_SQL_VARCHAR" maxlength="255">
+				<cfswitch expression="#lCase(variables.dbtype)#">
+                	<cfcase value="mysql">
+                    	#variables.tableprefix#groups.`group`
+                    </cfcase>
+                    <cfcase value="oracle">
+                    	#variables.tableprefix#groups."GROUP"
+                    </cfcase>
+                    <cfdefaultcase>
+                    	#variables.tableprefix#groups.[group]
+                    </cfdefaultcase>
+                </cfswitch> = <cfqueryparam value="#arguments.group#" cfsqltype="CF_SQL_VARCHAR" maxlength="255">
 				where	id = <cfqueryparam value="#arguments.id#" cfsqltype="CF_SQL_VARCHAR" maxlength="35">
 				</cfquery>
 			</cfif>
