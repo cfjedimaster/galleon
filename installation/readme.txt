@@ -27,13 +27,25 @@ Gifts are always welcome. ;)
 
 
 ---- LATEST VERSION ----
+2.2 (May 15, 2008)
+
+The major feature of this update is the ability for authors to edit their own posts. This was submitted by Todd Rafferty. 
+
+/cfcs/message.cfc - support for message edit
+/message_edit.cfm - ditto
+/messages.cfm - ditto
+
+I also fixed a security issue involving edit rights
+
+/cfcs/settings.ini.cfm - default encryption to false, version
+
+---- ARCHIVED UPDATES ----
 2.1 (May 9, 2008)
 /cfcs/conference.cfc, permission.cfc, rank.cfc and user.cfc modified to support Oracle. Thanks go to James Holmes. This is NOT documented yet,
 but you can specify oracle as the DB type now. Once folks test and confirm it's cool, I'll add it documentation.
 
 /cfcs/conference.cfc - fix a bug where if you delete the last thread of a conference, an error is thrown.
 
----- ARCHIVED UPDATES ----
 2.014 (April 30, 2008)
 /stylesheets/style.css - fix to blockquote style, thanks to zomigi (user on my forums)
 /cfcs/message.cfc - for my email fix, I accidentally only did it to the Admin email, not the User email. Thanks to Jonas Eriksson
