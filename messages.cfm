@@ -36,6 +36,13 @@
 <cfelse>
 	<cfset canPost = false>
 </cfif>
+<!--- Am I allowed to edit here? --->
+<cfif application.permission.allowed(application.rights.CANEDIT, request.forum.id, request.udf.getGroups()) and
+	  application.permission.allowed(application.rights.CANEDIT, request.conference.id, request.udf.getGroups())>
+	<cfset canEdit = true>
+<cfelse>
+	<cfset canEdit = false>
+</cfif>
 
 <!--- handle new post --->
 <cfparam name="form.title" default="RE: #request.thread.name#">
@@ -202,7 +209,10 @@
 					<cfset sig = replace(sig,chr(10),"<br />","ALL")>
 					<div class="signature">#sig#</div>
 				</cfif>
-				<cfif request.udf.isLoggedOn() and application.utils.isTheUserInAnyRole("forumsadmin,forumsmoderator")>
+				<!---
+				<cfif (request.udf.isLoggedOn() and application.utils.isTheUserInAnyRole("forumsadmin,forumsmoderator")) OR (request.udf.isLoggedOn() AND session.user.id EQ data.useridfk and canPost)>
+				--->
+				<cfif canEdit or (request.udf.isLoggedOn() and canPost and data.useridfk eq session.user.id)>
 				<br />
 				<p align="right"><a href="message_edit.cfm?id=#id#">[Edit Post]</a></p>
 				</cfif>

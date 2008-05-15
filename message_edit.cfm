@@ -8,13 +8,13 @@
 	Purpose		 : Allows moderators/admins to edit post.
 --->
 
-<cfif not request.udf.isLoggedOn() or not application.utils.isTheUserInAnyRole("forumsadmin,forumsmoderator")>
-	<cflocation url="index.cfm" addToken="false">
-</cfif>
-
-<cfif not isDefined("url.id") or not len(url.id)>
-	<cflocation url="index.cfm" addToken="false">
-</cfif>
+<cfif not isDefined("url.id") or not len(url.id)><cflocation url="index.cfm" addToken="false"></cfif>
+<cftry>
+	<cfset request.message = application.message.getMessage(url.id)>
+	<cfcatch>
+		<cflocation url="index.cfm" addToken="false">
+	</cfcatch>    
+</cftry>
 
 <!--- get parents --->
 <cftry>
@@ -27,11 +27,38 @@
 	</cfcatch>
 </cftry>
 
+<!--- Must be logged in. --->
+<cfif not request.udf.isLoggedOn()>
+	<cflocation url="index.cfm" addToken="false">
+</cfif>
+
+<!--- Am I allowed to edit here? --->
+<cfif application.permission.allowed(application.rights.CANEDIT, request.forum.id, request.udf.getGroups()) and
+	  application.permission.allowed(application.rights.CANEDIT, request.conference.id, request.udf.getGroups())>
+	<cfset canEdit = true>
+<cfelse>
+	<cfset canEdit = false>
+</cfif>
+
+<!--- ignore canedit if I have canPost and it's my post --->
+<!--- Am I allowed to post here? --->
+<cfif application.permission.allowed(application.rights.CANPOST, request.forum.id, request.udf.getGroups()) and
+	  application.permission.allowed(application.rights.CANPOST, request.conference.id, request.udf.getGroups())>
+	<cfset canPost = true>
+<cfelse>
+	<cfset canPost = false>
+</cfif>
+
+<cfif not canEdit and  not (canPost and request.message.useridfk eq session.user.id)>
+	<cflocation url="index.cfm" addToken="false">
+</cfif>
+
 <cfparam name="form.title" default="#request.message.title#">
 <cfparam name="form.body" default="#request.message.body#">
 <cfparam name="form.oldattachment" default="#request.message.attachment#">
 <cfparam name="form.filename" default="#request.message.filename#">
 <cfparam name="form.attachment" default="">
+<cfset form.body = rereplace(form.body,'\n\[i\]\* Last updated by: .* on .* @ .* \*\[\/i\]','','ALL')>
 
 <cfif isDefined("form.post")>
 	<cfset errors = "">

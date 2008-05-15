@@ -443,18 +443,25 @@ No HTML is allowed in your message. Basic Formatting Rules:<br />
 	</cffunction>
 		
 	<cffunction name="saveMessage" access="remote" returnType="void" roles="" output="false"
-				hint="Saves an existing message.">
-				
+				hint="Saves an existing message.">		
 		<cfargument name="id" type="uuid" required="true">
 		<cfargument name="message" type="struct" required="true">
-
-		<cfif not variables.utils.isTheUserInAnyRole("forumsadmin,forumsmoderator")>
+        <cfset var bodyreplace = "">
+        <cfset var theNow = now()>
+        <cfset var CRNL = CHR(13)&CHR(10)>
+        
+		<cfif (arguments.message.useridfk NEQ session.user.id) AND (NOT variables.utils.isTheUserInAnyRole("forumsadmin,forumsmoderator"))>
 			<cfset variables.utils.throw("Message CFC","Unauthorized execution of saveMessage.")>
 		</cfif>
 		
 		<cfif not validMessage(arguments.message)>
 			<cfset variables.utils.throw("Message CFC","Invalid data passed to saveMessage.")>
 		</cfif>
+        
+		<!--- // Remove "old" Last Updated by if there is one --->
+        <cfset bodyreplace = rereplace(arguments.message.body,'\n\[i\]\* Last updated by: .* \*\[\/i\]','','ALL')>
+        <!--- // Insert "new" Last Updated by --->
+        <cfset arguments.message.body = bodyreplace & "#CRNL#[i]* Last updated by: #session.user.username# on #dateFormat(theNow,'m/d/yyyy')# @ #timeFormat(theNow,'h:mm tt')# *[/i]">
 		
 		<cfquery datasource="#variables.dsn#">
 			update	#variables.tableprefix#messages
