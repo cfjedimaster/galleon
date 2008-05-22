@@ -29,10 +29,11 @@
 		<cfset var newid = createUUID()>
 				
 		<!--- First see if we can add a thread. Because roles= doesn't allow for OR, we use a UDF --->
+		<!--- Removed again due to new sec model...
 		<cfif not variables.utils.isTheUserInAnyRole("forumsadmin,forumsmoderator,forumsmember")>
 			<cfset variables.utils.throw("ThreadCFC","Unauthorized execution of addThread.")>
 		</cfif>
-		
+		--->
 		<cfif not validThread(arguments.thread)>
 			<cfset variables.utils.throw("ThreadCFC","Invalid data passed to addThread.")>
 		</cfif>
@@ -240,6 +241,7 @@
 		<cfset var lastu = "">
 		<cfset var lasti = "">
 		<cfset var haveSome = false>
+		<cfset var msgKids = "">
 		
 		<!---
 		Rather simple. Get my kids. Count total msgs, and pick latest date 

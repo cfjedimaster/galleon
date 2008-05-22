@@ -52,7 +52,7 @@
 			<cfif checkgroup.recordCount>
 				<cfset variables.utils.throw("User CFC","Group already exists")>
 			<cfelse>				
-				<cfquery name="insuser" datasource="#variables.dsn#">
+				<cfquery datasource="#variables.dsn#">
 				insert into #variables.tableprefix#groups(id,<cfif variables.dbtype is not "mysql">[group]<cfelse>`group`</cfif>)
 				values(<cfqueryparam value="#newid#" cfsqltype="CF_SQL_VARCHAR" maxlength="35">,
 				<cfqueryparam value="#arguments.group#" cfsqltype="CF_SQL_VARCHAR" maxlength="255">
@@ -376,6 +376,7 @@ To complete your registration at #variables.title#, please click on the link bel
 		<cfset var qGetUser = "">
 		<cfset var user = structNew()>
 		<cfset var g = "">
+		<cfset var qGetPostCount = "">
 		
 		<!---
 		<cfquery name="qGetUser" datasource="#variables.dsn#">		

@@ -154,7 +154,7 @@
 				break;
 
 				case "image":
-					obj = createObject('component','Image');
+					obj = createObject('component','image');
 						if (arguments.singleton) { // scope singleton
 							addSingleton(arguments.objName, obj);
 						}

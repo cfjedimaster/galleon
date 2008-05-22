@@ -39,10 +39,12 @@
 		<cfset var posted = now()>
 		
 		<!--- First see if we can add a message. Because roles= doesn't allow for OR, we use a UDF --->
+		<!--- Commented out since the front end checks this now...
 		<cfif not variables.utils.isTheUserInAnyRole("forumsadmin,forumsmoderator,forumsmember")>
 			<cfset variables.utils.throw("Message CFC","Unauthorized execution of addMessage.")>
 		</cfif>
-
+		--->
+		
 		<!--- Another security check - if arguments.username neq getAuthUser, throw --->
 		<cfif arguments.username neq getAuthUser() and not isUserInRole("forumsadmin")>
 			<cfset variables.utils.throw("Message CFC","Unauthorized execution of addMessage.")>
@@ -306,7 +308,7 @@ Message:
 		<cfset var quoteportion = "">
 		<cfset var quotename = "">
 		<cfset var quotetag = "">
-		
+		<cfset var quoteblock = "">
 		<cfset var imgblock = "">
 		<cfset var imgportion = "">
 		

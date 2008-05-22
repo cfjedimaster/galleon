@@ -52,6 +52,7 @@
 		<cfset var toKill = "">
 		<cfset var allowed = "">
 		<cfset var result = "">
+		<cfset var validgroups = "">
 		
 		<cfif not listFindNoCase(arguments.query.columnlist, arguments.resourcecol)>
 			<cfthrow message="Invalid resourcecol (#arguments.resourcecol#) - valid columns are #arguments.query.columnlist#">
