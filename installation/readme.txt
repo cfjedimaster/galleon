@@ -27,6 +27,13 @@ Gifts are always welcome. ;)
 
 
 ---- LATEST VERSION ----
+2.2.1 (May 22, 2008)
+/cfcs/message.cfc - var scope, and fix to let people in groups with canpost but not forummembers
+/cfcs/objectfactory.cfc - case issue in Linux
+/cfcs/permission.cfc, thread and user - var scope issues
+/cfcs/settings.ini.cfm - just the version
+
+---- ARCHIVED UPDATES ----
 2.2 (May 15, 2008)
 
 The major feature of this update is the ability for authors to edit their own posts. This was submitted by Todd Rafferty. 
@@ -39,7 +46,6 @@ I also fixed a security issue involving edit rights
 
 /cfcs/settings.ini.cfm - default encryption to false, version
 
----- ARCHIVED UPDATES ----
 2.1 (May 9, 2008)
 /cfcs/conference.cfc, permission.cfc, rank.cfc and user.cfc modified to support Oracle. Thanks go to James Holmes. This is NOT documented yet,
 but you can specify oracle as the DB type now. Once folks test and confirm it's cool, I'll add it documentation.
