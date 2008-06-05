@@ -273,7 +273,7 @@ A post has been made to a thread, forum, or conference that you are subscribed t
 You can change your subscription preferences by updating your profile.
 You can visit the thread here:
 
-#variables.settings.rootURL#messages.cfm?threadid=#arguments.threadid#&last##last
+#variables.settings.rootURL#<cfif not right(variables.settings.rooturl,1) is "/">/</cfif>messages.cfm?threadid=#arguments.threadid#&last##last
 
 Conference: #conference.name#
 Forum:      #forum.name#
