@@ -20,7 +20,7 @@
 		<cfset arrayAppend(errors, "Items per page must be numeric and greater than zero.")>
 	</cfif>
 
-	<cfif not len(trim(form.fromaddress)) or not isValid("email", form.fromaddress)>
+	<cfif not len(trim(form.fromaddress)) or not isEmail(form.fromaddress)>
 		<cfset arrayAppend(errors, "The From Address must be a valid email address.")>
 	</cfif>
 
