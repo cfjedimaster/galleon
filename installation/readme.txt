@@ -27,13 +27,18 @@ Gifts are always welcome. ;)
 
 
 ---- LATEST VERSION ----
+2.2.2 (June 5, 2008)
+/cfcs/message.cfc - If rooturl doesn't have / at the end, fix the url in emails.
+/cfcs/settings.ini.cfm - just the version
+/admin/settings.cfm - remove isValid - it was breaking cf6 compat
+
+---- ARCHIVED UPDATES ----
 2.2.1 (May 22, 2008)
 /cfcs/message.cfc - var scope, and fix to let people in groups with canpost but not forummembers
 /cfcs/objectfactory.cfc - case issue in Linux
 /cfcs/permission.cfc, thread and user - var scope issues
 /cfcs/settings.ini.cfm - just the version
 
----- ARCHIVED UPDATES ----
 2.2 (May 15, 2008)
 
 The major feature of this update is the ability for authors to edit their own posts. This was submitted by Todd Rafferty. 
