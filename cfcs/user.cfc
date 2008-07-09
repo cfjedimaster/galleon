@@ -92,7 +92,7 @@
 					<cfmail to="#arguments.emailaddress#" from="#application.settings.fromAddress#" subject="#variables.title# Confirmation Required">
 To complete your registration at #variables.title#, please click on the link below.
 
-#application.settings.rooturl#confirm.cfm?u=#newid#
+#variables.rooturl#<cfif not right(variables.rooturl,1) is "/">/</cfif>confirm.cfm?u=#newid#
 					</cfmail>
 				</cfif>
 				
