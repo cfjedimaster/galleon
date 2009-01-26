@@ -199,7 +199,7 @@
 
 				<div class="forum_post_content">
 				<!--- #application.message.renderMessage(body)# --->
-				<cfmodule template="tags/DP_ParseBBML.cfm" input="#body#" outputvar="result" convertsmilies="true" smileypath="images/Smilies/Default/">
+				<cfmodule template="tags/DP_ParseBBML.cfm" input="#body#" outputvar="result" convertsmilies="true" usecf_coloredcode="true" smileypath="images/Smilies/Default/">
 				#result.output#
 				<cfif len(uinfo.signature)>
 					<cfset sig = uinfo.signature>
