@@ -53,7 +53,7 @@
 				<cfset variables.utils.throw("User CFC","Group already exists")>
 			<cfelse>				
 				<cfquery datasource="#variables.dsn#">
-				insert into #variables.tableprefix#groups(id,<cfif variables.dbtype is not "mysql">[group]<cfelse>`group`</cfif>)
+				insert into #variables.tableprefix#groups(id,<cfif variables.dbtype is "oracle">"GROUP"<cfelseif variables.dbtype is not "mysql">[group]<cfelse>`group`</cfif>)
 				values(<cfqueryparam value="#newid#" cfsqltype="CF_SQL_VARCHAR" maxlength="35">,
 				<cfqueryparam value="#arguments.group#" cfsqltype="CF_SQL_VARCHAR" maxlength="255">
 				)
