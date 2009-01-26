@@ -12,6 +12,41 @@
 	<cflocation url="forums.cfm" addToken="false">
 </cfif>
 
+<!--- get forum if not new --->
+<cfif url.id neq 0>
+	<cfset forum = application.forum.getForum(url.id)>
+	<cfparam name="form.name" default="#forum.name#">
+	<cfparam name="form.description" default="#forum.description#">
+	<cfparam name="form.active" default="#forum.active#">
+	<cfparam name="form.attachments" default="#forum.attachments#">
+	<cfparam name="form.conferenceidfk" default="#forum.conferenceidfk#">
+	<!--- get groups with can read --->
+	<cfset canread = application.permission.getAllowed(application.rights.CANVIEW, url.id)>
+	<!--- get groups with can post --->
+	<cfset canpost = application.permission.getAllowed(application.rights.CANPOST, url.id)>
+	<!--- get groups with can edit --->
+	<cfset canedit = application.permission.getAllowed(application.rights.CANEDIT, url.id)>
+<cfelse>
+	<cfparam name="form.name" default="">
+	<cfparam name="form.description" default="">
+	<cfparam name="form.active" default="true">
+	<cfparam name="form.attachments" default="false">
+	<cfparam name="form.conferenceidfk" default="">
+	<cfset canread = queryNew("group")>
+	<cfset canpost = queryNew("group")>
+	<cfset canedit = queryNew("group")>
+</cfif>
+
+<cfif not isDefined("form.save.x")>
+	<cfparam name="form.canread" default="#valueList(canread.group)#">
+	<cfparam name="form.canpost" default="#valueList(canpost.group)#">
+	<cfparam name="form.canedit" default="#valueList(canedit.group)#">
+<cfelse>
+	<cfparam name="form.canread" default="">
+	<cfparam name="form.canpost" default="">
+	<cfparam name="form.canedit" default="">
+</cfif>
+
 <cfif isDefined("form.save.x")>
 	<cfset errors = "">
 	<cfif not len(trim(form.name))>
@@ -39,31 +74,6 @@
 		<cfset msg = "Forum, #forum.name#, has been updated.">
 		<cflocation url="forums.cfm?msg=#urlEncodedFormat(msg)#" addToken="false">
 	</cfif>
-</cfif>
-
-<!--- get forum if not new --->
-<cfif url.id neq 0>
-	<cfset forum = application.forum.getForum(url.id)>
-	<cfparam name="form.name" default="#forum.name#">
-	<cfparam name="form.description" default="#forum.description#">
-	<cfparam name="form.active" default="#forum.active#">
-	<cfparam name="form.attachments" default="#forum.attachments#">
-	<cfparam name="form.conferenceidfk" default="#forum.conferenceidfk#">
-	<!--- get groups with can read --->
-	<cfset canread = application.permission.getAllowed(application.rights.CANVIEW, url.id)>
-	<!--- get groups with can post --->
-	<cfset canpost = application.permission.getAllowed(application.rights.CANPOST, url.id)>
-	<!--- get groups with can edit --->
-	<cfset canedit = application.permission.getAllowed(application.rights.CANEDIT, url.id)>
-<cfelse>
-	<cfparam name="form.name" default="">
-	<cfparam name="form.description" default="">
-	<cfparam name="form.active" default="true">
-	<cfparam name="form.attachments" default="false">
-	<cfparam name="form.conferenceidfk" default="">
-	<cfset canread = queryNew("group")>
-	<cfset canpost = queryNew("group")>
-	<cfset canedit = queryNew("group")>
 </cfif>
 
 <!--- Security Related --->
@@ -127,9 +137,9 @@
 <div class="row_1">
 	<p class="input_name">Groups with Read Access</p>
 		<select name="canread" multiple="true" size="4" class="inputs_02">
-		<option value="" <cfif canread.recordCount is 0>selected</cfif>>Everyone</option>
+		<option value="" <cfif form.canread is "">selected</cfif>>Everyone</option>
 		<cfloop query="groups">
-		<option value="#id#" <cfif listFind(valueList(canread.group), id)>selected</cfif>>#group#</option>
+		<option value="#id#" <cfif listFind(form.canread, id)>selected</cfif>>#group#</option>
 		</cfloop>
 		</select>
 <div class="clearer"></div>
@@ -138,9 +148,9 @@
 <div class="row_0">
 	<p class="input_name">Groups with Post Access</p>
 		<select name="canpost" multiple="true" size="4" class="inputs_02">
-		<option value="" <cfif canpost.recordCount is 0>selected</cfif>>Everyone</option>
+		<option value="" <cfif form.canpost is "">selected</cfif>>Everyone</option>
 		<cfloop query="groups">
-		<option value="#id#" <cfif listFind(valueList(canpost.group), id)>selected</cfif>>#group#</option>
+		<option value="#id#" <cfif listFind(form.canpost, id)>selected</cfif>>#group#</option>
 		</cfloop>
 		</select>
 <div class="clearer"></div>
@@ -149,9 +159,9 @@
 <div class="row_1">
 	<p class="input_name">Groups with Edit Access</p>
 	<select name="canedit" multiple="true" size="4" class="inputs_02">
-		<option value="" <cfif canedit.recordCount is 0>selected</cfif>>Everyone</option>
+		<option value="" <cfif form.canedit is "">selected</cfif>>Everyone</option>
 		<cfloop query="groups">
-		<option value="#id#" <cfif listFind(valueList(canedit.group), id)>selected</cfif>>#group#</option>
+		<option value="#id#" <cfif listFind(form.canedit, id)>selected</cfif>>#group#</option>
 		</cfloop>
 	</select>
 <div class="clearer"></div>
