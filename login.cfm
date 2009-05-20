@@ -184,12 +184,12 @@ Your password is: #data.password#
 
 				
 			<p class="input_name">Username:</p>
-			<input type="text" name="username_new" value="#form.username_new#" class="input_box">
+			<input type="text" name="username_new" value="#htmlEditFormat(form.username_new)#" class="input_box">
 			
 			<div class="clearer"><br /></div>
 			
 			<p class="input_name">Email Address:</p>
-			<input type="text" name="emailaddress" value="#form.emailaddress#" class="input_box">
+			<input type="text" name="emailaddress" value="#htmlEditFormat(form.emailaddress)#" class="input_box">
 			
 			<div class="clearer"><br /></div>
 			
