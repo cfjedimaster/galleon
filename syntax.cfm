@@ -128,8 +128,8 @@ by Depressed Press of Boston.
 		<tr><td>[b][url=http://www.yahoo.com]Yahoo![/url][/b]</td><td><b><a href="http://www.yahoo.com">Yahoo!</a></b></td></tr>
 		<tr><td>[email]bill.gates@microsoft.com[/email]</td><td><a href="mailto:bill.gates@microsoft.com">bill.gates@microsoft.com</a></td></tr>
 		<tr><td>[email=ppan@neverland.com]Peter Pan[/email]</td><td><a href="mailto:ppan@neverland.com">Peter Pan</a></td></tr>
-		<tr><td>[img]#application.settings.rooturl#images/galleon.gif[/img]</td><td><img src="#application.settings.rooturl#images/galleon.gif"></td></tr>
-		<tr><td>[link=http://galleon.riaforge.org][img]#application.settings.rooturl#images/galleon.gif[/img][/link]</td><td><a href="http://galleon.riaforge.org"><img src="#application.settings.rooturl#images/galleon.gif"></a></td></tr>
+		<tr><td>[img]#application.settings.rooturl#/images/galleon.gif[/img]</td><td><img src="#application.settings.rooturl#/images/galleon.gif"></td></tr>
+		<tr><td>[link=http://galleon.riaforge.org][img]#application.settings.rooturl#/images/galleon.gif[/img][/link]</td><td><a href="http://galleon.riaforge.org"><img src="#application.settings.rooturl#/images/galleon.gif"></a></td></tr>
 
 		<tr><td></td><td></td></tr>
 	</table>
