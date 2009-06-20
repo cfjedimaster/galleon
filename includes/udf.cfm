@@ -97,7 +97,7 @@ function headerLink(col) {
 	if(len(qs)) qs = qs & "&";
 	
 	if(url.sort is colname) str = str & "[";
-	str = str & "<a href=""#cgi.script_name#?#qs#sort=#urlEncodedFormat(colname)#&sortdir=" & dir(colname) & """>#col#</a>";
+	str = str & "<a rel=""nofollow"" href=""#cgi.script_name#?#qs#sort=#urlEncodedFormat(colname)#&sortdir=" & dir(colname) & """>#col#</a>";
 	if(url.sort is colname) str = str & "]";
 	return str;
 }
