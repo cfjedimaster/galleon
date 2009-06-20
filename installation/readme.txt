@@ -27,13 +27,22 @@ Gifts are always welcome. ;)
 
 
 ---- LATEST VERSION ----
+2.2.6 (June 19, 2009)
+/includes/udf.cfm - Code that generates header links now adds nofollow.
+/syntax.cfm - small fix to image url, thanks to Jeff McNaughton
+
+---- ARCHIVED UPDATES ----
+2.2.5 (May 20, 2009)
+/stylesheets/style.css - Some bad CSS here blocked the rendering of UL/LI in message posts.
+/login.cfm - htmlEditFormat the result of a login
+/cfcs/settings.ini.cfm - version
+
 2.2.4 (January 26, 2009)
 /admin/conferences_edit.cfm + forums_edit.cfm -> Both files would 'forget' what Rights you picked on error
 /cfcs/settings.ini.cfm - just the version
 /cfcs/user.cfc - oracle fix
 /messages.cfm - forgot to enable CF code coloring
 
----- ARCHIVED UPDATES ----
 2.2.3 (July 9, 2008)
 /cfcs/user.cfc - If rooturl doesn't have / at the end, fix the url in emails, see last change
 /cfcs/settings.ini.cfm - just the version
