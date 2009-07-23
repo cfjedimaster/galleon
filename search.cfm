@@ -50,7 +50,7 @@
 		</div>
 		
 		<div class="row_1 top_pad">
-			<form action="#cgi.script_name#?#cgi.query_string#" method="post" class="search_forms">
+			<form action="#cgi.script_name#?#cgi.query_string#" method="post" class="search_forms" id="searchForm">
 				
 			<p class="input_name">Search Terms:</p>
 			<input type="text" name="searchterms" value="#form.searchterms#"  class="input_box" maxlength="100">
