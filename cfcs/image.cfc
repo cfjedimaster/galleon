@@ -126,7 +126,7 @@
 		<cfif loadImage.errorCode is 0>
 			<cfset img = loadImage.img>
 		<cfelse>
-			<cfset retVal = throw(loadImage.errorMessage)>
+			<cfset retVal = mythrow(loadImage.errorMessage)>
 			<cfreturn retVal>
 		</cfif>
 		<cfset retVal.metaData = getImageMetadata(loadImage.inFile)>
@@ -147,7 +147,7 @@
 		<cfset retVal.canModify = true>
 		<cfreturn retVal>
 		<cfcatch type="any">
-			<cfset retVal = throw( "#cfcatch.message#: #cfcatch.detail#")>
+			<cfset retVal = mythrow( "#cfcatch.message#: #cfcatch.detail#")>
 			<cfreturn retVal>
 		</cfcatch>
 	</cftry>
@@ -277,7 +277,7 @@
 		<cfif loadImage.errorCode is 0>
 			<cfset img = loadImage.img>
 		<cfelse>
-			<cfset retVal = throw(loadImage.errorMessage)>
+			<cfset retVal = mythrow(loadImage.errorMessage)>
 			<cfreturn retVal>
 		</cfif>
 	<cfelse>
@@ -320,7 +320,7 @@
 			w = newWidth;
 			h = newHeight;
 		} else {
-			retVal = throw( retVal.errorMessage);
+			retVal = mythrow( retVal.errorMessage);
 			return retVal;
 		}
 		resizedImage.init(javacast("int",w),javacast("int",h),img.getType());
@@ -404,7 +404,7 @@
 		<cfif loadImage.errorCode is 0>
 			<cfset img = loadImage.img>
 		<cfelse>
-			<cfset retVal = throw(loadImage.errorMessage)>
+			<cfset retVal = mythrow(loadImage.errorMessage)>
 			<cfreturn retVal>
 		</cfif>
 	<cfelse>
@@ -419,7 +419,7 @@
 			fromY + newHeight gt img.getHeight()
 			)
 		{
-			retval = throw( "The cropped image dimensions go beyond the original image dimensions.");
+			retval = mythrow( "The cropped image dimensions go beyond the original image dimensions.");
 			return retVal;
 		}
 		croppedImage = img.getSubimage(javaCast("int", fromX), javaCast("int", fromY), javaCast("int", newWidth), javaCast("int", newHeight) );
@@ -469,7 +469,7 @@
 		<cfif loadImage.errorCode is 0>
 			<cfset img = loadImage.img>
 		<cfelse>
-			<cfset retVal = throw(loadImage.errorMessage)>
+			<cfset retVal = mythrow(loadImage.errorMessage)>
 			<cfreturn retVal>
 		</cfif>
 	<cfelse>
@@ -479,7 +479,7 @@
 		<cfset img = convertImageObject(img,img.TYPE_3BYTE_BGR)>
 	</cfif>
 	<cfif ListFind("-270,-180,-90,90,180,270",degrees) is 0>
-		<cfset retVal = throw( "At this time, image.cfc only supports rotating images in 90 degree increments.")>
+		<cfset retVal = mythrow( "At this time, image.cfc only supports rotating images in 90 degree increments.")>
 		<cfreturn retVal>
 	</cfif>
 
@@ -539,7 +539,7 @@
 		<cfif loadImage.errorCode is 0>
 			<cfset img = loadImage.img>
 		<cfelse>
-			<cfset retVal = throw(loadImage.errorMessage)>
+			<cfset retVal = mythrow(loadImage.errorMessage)>
 			<cfreturn retVal>
 		</cfif>
 	<cfelse>
@@ -549,7 +549,7 @@
 	<cfscript>
 		if (outputFile eq "")
 		{
-			retVal = throw( "The convert method requires a valid output filename.");
+			retVal = mythrow( "The convert method requires a valid output filename.");
 			return retVal;
 		} else {
 			saveImage = writeImage(outputFile, img, jpegCompression);
@@ -644,29 +644,29 @@
 	<cfset retVal.errorMessage = "">
 	
 	<cfif not fileExists(arguments.inputFile)>
-		<cfset retVal = throw("The specified file #Chr(34)##arguments.inputFile##Chr(34)# could not be found.")>
+		<cfset retVal = mythrow("The specified file #Chr(34)##arguments.inputFile##Chr(34)# could not be found.")>
 		<cfreturn retVal>
 	<cfelseif listLen(filename,".") lt 2>
-		<cfset retVal = throw("Sorry, image files without extensions cannot be manipulated.")>
+		<cfset retVal = mythrow("Sorry, image files without extensions cannot be manipulated.")>
 		<cfreturn retVal>
 	<cfelseif listFindNoCase(validExtensionsToRead, extension) is 0>
-		<cfset retVal = throw("Java is unable to read #extension# files.")>
+		<cfset retVal = mythrow("Java is unable to read #extension# files.")>
 		<cfreturn retVal>
 	<cfelseif NOT fileExists(arguments.inputFile)>
-		<cfset retVal = throw("The specified input file does not exist.")>
+		<cfset retVal = mythrow("The specified input file does not exist.")>
 		<cfreturn retVal>
 	<cfelse>
 		<cfset img = CreateObject("java", "java.awt.image.BufferedImage")>
 		<cfset inFile = CreateObject("java", "java.io.File")>
 		<cfset inFile.init(arguments.inputFile)>
 		<cfif NOT inFile.canRead()>
-			<cfset retVal = throw("Unable to open source file #Chr(34)##arguments.inputFile##Chr(34)#.")>
+			<cfset retVal = mythrow("Unable to open source file #Chr(34)##arguments.inputFile##Chr(34)#.")>
 			<cfreturn retVal>
 		<cfelse>
 			<cftry>
 				<cfset img = imageIO.read(inFile)>
 				<cfcatch type="any">
-					<cfset retval = throw("An error occurred attempting to read the specified image.  #cfcatch.message# - #cfcatch.detail#")>
+					<cfset retval = mythrow("An error occurred attempting to read the specified image.  #cfcatch.message# - #cfcatch.detail#")>
 					<cfreturn retVal>
 				</cfcatch>
 			</cftry>
@@ -694,7 +694,7 @@
 	<cftry>
 		<cfset img = imageIO.read(inURL)>
 		<cfcatch type="any">
-			<cfset retval = throw("An error occurred attempting to read the specified image.  #cfcatch.message# - #cfcatch.detail#")>
+			<cfset retval = mythrow("An error occurred attempting to read the specified image.  #cfcatch.message# - #cfcatch.detail#")>
 			<cfreturn retVal>
 		</cfcatch>
 	</cftry>
@@ -726,7 +726,7 @@
 	<cfset retVal.errorMessage = "">
 
 	<cfif listFindNoCase(validExtensionsToWrite, extension) eq 0>
-		<cfset throw("Java is unable to write #extension# files.  Valid formats include: #validExtensionsToWrite#")>
+		<cfset mythrow("Java is unable to write #extension# files.  Valid formats include: #validExtensionsToWrite#")>
 	</cfif>
 
 	<cfif extension neq "jpg" and extension neq "jpeg">
@@ -781,7 +781,7 @@
 		<cfif loadImage.errorCode is 0>
 			<cfset img = loadImage.img>
 		<cfelse>
-			<cfset retVal = throw(loadImage.errorMessage)>
+			<cfset retVal = mythrow(loadImage.errorMessage)>
 			<cfreturn retVal>
 		</cfif>
 	<cfelse>
@@ -844,14 +844,14 @@
 	<cfset retVal.errorMessage = "">
 
 	<cfif NOT variables.javanulls>
-		<cfset throw("Sorry, but the blur filter is not supported on this platform.")>
+		<cfset mythrow("Sorry, but the blur filter is not supported on this platform.")>
 	</cfif>
 	<cfif inputFile neq "">
 		<cfset loadImage = readImage(inputFile, "NO")>
 		<cfif loadImage.errorCode is 0>
 			<cfset srcImage = loadImage.img>
 		<cfelse>
-			<cfset retVal = throw(loadImage.errorMessage)>
+			<cfset retVal = mythrow(loadImage.errorMessage)>
 			<cfreturn retVal>
 		</cfif>
 	<cfelse>
@@ -911,7 +911,7 @@
 	<cfset retVal.errorMessage = "">
 
 	<cfif NOT variables.javanulls>
-		<cfset throw("Sorry, but the blur filter is not supported on this platform.")>
+		<cfset mythrow("Sorry, but the blur filter is not supported on this platform.")>
 	</cfif>
 
 	<cfif inputFile neq "">
@@ -919,7 +919,7 @@
 		<cfif loadImage.errorCode is 0>
 			<cfset srcImage = loadImage.img>
 		<cfelse>
-			<cfset retVal = throw(loadImage.errorMessage)>
+			<cfset retVal = mythrow(loadImage.errorMessage)>
 			<cfreturn retVal>
 		</cfif>
 	<cfelse>
@@ -973,7 +973,7 @@
 	<cfset retVal.errorMessage = "">
 
 	<cfif NOT variables.javanulls>
-		<cfset throw("Sorry, but the blur filter is not supported on this platform.")>
+		<cfset mythrow("Sorry, but the blur filter is not supported on this platform.")>
 	</cfif>
 
 	<cfif inputFile neq "">
@@ -981,7 +981,7 @@
 		<cfif loadImage.errorCode is 0>
 			<cfset srcImage = loadImage.img>
 		<cfelse>
-			<cfset retVal = throw(loadImage.errorMessage)>
+			<cfset retVal = mythrow(loadImage.errorMessage)>
 			<cfreturn retVal>
 		</cfif>
 	<cfelse>
@@ -991,7 +991,7 @@
 		<cfset srcImage = convertImageObject(srcImage,srcImage.TYPE_3BYTE_BGR)>
 	</cfif>
 	<cfif srcImage.getType() neq 5>
-		<cfset throw("ImageCFC cannot posterize this image type (#srcImage.getType()#)")>
+		<cfset mythrow("ImageCFC cannot posterize this image type (#srcImage.getType()#)")>
 	</cfif>
 	<cfscript>
 		// initialize the posterize filter
@@ -1052,13 +1052,13 @@
 	<cfparam name="arguments.fontDetails.fontName" default="serif">
 
 	<cfif arguments.fontDetails.fontFile neq "" and not fileExists(arguments.fontDetails.fontFile)>
-		<cfset retVal = throw("The specified font file #Chr(34)##arguments.inputFile##Chr(34)# could not be found on the server.")>
+		<cfset retVal = mythrow("The specified font file #Chr(34)##arguments.inputFile##Chr(34)# could not be found on the server.")>
 		<cfreturn retVal>
 	</cfif>
 	<cftry>
 		<cfset rgb = getRGB(arguments.fontDetails.color)>
 		<cfcatch type="any">
-			<cfset retVal = throw("Invalid color #Chr(34)##arguments.fontDetails.color##Chr(34)#")>
+			<cfset retVal = mythrow("Invalid color #Chr(34)##arguments.fontDetails.color##Chr(34)#")>
 			<cfreturn retVal>
 		</cfcatch>
 	</cftry>
@@ -1067,7 +1067,7 @@
 		<cfif loadImage.errorCode is 0>
 			<cfset img = loadImage.img>
 		<cfelse>
-			<cfset retVal = throw(loadImage.errorMessage)>
+			<cfset retVal = mythrow(loadImage.errorMessage)>
 			<cfreturn retVal>
 		</cfif>
 	<cfelse>
@@ -1158,7 +1158,7 @@
 		<cfif loadImage.errorCode is 0>
 			<cfset originalImage = loadImage.img>
 		<cfelse>
-			<cfset retVal = throw(loadImage.errorMessage)>
+			<cfset retVal = mythrow(loadImage.errorMessage)>
 			<cfreturn retVal>
 		</cfif>
 	<cfelse>
@@ -1173,7 +1173,7 @@
 		<cfif loadImage.errorCode is 0>
 			<cfset wmImage = loadImage.img>
 		<cfelse>
-			<cfset retVal = throw(loadImage.errorMessage)>
+			<cfset retVal = mythrow(loadImage.errorMessage)>
 			<cfreturn retVal>
 		</cfif>
 	<cfelse>
@@ -1265,7 +1265,7 @@
 	<cfreturn retVal>
 </cffunction>
 
-<cffunction name="throw" access="private" output="false" returnType="struct">
+<cffunction name="mythrow" access="private" output="false" returnType="struct">
 	<cfargument name="detail" type="string" required="yes">
 	<cfargument name="force" type="boolean" required="no" default="no">
 
