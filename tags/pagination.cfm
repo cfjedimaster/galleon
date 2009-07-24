@@ -60,10 +60,18 @@
 			<cfelse>
 				<a href="#cgi.script_name#?#qs#&page=#url.page+1#"><img src="images/arrow_right_active.gif" alt="Next Page"/></a>
 			</cfif>
-			<p>Page:
+			<p>
+				<cfif attributes.pages gt 10>
+					<select onChange="document.location.href=this.options[this.selectedIndex].value">
+						<cfloop index="x" from=1 to="#attributes.pages#">
+							<option value="#cgi.script_name#?#qs#&page=#x#" <cfif url.page is x>selected</cfif>>Page #x#</option>
+						</cfloop>
+					</select>
+				<cfelse>
 				<cfloop index="x" from=1 to="#attributes.pages#">
 					<cfif url.page is not x><a href="#cgi.script_name#?#qs#&page=#x#">#x#</a><cfelse>#x#</cfif>
 				</cfloop>
+				</cfif>
 			</p>	
 			<cfif url.page is 1>
 				<img src="images/arrow_left_grey.gif" alt="Previous Page"/>

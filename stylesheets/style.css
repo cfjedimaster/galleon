@@ -162,12 +162,19 @@ a:active {
 	text-align: right;
 	}
 	.pages p {
-		padding: 2px 5px 0px 5px;
+		padding: 0px 5px 0px 5px;
 		float: right;
 		}
 	.pages img {
 		float: right;
+		margin: 0px 0px 0px 0px;
 		}
+	.page-select {
+		margin: 0px;
+		padding: 1px;
+		font-size: 10px;
+		}
+		
 		
 #footer {
 	border-top: 1px solid #235577;
@@ -450,3 +457,5 @@ a:active {
 	width: 340px;
 	padding: 20px 0px 0px 20px;
 	}
+	
+.left_24 { width: 24%; float: left; }	

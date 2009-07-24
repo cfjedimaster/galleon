@@ -27,11 +27,17 @@ Gifts are always welcome. ;)
 
 
 ---- LATEST VERSION ----
+2.2.7 (July 23, 2009)
+/cfcs/image.cfc - CF9 compat
+/tags/pagination.cfm - if you have more than ten pages, switch to a JS-required drop down
+/search.cfm - add an ID to form so auto select actually works
+/threads.cfm, /style.css - fix a wrap issue - thanks to Chaz Jachimski of Full City Media
+
+---- ARCHIVED UPDATES ----
 2.2.6 (June 19, 2009)
 /includes/udf.cfm - Code that generates header links now adds nofollow.
 /syntax.cfm - small fix to image url, thanks to Jeff McNaughton
 
----- ARCHIVED UPDATES ----
 2.2.5 (May 20, 2009)
 /stylesheets/style.css - Some bad CSS here blocked the rendering of UL/LI in message posts.
 /login.cfm - htmlEditFormat the result of a login

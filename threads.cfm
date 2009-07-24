@@ -94,7 +94,7 @@
 			<div class="left_45 keep_on border_right"><p><cfif isBoolean(sticky) and sticky><b>[Sticky]</b></cfif> <a href="messages.cfm?threadid=#id#">#name#</a></p></div>
 			<div class="left_15 keep_on border_right"><p>#username#</p></div>
 			<div class="left_15 keep_on border_right"><p>#mcount#</p></div>
-			<div class="left_auto keep_on">
+			<div class="left_24 keep_on">
 				<p><cfif len(lastpostuseridfk)>
 				<cfset uinfo = cachedUserInfo(username=lastpostuseridfk,userid=true)>
 				<a href="messages.cfm?threadid=#id#&last##last">#dateFormat(lastpostcreated,"m/d/yy")# #timeFormat(lastpostcreated,"h:mm tt")#</a> by #uinfo.username#
