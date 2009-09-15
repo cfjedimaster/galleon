@@ -95,7 +95,13 @@
 				<!--- new file --->
 				<cfset newfile = cffile.serverfile>
 				<!--- is it an image? --->
-				<cfset res = application.image.getImageInfo("",application.settings.avatardir & "/" & newfile)>
+				<cftry>
+					<cfset res = application.image.getImageInfo("",application.settings.avatardir & "/" & newfile)>
+					<cfcatch>
+						<cfset res = structNew()>
+						<cfset res.errorcode = 1>
+					</cfcatch>
+				</cftry>
 				<cfif res.errorcode is 1>
 					<cfset errors = errors & "File uploaded was not valid.<br>">
 					<cffile action="delete" file="#application.settings.avatardir#/#newfile#">
