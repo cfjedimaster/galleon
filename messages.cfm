@@ -84,7 +84,7 @@
 			<cfset newExtension = cffile.serverFileExt>
 			
 			<cfif not listFindNoCase(application.settings.safeExtensions, newExtension)>
-				<cfset errors = errors & "Your file did not have a extension. Allowed extensions are: #application.settings.safeExtensions#.<br>">
+				<cfset errors = errors & "Your file did not have a valid extension. Allowed extensions are: #application.settings.safeExtensions#.<br>">
 				<cffile action="delete" file="#newFilename#">
 				<cfset form.attachment = "">
 				<cfset form.filename = "">
