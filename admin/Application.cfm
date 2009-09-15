@@ -20,7 +20,6 @@
 <!--- must be the correct authentication --->
 <cfif not isUserInRole("forumsadmin")>
 	<cflocation url="../" addtoken="false">
-	<cfabort>
 </cfif>
 
 <cfsetting enablecfoutputonly=false>
