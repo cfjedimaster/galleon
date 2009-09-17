@@ -27,6 +27,13 @@ Gifts are always welcome. ;)
 
 
 ---- LATEST VERSION ----
+2.2.8.001 (September 17, 2009)
+
+/cfcs/settings.ini.cfm - version
+/messages.cfm, /message_edit.cfm, /newpost.cfm, /profile.cfm -> All files now upload to system TEMP directory. All files are named with UUIDs. Attachments store original file name so downloads are nice.
+/attachment.cfm - use the nicer download name
+
+---- ARCHIVED UPDATES ----
 2.2.8 (September 15, 2009)
 /admin/Application.cfm - minor edit to remove a cfabort that wasn't necessary.
 /cfcs/Application.cfm - simple bouncer
@@ -40,7 +47,6 @@ Gifts are always welcome. ;)
 /profile.cfm - handle an edge case where image.cfc threw an error
 /tags/application.cfm - simple bouncer
 
----- ARCHIVED UPDATES ----
 2.2.7 (July 23, 2009)
 /cfcs/image.cfc - CF9 compat
 /tags/pagination.cfm - if you have more than ten pages, switch to a JS-required drop down
