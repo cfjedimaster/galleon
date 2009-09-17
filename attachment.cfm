@@ -32,38 +32,38 @@
 <cfswitch expression="#extension#">
 
 	<cfcase value="txt">
-		<cfheader name="Content-disposition" value="attachment;filename=#message.filename#">
+		<cfheader name="Content-disposition" value="attachment;filename=#message.attachment#">
 		<cfcontent file="#application.settings.attachmentdir#/#message.filename#" type="text/plain">
 	</cfcase>
 			
 	<cfcase value="pdf">
-		<cfheader name="Content-disposition" value="attachment;filename=#message.filename#">		
+		<cfheader name="Content-disposition" value="attachment;filename=#message.attachment#">		
 		<cfcontent file="#application.settings.attachmentdir#/#message.filename#" type="application/pdf">
 	</cfcase>
 		
 	<cfcase value="doc">
-		<cfheader name="Content-disposition" value="attachment;filename=#message.filename#">		
+		<cfheader name="Content-disposition" value="attachment;filename=#message.attachment#">		
 		<cfcontent file="#application.settings.attachmentdir#/#message.filename#" type="application/msword">		
 	</cfcase>
 	
 	<cfcase value="ppt">
-		<cfheader name="Content-disposition" value="attachment;filename=#message.filename#">		
+		<cfheader name="Content-disposition" value="attachment;filename=#message.attachment#">		
 		<cfcontent file="#application.settings.attachmentdir#/#message.filename#" type="application/vnd.ms-powerpoint">		
 	</cfcase>
 	
 	<cfcase value="xls">
-		<cfheader name="Content-disposition" value="attachment;filename=#message.filename#">		
+		<cfheader name="Content-disposition" value="attachment;filename=#message.attachment#">		
 		<cfcontent file="#application.settings.attachmentdir#/#message.filename#" type="application/application/vnd.ms-excel">		
 	</cfcase>
 
 	<cfcase value="zip">
-		<cfheader name="Content-disposition" value="attachment;filename=#message.filename#">		
+		<cfheader name="Content-disposition" value="attachment;filename=#message.attachment#">		
 		<cfcontent file="#application.settings.attachmentdir#/#message.filename#" type="application/application/zip">		
 	</cfcase>
 	
 	<!--- everything else --->
 	<cfdefaultcase>
-		<cfheader name="Content-disposition" value="attachment;filename=#message.filename#">		
+		<cfheader name="Content-disposition" value="attachment;filename=#message.attachment#">		
 		<cfcontent file="#application.settings.attachmentdir#/#message.filename#" type="application/unknown">		
 	</cfdefaultcase>
 			
