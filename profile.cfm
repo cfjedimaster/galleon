@@ -90,27 +90,32 @@
 	
 	<cfif application.settings.allowavatars>
 		<cfif len(form.newavatar)>
-			<cffile action="upload" filefield="newavatar" destination="#application.settings.avatardir#" nameConflict="makeunique">
+			<cffile action="upload" filefield="newavatar" destination="#getTempDirectory()#" nameConflict="makeunique">
 			<cfif cffile.fileWasSaved>
 				<!--- new file --->
 				<cfset newfile = cffile.serverfile>
 				<!--- is it an image? --->
 				<cftry>
-					<cfset res = application.image.getImageInfo("",application.settings.avatardir & "/" & newfile)>
+					<cfset res = application.image.getImageInfo("",cffile.serverdirectory & "/" & cffile.serverfile)>
 					<cfcatch>
+						<cffile action="delete" file="#cffile.serverdirectory#/#cffile.serverfile#">
 						<cfset res = structNew()>
 						<cfset res.errorcode = 1>
 					</cfcatch>
 				</cftry>
 				<cfif res.errorcode is 1>
 					<cfset errors = errors & "File uploaded was not valid.<br>">
-					<cffile action="delete" file="#application.settings.avatardir#/#newfile#">
+					<cffile action="delete" file="#cffile.serverdirectory#/#cffile.serverfile#">
 				<cfelse>
+					<!--- copy from temp --->
+					<cfset newPath = application.settings.avatardir & "/" & createUUID() & "." & cffile.serverfileext>
+					<cffile action="move" source="#cffile.serverdirectory#/#cffile.serverfile#" destination="#newpath#">
+
 					<!--- scale --->
-					<cfset application.image.resize("", application.settings.avatardir & "/" & newfile, application.settings.avatardir & "/" & newfile,
+					<cfset application.image.resize("", newpath, newpath,
 													150,150,true)>
 					
-					<cfset avatar = newfile>
+					<cfset avatar = getFileFromPath(newpath)>
 					<!--- delete old --->
 					<cfif len(user.avatar) and user.avatar neq "@gravatar" and fileExists(application.settings.avatardir & "/" & user.avatar)>
 						<cffile action="delete" file="#application.settings.avatardir#/#user.avatar#">

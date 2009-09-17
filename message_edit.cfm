@@ -79,7 +79,7 @@
 	</cfif>
 	
 	<cfif isBoolean(request.forum.attachments) and request.forum.attachments and len(trim(form.attachment))>
-		<cffile action="upload" destination="#expandPath("./attachments")#" filefield="attachment" nameConflict="makeunique">
+		<cffile action="upload" destination="#getTempDirectory()#" filefield="attachment" nameConflict="makeunique">
 		
 		<cfif cffile.fileWasSaved>
 			<!--- Is the extension allowed? --->
@@ -92,9 +92,12 @@
 				<cfset form.attachment = "">
 				<cfset form.filename = "">
 			<cfelse>
+				<!--- give it a new uuid but remember it. yes I called it newNew. I rock like that. --->
+				<cfset newNewName = application.settings.attachmentDir & "/" & createUUID() & "." & newExtension>
+				<cffile action="move" source="#newFileName#" destination="#newNewName#">
 				<cfset form.oldattachment = cffile.clientFile>
 				<cfset form.attachment = cffile.clientFile>
-				<cfset form.filename = cffile.serverFile>
+				<cfset form.filename = getFileFromPath(newNewName)>
 			</cfif>
 		</cfif>
 	<cfelseif structKeyExists(form, "removefile")>
