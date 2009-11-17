@@ -81,6 +81,16 @@
 			</cfcatch>
 			<cfcatch type="any">
 				<cfset errors = "General DB error.">
+				<cfsavecontent variable="mail">
+				<cfoutput>
+				<p>
+				The following error was thrown during a user registration:
+				</p>
+				</cfoutput>
+				<cfdump var="#cfcatch#">
+				</cfsavecontent>
+			<cfset application.mailService.sendMail(application.settings.sendonpost,application.settings.sendonpost,"#application.settings.title# Error Report","", mail)>
+				
 				<!---
 				<cfdump var="#cfcatch.detail#">
 				<cfdump var="#cfcatch.message#">
@@ -97,10 +107,14 @@
 <cfif isDefined("form.reminder") and len(trim(form.username_lookup))>
 	<cfset data = application.user.getUser(trim(form.username_lookup))>
 	<cfif data.emailaddress is not "">
-		<cfmail to="#data.emailaddress#" from="#application.settings.fromAddress#" subject="Galleon Password Reminder">
-This is a password reminder from the Galleon Forums at #application.settings.rooturl#.
+		<cfsavecontent variable="body">
+		<cfoutput>
+This is a password reminder from #application.settings.title# at #application.settings.rooturl#.
 Your password is: #data.password#
-		</cfmail>
+		</cfoutput>
+		</cfsavecontent>
+		<cfset application.mailService.sendMail(data.emailaddress,application.settings.fromaddress,"#application.settings.title# Password Reminder",trim(body))>
+	
 		<cfset sentInfo = true>
 	</cfif>
 </cfif>
