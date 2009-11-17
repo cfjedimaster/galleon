@@ -122,7 +122,7 @@
 		<select name="canpost" multiple="true" size="4" class="inputs_02">
 		<option value="" <cfif form.canpost is "">selected</cfif>>Everyone</option>
 		<cfloop query="groups">
-		<option value="#id#" <cfif listFind(valueList(canpost.group), id)>selected</cfif>>#group#</option>
+		<option value="#id#" <cfif listFind(form.canpost, id)>selected</cfif>>#group#</option>
 		</cfloop>
 		</select>
 <div class="clearer"></div>
@@ -133,7 +133,7 @@
 	<select name="canedit" multiple="true" size="4" class="inputs_02">
 		<option value="" <cfif form.canedit is "">selected</cfif>>Everyone</option>
 		<cfloop query="groups">
-		<option value="#id#" <cfif listFind(valueList(canedit.group), id)>selected</cfif>>#group#</option>
+		<option value="#id#" <cfif listFind(form.canedit, id)>selected</cfif>>#group#</option>
 		</cfloop>
 	</select>
 <div class="clearer"></div>
