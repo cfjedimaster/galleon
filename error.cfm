@@ -51,7 +51,10 @@ Error Occured:<br>
 </cfoutput>
 </cfsavecontent>
 
-<cfmail to="#application.settings.sendonpost#" from="#application.settings.sendonpost#" type="html" subject="Error Report">#mail#</cfmail>
+<!--- An error can occur during application startup, so we may not have the service. --->
+<cfif structKeyExists(application, "mailService")>
+	<cfset application.mailService.sendMail(application.settings.sendonpost,application.settings.sendonpost,"#application.settings.title# Error Report","", mail)>
+</cfif>
 
 <cfmodule template="tags/layout.cfm" templatename="main" title="Error">
 
