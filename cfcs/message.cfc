@@ -37,6 +37,7 @@
 		<cfset var notifiedList = "">
 		<cfset var body = "">
 		<cfset var posted = now()>
+		<cfset var fullbody = "">
 		
 		<!--- First see if we can add a message. Because roles= doesn't allow for OR, we use a UDF --->
 		<!--- Commented out since the front end checks this now...
@@ -129,9 +130,10 @@
 		<cfset notifiedList = notifySubscribers(arguments.threadid, tmpThread.name, arguments.forumid, variables.user.getUserID(arguments.username),body)>
 		
 		<cfif structKeyExists(variables.settings,"sendonpost") and len(variables.settings.sendonpost) and not listFindNoCase(notifiedList, variables.settings.sendOnPost)>
-		
-			<cfmail to="#variables.settings.sendonpost#" from="#variables.settings.fromAddress#" 
-					subject="#variables.settings.title# Notification: Post to #tmpThread.name#">
+
+			<cfprocessingdirective suppresswhitespace="false">
+			<cfsavecontent variable="fullbody">
+			<cfoutput>
 Title:		#arguments.message.title#
 Thread: 	#tmpThread.name#
 Forum:		#forum.name#
@@ -141,8 +143,12 @@ User:		#arguments.username#
 #wrap(body,80)#
 			
 #variables.settings.rootURL#<cfif not right(variables.settings.rooturl,1) is "/">/</cfif>messages.cfm?threadid=#arguments.threadid#&last##last
-			</cfmail>
-
+			</cfoutput>
+			</cfsavecontent>
+			</cfprocessingdirective>
+									
+			<cfset variables.mailService.sendMail(variables.settings.fromAddress,variables.settings.sendonpost,"#application.settings.title# Notification: Post to #tmpThread.name#",trim(fullbody))>
+		
 		</cfif>
 		
 		<!--- Now we notify our thread, forum, and conference on our new stats --->
@@ -251,6 +257,9 @@ User:		#arguments.username#
 		<cfset var subscribers = "">
 		
 		<cfset var username = variables.user.getUser(variables.user.getUsernameFromId(arguments.userid)).username>
+		<cfset var fullbody = "">
+		<cfset var htmlBody = "">
+		<cfset var result = "">
 		
 		<!--- 
 			  In order to get our subscribers, we need to get the forum and conference for the thread.
@@ -268,7 +277,10 @@ User:		#arguments.username#
 		</cfquery>
 		
 		<cfif subscribers.recordCount>
-			<cfmail query="subscribers" subject="#variables.settings.title# Notification: Post to #arguments.threadname#" from="#variables.settings.fromAddress#" to="#emailaddress#">
+		
+			<cfprocessingdirective suppresswhitespace="false">
+			<cfsavecontent variable="fullbody">
+			<cfoutput>
 A post has been made to a thread, forum, or conference that you are subscribed to.
 You can change your subscription preferences by updating your profile.
 You can visit the thread here:
@@ -284,9 +296,38 @@ Message:
 #wrap(arguments.body,80)#
 </cfif>
 
+			</cfoutput>
+			</cfsavecontent>
+			</cfprocessingdirective>
 
-			</cfmail>
+			<cfif variables.settings.fullemails>
 
+				<!--- Calling a custom tag from a CFC. Is that crazy? Hell yeah! I considering creating a CFC service wrapper. And I may still. --->
+				<cfmodule template="../tags/DP_ParseBBML.cfm" input="#body#" outputvar="result" convertsmilies="true" usecf_coloredcode="true" smileypath="images/Smilies/Default/">
+				
+				<cfprocessingdirective suppresswhitespace="false">
+				<cfsavecontent variable="htmlbody">
+				<cfoutput>
+	A post has been made to a thread, forum, or conference that you are subscribed to.<br/>
+	You can change your subscription preferences by updating your profile.<br/>
+	You can visit the thread here:<br/>
+	<br/>
+	#variables.settings.rootURL#<cfif not right(variables.settings.rooturl,1) is "/">/</cfif>messages.cfm?threadid=#arguments.threadid#&last##last<br/>
+	
+	Conference: #conference.name#<br/>
+	Forum:      #forum.name#<br/>
+	Thread:     #arguments.threadname#<br/>
+	User:       #username#<br/>
+	Message:<br/>#result.output#
+				</cfoutput>
+				</cfsavecontent>
+				</cfprocessingdirective>
+
+			</cfif>			
+			<!--- The mailService doesn't support queries yet. --->
+			<cfloop query="subscribers">
+				<cfset variables.mailService.sendMail(variables.settings.fromAddress,emailaddress,"#variables.settings.title# Notification: Post to #arguments.threadname#",trim(fullbody),trim(htmlbody))>
+			</cfloop>
 		</cfif>
 		
 		<cfreturn valueList(subscribers.emailaddress)>
@@ -547,6 +588,11 @@ No HTML is allowed in your message. Basic Formatting Rules:<br />
 		
 	</cffunction>
 
+	<cffunction name="setMailService" access="public" output="No" returntype="void">
+		<cfargument name="mailservice" required="true" hint="thread">
+		<cfset variables.mailservice = arguments.mailservice />
+	</cffunction>
+	
 	<cffunction name="setSettings" access="public" output="No" returntype="void">
 		<cfargument name="settings" required="true" hint="Setting">
 		<cfset variables.dsn = arguments.settings.getSettings().dsn>
