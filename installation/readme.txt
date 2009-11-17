@@ -27,13 +27,29 @@ Gifts are always welcome. ;)
 
 
 ---- LATEST VERSION ----
+2.2.9 (November 17, 2009)
+/admin/conferences_edit.cfm - Fixes an issue where security settings wouldn't stick if you had an error.
+/admin/forums_edit.cfm - If you have no conferences, we tell you and prevent you from creating a forum.
+/Application.cfm - Loads the mailService component into the App scope.
+/cfcs/mailservice.cfc - Handles all mail operations - allows for mail servers/usernames/password. Thanks to James Edmunds for the inspiration.
+/cfcs/message.cfc - Makes use of mail service. Emails to subscribers include plain text and HTML versions.
+/cfcs/objectfactory.cfc - support for mailservice
+/cfcs/settings.ini.cfm - new attributes for mailserver, mailusername, mailpassword
+/cfcs/user.cfc - support for mail service
+/error.cfm - will notice if it can't send email
+/tags/pagination.cfm - fixes alt/title tags
+/stylesheets/admin_style.css - fix by Chaz Jachimski
+/messages.cfm - Just removed code that was commented out.
+/includes/udf.cfm - update email validation to support +
+/login.cfm - Now if there is a db error, we email it. Makes use of mail service.
+
+---- ARCHIVED UPDATES ----
 2.2.8.001 (September 17, 2009)
 
 /cfcs/settings.ini.cfm - version
 /messages.cfm, /message_edit.cfm, /newpost.cfm, /profile.cfm -> All files now upload to system TEMP directory. All files are named with UUIDs. Attachments store original file name so downloads are nice.
 /attachment.cfm - use the nicer download name
 
----- ARCHIVED UPDATES ----
 2.2.8 (September 15, 2009)
 /admin/Application.cfm - minor edit to remove a cfabort that wasn't necessary.
 /cfcs/Application.cfm - simple bouncer
