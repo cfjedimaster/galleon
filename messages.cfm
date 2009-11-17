@@ -201,7 +201,6 @@
 				<cfif len(attachment)>Attachment: <a href="attachment.cfm?id=#id#">#attachment#</a></cfif></p>
 
 				<div class="forum_post_content">
-				<!--- #application.message.renderMessage(body)# --->
 				<cfmodule template="tags/DP_ParseBBML.cfm" input="#body#" outputvar="result" convertsmilies="true" usecf_coloredcode="true" smileypath="images/Smilies/Default/">
 				#result.output#
 				<cfif len(uinfo.signature)>
