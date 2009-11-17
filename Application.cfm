@@ -33,6 +33,9 @@
 	<!--- Get main settings --->
 	<cfset application.settings = application.factory.get('galleonSettings').getSettings()>
 
+	<!--- get mail service --->
+	<cfset application.mailService = application.factory.get('mailService')>
+	
 	<cfif not directoryExists(application.settings.attachmentdir)>
 		<cfdirectory action="create" directory="#application.settings.attachmentdir#">
 	</cfif>
@@ -74,7 +77,7 @@
 		<cfset application.image = application.factory.get('image')>
 		<cfset application.image.setOption("throwonerror", false)>
 	</cfif>
-	
+
 	<cfset application.init = true>
 	
 </cfif>
