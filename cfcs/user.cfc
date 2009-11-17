@@ -76,6 +76,7 @@
 		<cfset var checkuser = "">
 		<cfset var insuser = "">
 		<cfset var newid = createUUID()>
+		<cfset var body = "">
 		
 		<cflock name="user.cfc" type="exclusive" timeout="30">
 			<cfquery name="checkuser" datasource="#variables.dsn#">
@@ -89,11 +90,18 @@
 			<cfelse>
 				<!--- If system requires confirmation, set it to 0. --->
 				<cfif variables.requireconfirmation and not arguments.confirmed>
-					<cfmail to="#arguments.emailaddress#" from="#application.settings.fromAddress#" subject="#variables.title# Confirmation Required">
+				
+					<cfprocessingdirective suppresswhitespace="false">
+					<cfsavecontent variable="body">
+					<cfoutput>
 To complete your registration at #variables.title#, please click on the link below.
 
 #variables.rooturl#<cfif not right(variables.rooturl,1) is "/">/</cfif>confirm.cfm?u=#newid#
-					</cfmail>
+					</cfoutput>
+					</cfsavecontent>
+					</cfprocessingdirective>
+			
+					<cfset variables.mailService.sendMail(variables.fromAddress,arguments.emailaddress,"#variables.title# Confirmation Required",trim(body))>
 				</cfif>
 				
 				<!--- hash password --->
@@ -637,6 +645,11 @@ To complete your registration at #variables.title#, please click on the link bel
 				
 	</cffunction>		
 
+	<cffunction name="setMailService" access="public" output="No" returntype="void">
+		<cfargument name="mailservice" required="true" hint="thread">
+		<cfset variables.mailservice = arguments.mailservice />
+	</cffunction>
+	
 	<cffunction name="setSettings" access="public" output="No" returntype="void">
 		<cfargument name="settings" required="true" hint="Setting">
 
