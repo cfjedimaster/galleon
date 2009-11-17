@@ -85,93 +85,106 @@
 
 <cfmodule template="../tags/layout.cfm" templatename="admin" title="Forum Editor">
 
-<cfoutput>
-<form action="#cgi.script_name#?#cgi.query_string#" method="post">
-<div class="clearer"></div>
-<cfif isDefined("errors")><div class="input_error"><ul><b>#errors#</b></ul></div></cfif>
+<cfif conferences.recordCount is 0>
 
-<div class="name_row">
-<p class="left_100"></p>
-</div>
-
-<div class="row_0">
-	<p class="input_name">Name</p>
-	<input type="text" name="name" value="#form.name#" class="inputs_01">
+	<cfoutput>
 	<div class="clearer"></div>
-</div>
-
-<div class="row_1">
-	<p class="input_name">Conference</p>
-		<select name="conferenceidfk" class="inputs_02">
-		<cfloop query="conferences">
-		<option value="#id#" <cfif form.conferenceidfk is id>selected</cfif>>#name#</option>
-		</cfloop>
-		</select>
-<div class="clearer"></div>
-</div>
-
-<div class="row_0">
-	<p class="input_name">Description</p>
-	<input type="text" name="description" value="#form.description#" class="inputs_01">
-	<div class="clearer"></div>
-</div>
-
-<div class="row_1">
-	<p class="input_name">Active</p>
-	<select name="active" class="inputs_02">
-		<option value="1" <cfif form.active>selected</cfif>>Yes</option>
-		<option value="0" <cfif not form.active>selected</cfif>>No</option>
-	</select>
-<div class="clearer"></div>
-</div>
+	<div>
+	You do not have any conferences. You must <a href="conferences_edit.cfm?id=0">create one</a> before creating a forum.
+	</div>
+	</cfoutput>
 	
-<div class="row_0">
-	<p class="input_name">Attachments</p>
-	<select name="attachments" class="inputs_02">
-		<option value="1" <cfif isBoolean(form.attachments) and form.attachments>selected</cfif>>Yes</option>
-		<option value="0" <cfif (isBoolean(form.attachments) and not form.attachments) or form.attachments is "">selected</cfif>>No</option>
-	</select>
-<div class="clearer"></div>
-</div>
+<cfelse>
 
-<div class="row_1">
-	<p class="input_name">Groups with Read Access</p>
-		<select name="canread" multiple="true" size="4" class="inputs_02">
-		<option value="" <cfif form.canread is "">selected</cfif>>Everyone</option>
-		<cfloop query="groups">
-		<option value="#id#" <cfif listFind(form.canread, id)>selected</cfif>>#group#</option>
-		</cfloop>
+	<cfoutput>
+	<form action="#cgi.script_name#?#cgi.query_string#" method="post">
+	<div class="clearer"></div>
+	<cfif isDefined("errors")><div class="input_error"><ul><b>#errors#</b></ul></div></cfif>
+	
+	<div class="name_row">
+	<p class="left_100"></p>
+	</div>
+	
+	<div class="row_0">
+		<p class="input_name">Name</p>
+		<input type="text" name="name" value="#form.name#" class="inputs_01">
+		<div class="clearer"></div>
+	</div>
+	
+	<div class="row_1">
+		<p class="input_name">Conference</p>
+			<select name="conferenceidfk" class="inputs_02">
+			<cfloop query="conferences">
+			<option value="#id#" <cfif form.conferenceidfk is id>selected</cfif>>#name#</option>
+			</cfloop>
+			</select>
+	<div class="clearer"></div>
+	</div>
+	
+	<div class="row_0">
+		<p class="input_name">Description</p>
+		<input type="text" name="description" value="#form.description#" class="inputs_01">
+		<div class="clearer"></div>
+	</div>
+	
+	<div class="row_1">
+		<p class="input_name">Active</p>
+		<select name="active" class="inputs_02">
+			<option value="1" <cfif form.active>selected</cfif>>Yes</option>
+			<option value="0" <cfif not form.active>selected</cfif>>No</option>
 		</select>
-<div class="clearer"></div>
-</div>
-
-<div class="row_0">
-	<p class="input_name">Groups with Post Access</p>
-		<select name="canpost" multiple="true" size="4" class="inputs_02">
-		<option value="" <cfif form.canpost is "">selected</cfif>>Everyone</option>
-		<cfloop query="groups">
-		<option value="#id#" <cfif listFind(form.canpost, id)>selected</cfif>>#group#</option>
-		</cfloop>
+	<div class="clearer"></div>
+	</div>
+		
+	<div class="row_0">
+		<p class="input_name">Attachments</p>
+		<select name="attachments" class="inputs_02">
+			<option value="1" <cfif isBoolean(form.attachments) and form.attachments>selected</cfif>>Yes</option>
+			<option value="0" <cfif (isBoolean(form.attachments) and not form.attachments) or form.attachments is "">selected</cfif>>No</option>
 		</select>
-<div class="clearer"></div>
-</div>
+	<div class="clearer"></div>
+	</div>
+	
+	<div class="row_1">
+		<p class="input_name">Groups with Read Access</p>
+			<select name="canread" multiple="true" size="4" class="inputs_02">
+			<option value="" <cfif form.canread is "">selected</cfif>>Everyone</option>
+			<cfloop query="groups">
+			<option value="#id#" <cfif listFind(form.canread, id)>selected</cfif>>#group#</option>
+			</cfloop>
+			</select>
+	<div class="clearer"></div>
+	</div>
+	
+	<div class="row_0">
+		<p class="input_name">Groups with Post Access</p>
+			<select name="canpost" multiple="true" size="4" class="inputs_02">
+			<option value="" <cfif form.canpost is "">selected</cfif>>Everyone</option>
+			<cfloop query="groups">
+			<option value="#id#" <cfif listFind(form.canpost, id)>selected</cfif>>#group#</option>
+			</cfloop>
+			</select>
+	<div class="clearer"></div>
+	</div>
+	
+	<div class="row_1">
+		<p class="input_name">Groups with Edit Access</p>
+		<select name="canedit" multiple="true" size="4" class="inputs_02">
+			<option value="" <cfif form.canedit is "">selected</cfif>>Everyone</option>
+			<cfloop query="groups">
+			<option value="#id#" <cfif listFind(form.canedit, id)>selected</cfif>>#group#</option>
+			</cfloop>
+		</select>
+	<div class="clearer"></div>
+	</div>
+	<div id="input_btns">	
+		<input type="image" src="../images/btn_save.jpg"  name="save" value="Save">
+		<input type="image" src="../images/btn_cancel.jpg" type="submit" name="cancel" value="Cancel">
+	</div>
+	</form>
+	</cfoutput>
 
-<div class="row_1">
-	<p class="input_name">Groups with Edit Access</p>
-	<select name="canedit" multiple="true" size="4" class="inputs_02">
-		<option value="" <cfif form.canedit is "">selected</cfif>>Everyone</option>
-		<cfloop query="groups">
-		<option value="#id#" <cfif listFind(form.canedit, id)>selected</cfif>>#group#</option>
-		</cfloop>
-	</select>
-<div class="clearer"></div>
-</div>
-<div id="input_btns">	
-	<input type="image" src="../images/btn_save.jpg"  name="save" value="Save">
-	<input type="image" src="../images/btn_cancel.jpg" type="submit" name="cancel" value="Cancel">
-</div>
-</form>
-</cfoutput>
+</cfif>
 
 </cfmodule>
 
