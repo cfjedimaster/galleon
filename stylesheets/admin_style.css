@@ -204,6 +204,8 @@ a.nav_on:active {
 .right_90 { width: 90%; float: right; }	
 .right_100 { width: 100%; float: right; }	
 
+.wtf { border: 10px solid red; }
+
 .align_center {
 	text-align: center;
 	}
@@ -231,7 +233,7 @@ a.nav_on:active {
 	height: 32px;
 	clear: both;
 	border-bottom: 1px solid #2878b5;
-	margin: 40px 0px 0px 0px;
+	margin: 5px 0px 0px 0px;
 	}
 	.name_row p {
 		padding: 7px 0px 4px 0px;
@@ -287,7 +289,6 @@ a.nav_on:active {
 		.row_1 p span { padding: 0px 0px 0px 10px; }
 		
 .top_title {
-	position: absolute;
 	color: #ff6c00;
 	font-size: 20px;
 	padding: 5px 0px 10px 0px;
@@ -298,25 +299,26 @@ a.nav_on:active {
 	}
 
 .top_input_misc {
-	position: absolute;	
+	float: right;
 	z-index: 1;
 	width: 250px;
 	height: 20px;
-	padding: 6px 0px 0px 250px;
+	padding: 6px 0px 0px 0px;
 	}
 	
 .records {
-	position: absolute;
 	width: 260px;
 	height: 20px;
+	float: right;
 	text-align: right;
 	padding-right: 5px;
-	padding: 10px 10px 0px 490px;
+	padding: 10px 10px 0px 0px;
 	}
 
 .input_error {
 	color: red;
-	padding: 20px 0px 0px 0px;	margin: 0px 0px 0px -40px;
+	padding: 20px 0px 0px 0px;
+	margin: 0px 0px 0px -40px;
 	}
 	
 .input_name {
