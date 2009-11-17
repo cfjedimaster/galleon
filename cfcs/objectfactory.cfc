@@ -84,6 +84,15 @@
 					return obj;
 				break;
 
+				case "mailService":
+					obj = createObject('component','mailService');
+					obj.setSettings(get('galleonSettings', arguments.singleton));
+					if (arguments.singleton) { // scope singleton
+						addSingleton(arguments.objName, obj);
+					}
+					
+					return obj;
+				break;
 				case "message":
 					obj = createObject('component','message').init();
 						if (arguments.singleton) { // scope singleton
@@ -96,6 +105,7 @@
 						obj.setConference( get('conference', arguments.singleton) );
 						obj.setUser( get('user', arguments.singleton) );
 						obj.setUtils( get('utils', arguments.singleton) );
+						obj.setMailService( get('mailService', arguments.singleton) );						
 					return obj;
 				break;
 
@@ -141,6 +151,7 @@
 						// inject dependencies through setter
 						obj.setSettings( get('galleonSettings', arguments.singleton) );
 						obj.setUtils( get('utils', arguments.singleton) );
+						obj.setMailService( get('mailService', arguments.singleton) );						
 					return obj;
 				break;
 
