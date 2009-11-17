@@ -40,14 +40,14 @@
 					<cfif not request.udf.isLoggedOn()>
 						<cfset thisPage = cgi.script_name & "?" & cgi.query_string & "&##newpost">
 						<cfset link = "login.cfm?ref=#urlEncodedFormat(thisPage)#">
-						<a href="#link#"><img src="images/btn_reply.gif" alt="Reply" title="New Topic"/></a>
+						<a href="#link#"><img src="images/btn_reply.gif" alt="Reply" title="Reply"/></a>
 					<cfelse>
-						<a href="##newpost"><img src="images/btn_reply.gif" alt="Reply" title="New Topic"/></a>
+						<a href="##newpost"><img src="images/btn_reply.gif" alt="Reply" title="Reply"/></a>
 					</cfif>
 				</cfif>
 			</cfif>
 			<cfif request.udf.isLoggedOn() and attributes.mode is not "na">
-				<a href="profile.cfm?#cgi.query_string#&s=1"><img src="images/btn_subscribe.gif" alt="Reply" title="New Topic"/></a>
+				<a href="profile.cfm?#cgi.query_string#&s=1"><img src="images/btn_subscribe.gif" alt="Subscribe" title="Subscribe"/></a>
 			</cfif>
 		</div>
 		<!-- Top Button Ender -->
