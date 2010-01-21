@@ -241,7 +241,7 @@
 
 		<cfloop query="threadKids">
 			<cfset total = total + messages>
-			<cfif dateCompare(last, lastPostCreated) is -1>
+			<cfif isDate(lastPostCreated) and dateCompare(last, lastPostCreated) is -1>
 				<cfset last = lastpostcreated>
 				<cfset lastu = lastpostuseridfk>
 				<cfset lasti = threadKids.id[currentRow]>
