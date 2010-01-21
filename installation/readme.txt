@@ -27,6 +27,12 @@ Gifts are always welcome. ;)
 
 
 ---- LATEST VERSION ----
+2.2.9.001 (January 21, 2010)
+/cfcs/forum.cfc - Fix to updatestats to handle bad dates
+/cfcs/user.cfc - Fixes a bug where a user subscribed to a thread that goes inactive would get an error on the Profile page
+/cfcs/settings.ini.cfm - Version #
+
+---- ARCHIVED UPDATES ----
 2.2.9 (November 17, 2009)
 /admin/conferences_edit.cfm - Fixes an issue where security settings wouldn't stick if you had an error.
 /admin/forums_edit.cfm - If you have no conferences, we tell you and prevent you from creating a forum.
@@ -43,7 +49,6 @@ Gifts are always welcome. ;)
 /includes/udf.cfm - update email validation to support +
 /login.cfm - Now if there is a db error, we email it. Makes use of mail service.
 
----- ARCHIVED UPDATES ----
 2.2.8.001 (September 17, 2009)
 
 /cfcs/settings.ini.cfm - version
