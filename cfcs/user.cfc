@@ -370,9 +370,20 @@ To complete your registration at #variables.title#, please click on the link bel
 		<cfset var q = "">
 		
 		<cfquery name="q" datasource="#variables.dsn#">
-			select	id, threadidfk, forumidfk, conferenceidfk
-			from	#variables.tableprefix#subscriptions
-			where	useridfk = <cfqueryparam value="#uid#" cfsqltype="cf_sql_varchar" maxlength="35">
+		    select  s.id, s.threadidfk, s.forumidfk, s.conferenceidfk
+            from    #variables.tableprefix#subscriptions s
+            left join #variables.tableprefix#threads t on s.threadidfk = t.id
+            left join #variables.tableprefix#forums f on s.forumidfk = f.id
+            left join #variables.tableprefix#conferences c on s.conferenceidfk = c.id
+            where    s.useridfk = <cfqueryparam value="#uid#" cfsqltype="cf_sql_varchar" maxlength="35">
+			and 
+			(
+			(s.threadidfk is not null and t.active = 1)
+			or 
+			(s.forumidfk is not null and f.active=1)
+			or 
+			(s.conferenceidfk is not null and c.active=1)
+			)
 		</cfquery>
 		
 		<cfreturn q>
