@@ -27,12 +27,16 @@ Gifts are always welcome. ;)
 
 
 ---- LATEST VERSION ----
+2.2.9.001 (February 25, 2010)
+/cfcs/mailservice.cfc - Small fix to mailservice by J.J. Blodgett
+/cfcs/settings.ini.cfm - Version #
+
+---- ARCHIVED UPDATES ----
 2.2.9.001 (January 21, 2010)
 /cfcs/forum.cfc - Fix to updatestats to handle bad dates
 /cfcs/user.cfc - Fixes a bug where a user subscribed to a thread that goes inactive would get an error on the Profile page
 /cfcs/settings.ini.cfm - Version #
 
----- ARCHIVED UPDATES ----
 2.2.9 (November 17, 2009)
 /admin/conferences_edit.cfm - Fixes an issue where security settings wouldn't stick if you had an error.
 /admin/forums_edit.cfm - If you have no conferences, we tell you and prevent you from creating a forum.
