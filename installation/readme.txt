@@ -27,11 +27,15 @@ Gifts are always welcome. ;)
 
 
 ---- LATEST VERSION ----
-2.2.9.001 (February 25, 2010)
-/cfcs/mailservice.cfc - Small fix to mailservice by J.J. Blodgett
+2.2.9.003 (March 2, 2010)
+/threads.cfm - thanks to user pasorens for noticing broken thread sorting
 /cfcs/settings.ini.cfm - Version #
 
 ---- ARCHIVED UPDATES ----
+2.2.9.002 (February 25, 2010)
+/cfcs/mailservice.cfc - Small fix to mailservice by J.J. Blodgett
+/cfcs/settings.ini.cfm - Version #
+
 2.2.9.001 (January 21, 2010)
 /cfcs/forum.cfc - Fix to updatestats to handle bad dates
 /cfcs/user.cfc - Fixes a bug where a user subscribed to a thread that goes inactive would get an error on the Profile page

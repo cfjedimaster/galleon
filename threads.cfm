@@ -78,7 +78,7 @@
 			<div class="left_45 keep_on border_right"><p>#request.udf.headerLink("Thread","name")#</p></div>
 			<div class="left_15 keep_on border_right"><p>#request.udf.headerLink("Originator","username")#</p></div>
 			<div class="left_15 keep_on border_right"><p>#request.udf.headerLink("Replies","messages")#</p></div>
-			<div class="left_auto keep_on"><p>#request.udf.headerLink("Last Post","lastpost")#</p></div>
+			<div class="left_auto keep_on"><p>#request.udf.headerLink("Last Post","lastpostcreated")#</p></div>
 			
 		</div>
 		<cfif data.recordCount>
