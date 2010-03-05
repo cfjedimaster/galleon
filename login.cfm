@@ -113,7 +113,7 @@ This is a password reminder from #application.settings.title# at #application.se
 Your password is: #data.password#
 		</cfoutput>
 		</cfsavecontent>
-		<cfset application.mailService.sendMail(data.emailaddress,application.settings.fromaddress,"#application.settings.title# Password Reminder",trim(body))>
+		<cfset application.mailService.sendMail(application.settings.fromaddress,data.emailaddress,"#application.settings.title# Password Reminder",trim(body))>
 	
 		<cfset sentInfo = true>
 	</cfif>
