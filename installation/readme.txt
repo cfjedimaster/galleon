@@ -1,5 +1,5 @@
 LICENSE 
-Copyright 2006, 2007, 2008 Raymond Camden
+Copyright 2006, 2007, 2008, 2009, 2010 Raymond Camden
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -27,11 +27,34 @@ Gifts are always welcome. ;)
 
 
 ---- LATEST VERSION ----
+2.2.3 (March 19, 2010)
+
+NOTE: A new table has been added, privatemessages. Please ensure you add this table.
+
+/admin/gen_stats.cfm, messages.cfm, messages_edit.cfm, settings.cfm, stats_charts.cfm, threads.cfm, users.cfm
+Support for performance updates.
+
+/cfcs/message.cfc, settings.ini.cfm, thread.cfc, user.cfc
+Support for performance updates - added allowpms to settings to allow private messages
+
+/images/btn_send.gif -> New image
+
+/pagetemplages/admin_header.cfm, main_header.cfm
+Small nav changes
+
+/stylesheets/style.css
+Misc change
+
+/messages.cfm, profile.cfm, pm.cfm, pms.cfm, sendpm.cfm, threads.cfm
+Changes in regard to messaging/performance.
+
+/tags/datatablenew.cfm -> New tag
+
+---- ARCHIVED UPDATES ----
 2.2.9.004 (March 5, 2010)
 /login.cfm - thanks to use rucky544 for noticing a bug in the send password reminder 
 /cfcs/settings.ini.cfm - Version #
 
----- ARCHIVED UPDATES ----
 2.2.9.003 (March 2, 2010)
 /threads.cfm - thanks to user pasorens for noticing broken thread sorting
 /cfcs/settings.ini.cfm - Version #

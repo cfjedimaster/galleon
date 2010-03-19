@@ -129,7 +129,8 @@
 <cfset qs = replaceList(cgi.query_string,"<,>",",")>
 
 <!--- get my messages --->
-<cfset data = application.message.getMessages(threadid=request.thread.id)>
+<cfset mdata = application.message.getMessages(threadid=request.thread.id)>
+<cfset data = mdata.data>
 
 <!--- Loads header --->
 <cfmodule template="tags/layout.cfm" templatename="main" title="#application.settings.title# : #request.conference.name# : #request.forum.name# : #request.thread.name#">
@@ -153,11 +154,8 @@
 <cfmodule template="tags/pagination.cfm" pages="#pages#" mode="messages" canPost="#canPost#" />
 
 <!--- Now display the table. This changes based on what our data is. --->
-<cfoutput>
-	
-	
-	
-		<!-- Content Start -->
+<cfoutput>	
+	<!-- Content Start -->
 	<div class="content_box">
 		
 		<!-- Post Box Start -->
@@ -190,6 +188,9 @@
 				<br /><br />
 				<p><span class="bolder">Joined:</span> #dateFormat(uInfo.dateCreated,"mm/dd/yy")#</p>
 				<p><span class="bolder">Posts:</span> #uInfo.postcount#</p>
+				<cfif request.udf.isLoggedOn() and application.settings.allowpms and username neq getAuthUser()>
+				<p><span class="bolder">Message:</span> <a href="sendpm.cfm?user=#urlEncodedFormat(username)#">Private Message</a></p>
+				</cfif>
 			</div>
 			
 			<div class="forum_post_right keep_on">
@@ -247,8 +248,6 @@
 		<!-- Post end -->
 		<a name="bottom" /></a>
 		
-		
-					
 	</div>
 	<!-- Content End -->
 	
