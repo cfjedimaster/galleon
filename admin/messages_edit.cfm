@@ -15,11 +15,10 @@
 	<cflocation url="messages.cfm" addToken="false">
 </cfif>
 
-<!--- get all threads --->
-<cfset threads = application.thread.getThreads(false)>
-
-<!--- get all users --->
-<cfset users = application.user.getUsers()>
+<!--- Adds no longer supported, link is gone, but be anal --->
+<cfif url.id eq 0>
+	<cflocation url="messages.cfm" addToken="false">
+</cfif>
 
 <cfif isDefined("form.save.x")>
 	<cfset errors = "">
@@ -42,13 +41,11 @@
 			<cfset filename = message.filename>
 		</cfif>
 
-		<cfset message = structNew()>
-
+		<cfset message = application.message.getMessage(url.id)>
 		<cfset message.title = trim(htmlEditFormat(form.title))>
 		<cfset message.body = trim(htmlEditFormat(form.body))>
 		<cfset message.posted = trim(form.posted)>
-		<cfset message.threadidfk = form.threadidfk>
-		<cfset message.useridfk = form.useridfk>
+		
 		<cfif structKeyExists(variables, "attachment")>
 			<cfset message.attachment = attachment>
 			<cfset message.filename = filename>
@@ -57,38 +54,16 @@
 			<cfset message.filename = "">
 		</cfif>
 			
-		<cfif url.id neq 0>
-			<cfset application.message.saveMessage(url.id, message)>
-		<cfelse>
-			<cfset threadPicked = application.thread.getThread(form.threadidfk)>
-			<!--- translate the user id to the username for addMessage --->
-			<cfloop query="users">
-				<cfif id is form.useridfk>
-					<cfset theusername = username>
-				</cfif>
-			</cfloop>
-			<cfset application.message.addMessage(message,threadPicked.forumidfk,theusername,form.threadidfk)>
-		</cfif>
+		<cfset application.message.saveMessage(url.id, message)>
 		<cfset msg = "Message, #message.title#, has been updated.">
 		<cflocation url="messages.cfm?msg=#urlEncodedFormat(msg)#" addToken="false">
 	</cfif>
 </cfif>
 
-<!--- get message if not new --->
-<cfif url.id neq 0>
-	<cfset message = application.message.getMessage(url.id)>
-	<cfparam name="form.title" default="#message.title#">
-	<cfparam name="form.body" default="#message.body#">
-	<cfparam name="form.posted" default="#dateFormat(message.posted,"m/dd/yy")# #timeFormat(message.posted,"h:mm tt")#">
-	<cfparam name="form.useridfk" default="#message.useridfk#">
-	<cfparam name="form.threadidfk" default="#message.threadidfk#">
-<cfelse>
-	<cfparam name="form.title" default="">
-	<cfparam name="form.body" default="">
-	<cfparam name="form.posted" default="#dateFormat(now(),"m/dd/yy")# #timeFormat(now(),"h:mm tt")#">
-	<cfparam name="form.useridfk" default="">
-	<cfparam name="form.threadidfk" default="">
-</cfif>
+<cfset message = application.message.getMessage(url.id)>
+<cfparam name="form.title" default="#message.title#">
+<cfparam name="form.body" default="#message.body#">
+<cfparam name="form.posted" default="#dateFormat(message.posted,"m/dd/yy")# #timeFormat(message.posted,"h:mm tt")#">
 
 <cfmodule template="../tags/layout.cfm" templatename="admin" title="Message Editor">
 
@@ -115,11 +90,7 @@
 
 <div class="row_0">
 	<p class="input_name">Thread</p>
-		<select name="threadidfk" class="inputs_02">
-			<cfloop query="threads">
-			<option value="#id#" <cfif form.threadidfk is id>selected</cfif>>#name#</option>
-			</cfloop>
-		</select>
+	#message.thread#
 <div class="clearer"></div>
 </div>
 
@@ -131,11 +102,7 @@
 
 <div class="row_0">
 	<p class="input_name">User</p>
-		<select name="useridfk" class="inputs_02">
-			<cfloop query="users">
-			<option value="#id#" <cfif form.useridfk is id>selected</cfif>>#username#</option>
-			</cfloop>
-		</select>
+		#message.username#
 <div class="clearer"></div>
 </div>
 

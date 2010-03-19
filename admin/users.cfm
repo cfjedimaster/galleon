@@ -11,6 +11,9 @@
 
 <cfparam name="url.search" default="">
 <cfparam name="form.search" default="#url.search#">
+<cfparam name="url.start" default="1">
+<cfparam name="url.sort" default="username">
+<cfparam name="url.dir" default="asc">
 
 <cfmodule template="../tags/layout.cfm" templatename="admin" title="User Editor">
 
@@ -23,16 +26,8 @@
 </cfif>
 
 <!--- get users --->
-<cfset users = application.user.getUsers()>
+<cfset users = application.user.getUsers(search=form.search,start=url.start, sort="#url.sort# #url.dir#", max=10)>
 
-<cfif len(trim(form.search))>
-	<cfquery name="users" dbtype="query">
-	select	*
-	from	users
-	where	lower(username) like <cfqueryparam cfsqltype="cf_sql_varchar" value="%#lcase(form.search)#%"> 
-	or		lower(emailaddress) like <cfqueryparam cfsqltype="cf_sql_varchar" value="%#lcase(form.search)#%">
-	</cfquery>
-</cfif>
 
 <cfif application.settings.requireconfirmation>
 	<cfset list = "username,emailaddress,postcount,confirmed,datecreated">
@@ -50,8 +45,11 @@
 </div>
 </cfoutput>
 
-<cfmodule template="../tags/datatable.cfm" 
-		  data="#users#" list="#list#" 
+<cfmodule template="../tags/datatablenew.cfm" 
+		  data="#users.data#" list="#list#" 
+  		  total="#users.total#" perpage=10 start="#url.start#"
+		  nosort="postcount"
+		  
 		  classList="left_20,left_25,left_20 align_center,left_15 align_center,left_15"
 		  editlink="users_edit.cfm" linkcol="username" linkval="username" label="User" linkappend="&search=#urlEncodedFormat(form.search)#" />
 

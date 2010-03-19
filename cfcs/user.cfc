@@ -218,7 +218,28 @@ To complete your registration at #variables.title#, please click on the link bel
 		</cfquery>
 		
 	</cffunction>
+
+	<cffunction name="deletePrivateMessage" access="public" returnType="void" output="false"
+				hint="Deletes a PM.">
+		<cfargument name="id" type="uuid" required="true">
+		<cfargument name="username" type="string" required="true">
+		<cfset var pm = "">
+		
+		<!--- fetch it just to ensure we can get it --->
+		<cftry>
+			<cfset pm = getPrivateMessage(arguments.id, arguments.username)>
 	
+			<cfquery datasource="#variables.dsn#">
+			delete	from #variables.tableprefix#privatemessages
+			where	id = <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.id#" maxlength="35">
+			</cfquery>
+			<cfcatch>
+				<!--- do nothing, it is either a hack or a user reloading by accident --->
+			</cfcatch>
+		</cftry>
+				
+	</cffunction>
+		
 	<cffunction name="deleteUser" access="public" returnType="void" output="false"
 				hint="Deletes a user.">
 		<cfargument name="username" type="string" required="true">
@@ -362,7 +383,65 @@ To complete your registration at #variables.title#, please click on the link bel
 			
 	</cffunction>
 
+	<cffunction name="getPrivateMessage" access="public" returnType="struct" output="false" hint="Gets my private messages.">
+		<cfargument name="id" type="string" required="true">
+		<cfargument name="username" type="string" required="true">
+		<cfset var q = "">
+		<cfset var s = structNew()>
+		
+		<cfquery name="q" datasource="#variables.dsn#">
+		select pm.id, pm.subject, pm.body, pm.unread, pm.sent, u2.username as sender
+		from #variables.tableprefix#privatemessages pm
+		left join #variables.tableprefix#users u2 on pm.fromuseridfk = u2.id
+		left join #variables.tableprefix#users u on pm.touseridfk = u.id
+		where u.username = <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.username#">
+		and	pm.id = <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.id#">
+		</cfquery>
+		
+		<cfif q.recordCount is 0>
+			<cfthrow message="Invalid or unauthorized message load.">
+		</cfif>
+		
+		<cfloop index="col" list="#q.columnList#">
+			<cfset s[col] = q[col][1]>
+		</cfloop>
+		
+		<cfquery datasource="#variables.dsn#">
+		update #variables.tableprefix#privatemessages
+		set unread = 0
+		where id = <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.id#">
+		</cfquery>
+		
+		<cfreturn s>
+		
+	</cffunction>
+	
+	<cffunction name="getPrivateMessages" access="public" returnType="query" output="false" hint="Gets my private messages.">
+		<cfargument name="username" type="string" required="true">
+		<cfargument name="sort" type="string" required="false" default="sent">
+		<cfargument name="sortdir" type="string" required="false" default="desc">
 
+		<cfset var q = "">
+
+		<cfif not listFindNoCase("sender,sent,subject", arguments.sort)>
+			<cfset arguments.sort = "sent">
+		</cfif>
+		<cfif not listFindNoCase("asc,desc", arguments.sortdir)>
+			<cfset arguments.sortdir = "desc">
+		</cfif>
+				
+		<cfquery name="q" datasource="#variables.dsn#">
+		select pm.id, pm.subject, pm.body, pm.unread, pm.sent, u2.username as sender
+		from #variables.tableprefix#privatemessages pm
+		left join #variables.tableprefix#users u2 on pm.fromuseridfk = u2.id
+		left join #variables.tableprefix#users u on pm.touseridfk = u.id
+		where u.username = <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.username#">
+		order by #arguments.sort# #arguments.sortdir#
+		</cfquery>
+		
+		<cfreturn q>
+	</cffunction>
+	
 	<cffunction name="getSubscriptions" access="public" returnType="query" output="false"
 				hint="Gets subscriptions for a user.">
 		<cfargument name="username" type="string" required="true">
@@ -387,6 +466,23 @@ To complete your registration at #variables.title#, please click on the link bel
 		</cfquery>
 		
 		<cfreturn q>
+	</cffunction>
+	
+	<cffunction name="getUnreadMessageCount" access="public" returnType="numeric" output="false" hint="Returns the number of unread messages for a user.">
+		<cfargument name="username" type="string" required="true">
+	
+		<cfset var result = "">
+		
+		<cfquery name="result" datasource="#variables.dsn#">
+		select count(pm.id) as total
+		from #variables.tableprefix#privatemessages pm
+		left join #variables.tableprefix#users u on pm.touseridfk = u.id
+		where u.username = <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.username#">
+		and pm.unread = 1
+		</cfquery>
+
+		<cfreturn result.total>
+
 	</cffunction>
 	
 	<cffunction name="getUser" access="public" returnType="struct" output="false"
@@ -475,21 +571,78 @@ To complete your registration at #variables.title#, please click on the link bel
 		<cfreturn qGetUser.username>
 	</cffunction>
 	
-	<cffunction name="getUsers" access="public" returnType="query" output="false"
+	<cffunction name="getUsers" access="public" returnType="struct" output="false"
 				hint="Returns all the users.">
+		<cfargument name="start" type="numeric" required="false">
+		<cfargument name="max" type="numeric" required="false">
+
+		<cfargument name="sort" type="string" required="false" default="messages asc">
+		<cfargument name="search" type="string" required="false">
+	
 		<cfset var qGetUsers = "">
+		<cfset var getTotal = "">
+		<cfset var qGetUsersId = "">
+		<cfset var idfilter = "">
+		<cfset var smalleridfilter = "">
 		
+		<cfif structKeyExists(arguments, "start") and structKeyExists(arguments, "max")>
+			<cfquery name="gettotal" datasource="#variables.dsn#">
+			select	count(id) as total
+			from	#variables.tableprefix#users u
+			where	1=1
+			<cfif structKeyExists(arguments, "search") and len(arguments.search)>
+				and		u.username like  <cfqueryparam value="%#arguments.search#%" cfsqltype="CF_SQL_VARCHAR" maxlength="35">
+			</cfif>			
+			</cfquery>
+
+			<cfquery name="qGetUsersID" datasource="#variables.dsn#" maxrows="#arguments.start+arguments.max-1#">
+				select	u.id
+				from	#variables.tableprefix#users u
+				where 1=1
+				<cfif structKeyExists(arguments, "search") and len(arguments.search)>
+					and		u.username like  <cfqueryparam value="%#arguments.search#%" cfsqltype="CF_SQL_VARCHAR" maxlength="35">
+				</cfif>
+				order by u.#arguments.sort#
+				<cfif variables.dbtype is "MYSQL">
+				limit #arguments.start-1#,#arguments.max#
+				</cfif>
+			</cfquery>
+			<cfset idfilter = valueList(qGetUsersID.id)>
+			
+			<cfif listLen(idfilter) gt arguments.max>
+				<cfloop index="x" from="#listLen(idfilter)-arguments.page#" to="#listLen(idfilter)#">
+					<cfset smalleridfilter = listAppend(smalleridfilter, listGetAt(idfilter, x))>
+				</cfloop>
+				<cfset idfilter = smalleridfilter>
+			</cfif>
+		</cfif>		
+						
 		<cfquery name="qGetUsers" datasource="#variables.dsn#">
-		select #variables.tableprefix#users.id, #variables.tableprefix#users.username, #variables.tableprefix#users.password, #variables.tableprefix#users.emailaddress, #variables.tableprefix#users.datecreated, count(#variables.tableprefix#messages.id) as postcount, #variables.tableprefix#users.confirmed
-		from #variables.tableprefix#users
+		select u.id, u.username, u.password, u.emailaddress, u.datecreated, count(#variables.tableprefix#messages.id) as postcount, u.confirmed
+		from #variables.tableprefix#users u
 		left join  #variables.tableprefix#messages
-		on  #variables.tableprefix#users.id = #variables.tableprefix#messages.useridfk
-		group by #variables.tableprefix#users.id, #variables.tableprefix#users.username, #variables.tableprefix#users.password, #variables.tableprefix#users.emailaddress, #variables.tableprefix#users.datecreated, #variables.tableprefix#users.confirmed
-		order by #variables.tableprefix#users.username
+		on  u.id = #variables.tableprefix#messages.useridfk
+		where 1=1
+		<cfif len(idfilter)>
+			and	u.id in (<cfqueryparam value="#idfilter#" cfsqltype="cf_sql_varchar" list="true">)
+		</cfif>
+		<cfif structKeyExists(arguments, "search") and len(arguments.search)>
+			and		u.username like  <cfqueryparam value="%#arguments.search#%" cfsqltype="CF_SQL_VARCHAR" maxlength="35">
+		</cfif>
+		
+		group by u.id, u.username,u.password, u.emailaddress, u.datecreated, u.confirmed
+		order by u.#arguments.sort#
 		</cfquery>
 		
-		<cfreturn qGetUsers>
-			
+		<cfif structKeyExists(arguments, "start") and structKeyExists(arguments, "max")>
+			<cfset result.total = gettotal.total>		
+		<cfelse>
+			<cfset result.total = qGetTUsers.recordCount>
+		</cfif>
+
+		<cfset result.data = qGetUsers>
+
+		<cfreturn result>				
 	</cffunction>
 
 	<cffunction name="removeGroups" access="private" returnType="void" output="false"
@@ -597,6 +750,29 @@ To complete your registration at #variables.title#, please click on the link bel
 		
 	</cffunction>
 
+	<cffunction name="sendPrivateMessage" access="public" returnType="void" output="false" hint="Sends a Private Message.">
+		<cfargument name="to" type="string" required="true">
+		<cfargument name="from" type="string" required="true">
+		<cfargument name="subject" type="string" required="true">
+		<cfargument name="body" type="string" required="true">
+		
+		<cfset var toid = getuserid(arguments.to)>
+		<cfset var fromid = getuserid(arguments.from)>
+		
+		<cfquery datasource="#variables.dsn#">
+		insert into #variables.tableprefix#privatemessages(id,fromuseridfk,touseridfk,sent,body,subject,unread) 
+		values(
+			<cfqueryparam cfsqltype="cf_sql_varchar" value="#createUUID()#">,
+			<cfqueryparam cfsqltype="cf_sql_varchar" value="#toid#">,
+			<cfqueryparam cfsqltype="cf_sql_varchar" value="#fromid#">,
+			<cfqueryparam cfsqltype="cf_sql_timestamp" value="#now()#">,
+			<cfqueryparam cfsqltype="cf_sql_longvarchar" value="#arguments.body#">,
+			<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.subject#" maxlength="255">,
+			1)
+		</cfquery>
+						
+	</cffunction>
+	
 	<cffunction name="subscribe" access="public" returnType="void" output="false"
 				hint="Subscribes a user to Galleon.">
 		<cfargument name="username" type="string" required="true">

@@ -7,6 +7,8 @@
 	Purpose		 : 
 --->
 
+<!--- Disabling for now --->
+<cfabort/>
 <cfquery name="conferences" datasource="#application.settings.dsn#">
 select	id, name
 from	#application.settings.tableprefix#conferences
@@ -17,8 +19,8 @@ select	id, name, conferenceidfk
 from	#application.settings.tableprefix#forums
 </cfquery>
 
-<cfset threads = application.thread.getThreads()>
-<cfset users = application.user.getUsers()>
+<!---<cfset threads = application.thread.getThreads()>--->
+<!---<cfset users = application.user.getUsers()>--->
 
 <cfoutput>
 <div class="title_row">
@@ -43,11 +45,11 @@ from	#application.settings.tableprefix#forums
 		</cfloop>
 	</cfchartseries>
 </cfchart>
-
+<cfdump var="#forums#">
 <div class="title_row">
 <p>Number of Threads Per Forum</p>
 </div>
-
+<!---
 <cfchart format="flash" chartheight="400" chartwidth="400" seriesplacement="default" 
 		 labelformat="number" tipstyle="mouseOver" pieslicestyle="sliced">
 	<cfchartseries type="pie">
@@ -66,7 +68,8 @@ from	#application.settings.tableprefix#forums
 		</cfloop>
 	</cfchartseries>
 </cfchart>
-
+--->
+<!---
 <cfquery name="sortedThreads" dbtype="query">
 	select		*
 	from		threads
@@ -94,7 +97,8 @@ from	#application.settings.tableprefix#forums
 	<div class="clearer"></div>
 </div>				
 </cfloop>
-
+--->
+<!---
 <cfquery name="sortedUsers" dbtype="query">
 	select		*
 	from		users
@@ -102,7 +106,7 @@ from	#application.settings.tableprefix#forums
 </cfquery>
 
 <div class="title_row">
-	<p>Top 10 Uses by Post Count</p>
+	<p>Top 10 Users by Post Count</p>
 </div>
 
 <div class="secondary_row">
@@ -122,6 +126,7 @@ from	#application.settings.tableprefix#forums
 	<div class="clearer"></div>
 </div>				
 </cfloop>
+--->
 
 </cfoutput>
 

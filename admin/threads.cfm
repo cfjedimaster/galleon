@@ -11,6 +11,9 @@
 
 <cfparam name="url.search" default="">
 <cfparam name="form.search" default="#url.search#">
+<cfparam name="url.start" default="1">
+<cfparam name="url.sort" default="lastpostcreated">
+<cfparam name="url.dir" default="desc">
 
 <cfmodule template="../tags/layout.cfm" templatename="admin" title="Thread Editor">
 
@@ -23,15 +26,7 @@
 </cfif>
 
 <!--- get threads --->
-<cfset threads = application.thread.getThreads(false)>
-
-<cfif len(trim(form.search))>
-	<cfquery name="threads" dbtype="query">
-	select	*
-	from	threads
-	where	lower(name) like <cfqueryparam cfsqltype="cf_sql_varchar" value="%#lcase(form.search)#%"> 
-	</cfquery>
-</cfif>
+<cfset threads = application.thread.getThreads(bActiveOnly=false,start=url.start, max=10, sort="#url.sort# #url.dir#", search=form.search)>
 
 <cfoutput>
 <div class="top_input_misc">
@@ -43,8 +38,10 @@
 </div>
 </cfoutput>
 
-<cfmodule template="../tags/datatable.cfm" 
-		  data="#threads#" list="name,lastpostcreated,forum,conference,messages,sticky,active"
+<cfmodule template="../tags/datatablenew.cfm" 
+		  data="#threads.data#" list="name,lastpostcreated,forum,conference,messages,sticky,active"
+		  		  total="#threads.total#" perpage=10 start="#url.start#"
+			nosort="forum,conference,sticky"
 		  classList="left_15,left_15,left_20,left_15,left_10 align_center,left_10 align_center,left_10 align_center" 
 		  editlink="threads_edit.cfm" linkcol="name" label="Thread" linkappend="&search=#urlEncodedFormat(form.search)#"/>
 

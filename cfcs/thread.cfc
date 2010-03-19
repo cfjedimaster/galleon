@@ -112,20 +112,79 @@
 			
 	</cffunction>
 		
-	<cffunction name="getThreads" access="remote" returnType="query" output="false"
+	<cffunction name="getThreads" access="public" returnType="struct" output="false"
 				hint="Returns a list of threads.">
 
 		<cfargument name="bActiveOnly" type="boolean" required="false" default="true">
 		<cfargument name="forumid" type="uuid" required="false">
+
+		<cfargument name="start" type="numeric" required="false">
+		<cfargument name="max" type="numeric" required="false">
+
+		<cfargument name="sort" type="string" required="false" default="messages asc">
+		<cfargument name="search" type="string" required="false">
 		
 		<cfset var qGetThreads = "">
-		<cfset var getLastUser = "">
+		<cfset var qGetThreadsID = "">
+		<cfset var idfilter = "">
+		<cfset var smalleridfilter = "">
+		<cfset var x = "">
+		<cfset var getTotal = "">
+		<cfset var result = structNew()>
 		
 		<!--- Only a ForumsAdmin can be bActiveOnly=false --->
 		<cfif not arguments.bActiveOnly and not isUserInRole("forumsadmin")>
 			<cfset variables.utils.throw("ThreadCFC","Invalid call to getThreads")>
 		</cfif>
-		
+
+		<cfif structKeyExists(arguments, "start") and structKeyExists(arguments, "max")>
+			<cfquery name="gettotal" datasource="#variables.dsn#">
+			select	count(id) as total
+			from	#variables.tableprefix#threads t
+			where	1=1
+			<cfif arguments.bActiveOnly>
+				and		t.active = 1
+			</cfif>
+			<cfif isDefined("arguments.forumid")>
+				and		t.forumidfk = <cfqueryparam value="#arguments.forumid#" cfsqltype="CF_SQL_VARCHAR" maxlength="35">
+			</cfif>
+			<cfif structKeyExists(arguments, "search") and len(arguments.search)>
+				and		t.name like  <cfqueryparam value="%#arguments.search#%" cfsqltype="CF_SQL_VARCHAR" maxlength="35">
+			</cfif>			
+			</cfquery>
+
+			<cfquery name="qGetThreadsID" datasource="#variables.dsn#" maxrows="#arguments.start+arguments.max-1#">
+				select	t.id
+				from	((#variables.tableprefix#threads t
+						inner join #variables.tableprefix#forums f on t.forumidfk = f.id)
+						inner join #variables.tableprefix#conferences c on f.conferenceidfk = c.id)
+						inner join #variables.tableprefix#users u on t.useridfk = u.id
+
+				where 1=1
+				<cfif arguments.bActiveOnly>
+					and		t.active = 1
+				</cfif>
+				<cfif isDefined("arguments.forumid")>
+					and		t.forumidfk = <cfqueryparam value="#arguments.forumid#" cfsqltype="CF_SQL_VARCHAR" maxlength="35">
+				</cfif>			
+				<cfif structKeyExists(arguments, "search") and len(arguments.search)>
+					and		t.name like  <cfqueryparam value="%#arguments.search#%" cfsqltype="CF_SQL_VARCHAR" maxlength="35">
+				</cfif>
+				order by t.sticky <cfif variables.dbtype is not "msaccess">desc<cfelse>asc</cfif>, t.#arguments.sort#
+				<cfif variables.dbtype is "MYSQL">
+				limit #arguments.start-1#,#arguments.max#
+				</cfif>
+			</cfquery>
+			<cfset idfilter = valueList(qGetThreadsID.id)>
+			
+			<cfif listLen(idfilter) gt arguments.max>
+				<cfloop index="x" from="#listLen(idfilter)-arguments.page#" to="#listLen(idfilter)#">
+					<cfset smalleridfilter = listAppend(smalleridfilter, listGetAt(idfilter, x))>
+				</cfloop>
+				<cfset idfilter = smalleridfilter>
+			</cfif>
+		</cfif>		
+				
 		<cfquery name="qGetThreads" datasource="#variables.dsn#">
 		select	t.id, t.name, t.active, t.forumidfk, t.useridfk, t.datecreated, t.messages, t.lastpostuseridfk,
 			   	t.lastpostcreated, f.name as forum, u.username, sticky, c.name as conference
@@ -136,16 +195,30 @@
 		inner join #variables.tableprefix#users u on t.useridfk = u.id
 		
 		where 1=1 
+		<cfif len(idfilter)>
+			and	t.id in (<cfqueryparam value="#idfilter#" cfsqltype="cf_sql_varchar" list="true">)
+		</cfif>
 		<cfif arguments.bActiveOnly>
 			and		t.active = 1
 		</cfif>
 		<cfif isDefined("arguments.forumid")>
 			and		t.forumidfk = <cfqueryparam value="#arguments.forumid#" cfsqltype="CF_SQL_VARCHAR" maxlength="35">
 		</cfif>
-		order by t.sticky <cfif variables.dbtype is not "msaccess">desc<cfelse>asc</cfif>, t.messages
+		<cfif structKeyExists(arguments, "search") and len(arguments.search)>
+			and		t.name like  <cfqueryparam value="%#arguments.search#%" cfsqltype="CF_SQL_VARCHAR" maxlength="35">
+		</cfif>
+		order by t.sticky <cfif variables.dbtype is not "msaccess">desc<cfelse>asc</cfif>, t.#arguments.sort#
 		</cfquery>
-		
-		<cfreturn qGetThreads>
+
+		<cfif structKeyExists(arguments, "start") and structKeyExists(arguments, "max")>
+			<cfset result.total = gettotal.total>		
+		<cfelse>
+			<cfset result.total = qGetThreads.recordCount>
+		</cfif>
+
+		<cfset result.data = qGetThreads>
+
+		<cfreturn result>			
 			
 	</cffunction>
 	

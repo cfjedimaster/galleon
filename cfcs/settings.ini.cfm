@@ -6,8 +6,8 @@ fromAddress=galleon@localhost.com
 rootURL=http://127.0.0.1/forums
 sendonpost=youremail@goeshere.com
 dbtype=mysql
-tableprefix=galleon_
-version=2.2.9.004
+tableprefix=
+version=2.3
 requireconfirmation=true
 title=Galleon Forums
 fullemails=true
@@ -18,4 +18,5 @@ bbcode_editor=true
 mailserver=
 mailusername=
 mailpassword=
+allowpms=true
 --->

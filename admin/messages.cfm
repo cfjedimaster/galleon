@@ -11,6 +11,9 @@
 
 <cfparam name="url.search" default="">
 <cfparam name="form.search" default="#url.search#">
+<cfparam name="url.start" default="1">
+<cfparam name="url.sort" default="posted">
+<cfparam name="url.dir" default="asc">
 
 <cfmodule template="../tags/layout.cfm" templatename="admin" title="Message Editor">
 
@@ -23,15 +26,7 @@
 </cfif>
 
 <!--- get messages --->
-<cfset messages = application.message.getMessages()>
-
-<cfif len(trim(form.search))>
-	<cfquery name="messages" dbtype="query">
-	select	*
-	from	messages
-	where	lower(title) like <cfqueryparam cfsqltype="cf_sql_varchar" value="%#lcase(form.search)#%"> 
-	</cfquery>
-</cfif>
+<cfset messages = application.message.getMessages(search=form.search, start=url.start, max=10, sort="#url.sort# #url.dir#")>
 
 <cfoutput>
 <div class="top_input_misc">
@@ -43,9 +38,11 @@
 </div>
 </cfoutput>
 
-<cfmodule template="../tags/datatable.cfm" 
-		  data="#messages#" list="title,posted,threadname,forumname,conferencename,username"
+<cfmodule template="../tags/datatablenew.cfm" 
+		  data="#messages.data#" list="title,posted,threadname,forumname,conferencename,username"
+		  total="#messages.total#" perpage=10 start="#url.start#"
 		  classList="left_20,left_15,left_20,left_15,left_15,left_10" 
+		  nosort="threadname,forumname,conferencename,username"
 		  editlink="messages_edit.cfm" linkcol="title" label="Message" linkappend="&search=#urlEncodedFormat(form.search)#" />
 
 

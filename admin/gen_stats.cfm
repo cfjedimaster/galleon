@@ -35,6 +35,12 @@ select	count(id) as messages, min(posted) as earliestpost,
 from	#application.settings.tableprefix#messages
 </cfquery>
 
+<cfquery name="wstats" datasource="#application.settings.dsn#">
+select	count(id) as messages
+from	#application.settings.tableprefix#messages
+where	posted > <cfqueryparam cfsqltype="cf_sql_timestamp" value="#dateAdd("d", -7, now())#">
+</cfquery>
+
 <cfoutput>
 <div class="clearer"></div>
 <div class="title_row">
@@ -43,26 +49,33 @@ from	#application.settings.tableprefix#messages
 
 <div class="row_0">
 	<p class="left_50"><span>Number of Conferences:</span></p>
-	<p class="left40">#cstats.conferenceCount#</p>
+	<p class="left40">#numberFormat(cstats.conferenceCount)#</p>
 
 <div class="clearer"></div>
 </div>
 
 <div class="row_1">
 	<p class="left_50"><span>Number of Forums:</span></p>
-	<p class="left40">#fstats.forumCount#</p>
+	<p class="left40">#numberFormat(fstats.forumCount)#</p>
 <div class="clearer"></div>
 </div>
 
 <div class="row_0">
 	<p class="left_50"><span>Number of Threads:</span></p>
-	<p class="left40">#tstats.threadCount#</p>
+	<p class="left40">#numberFormat(tstats.threadCount)#</p>
 <div class="clearer"></div>
 </div>
 
 <div class="row_1">
 	<p class="left_50"><span>Number of Messages:</span></p>
-	<p class="left40">#mstats.messages#</p>
+	<p class="left40">#numberFormat(mstats.messages)#</p>
+
+<div class="clearer"></div>
+</div>
+
+<div class="row_1">
+	<p class="left_50"><span>Messages Posted This Week:</span></p>
+	<p class="left40">#numberFormat(wstats.messages)#</p>
 
 <div class="clearer"></div>
 </div>
@@ -81,7 +94,7 @@ from	#application.settings.tableprefix#messages
 
 <div class="row_0">
 	<p class="left_50"><span>Number of Users:</span></p>
-	<p class="left40">#ustats.userCount#</p>
+	<p class="left40">#numberFormat(ustats.userCount)#</p>
 
 <div class="clearer"></div>
 </div>

@@ -202,9 +202,12 @@ User:		#arguments.username#
 		<cfset var qGetMessage = "">
 				
 		<cfquery name="qGetMessage" datasource="#variables.dsn#">
-			select	id, title, body, posted, useridfk, threadidfk, attachment, filename
-			from	#variables.tableprefix#messages
-			where	id = <cfqueryparam value="#arguments.id#" cfsqltype="CF_SQL_VARCHAR" maxlength="35">
+			select	m.id, m.title, m.body, m.posted, m.useridfk, m.threadidfk, m.attachment, m.filename,
+					u.username, t.name as thread
+			from	#variables.tableprefix#messages m
+			left join #variables.tableprefix#users u on m.useridfk = u.id
+			left join #variables.tableprefix#threads t on m.threadidfk = t.id
+			where	m.id = <cfqueryparam value="#arguments.id#" cfsqltype="CF_SQL_VARCHAR" maxlength="35">
 		</cfquery>
 
 		<!--- Throw if invalid id passed --->
@@ -216,15 +219,64 @@ User:		#arguments.username#
 			
 	</cffunction>
 		
-	<cffunction name="getMessages" access="remote" returnType="query" output="false"
+	<cffunction name="getMessages" access="public" returnType="struct" output="false"
 				hint="Returns a list of messages.">
 
 		<cfargument name="threadid" type="uuid" required="false">
+		<cfargument name="start" type="numeric" required="false">
+		<cfargument name="max" type="numeric" required="false">
+		<cfargument name="sort" type="string" required="false" default="posted asc">
+		<cfargument name="search" type="string" required="false">
 		
 		<cfset var qGetMessages = "">
-				
+		<cfset var qGetMessagesID = "">
+		<cfset var idfilter = "">
+		<cfset var smalleridfilter = "">
+		<cfset var x = "">
+		<cfset var getTotal = "">
+		<cfset var result = structNew()>
+		
+		<cfif structKeyExists(arguments, "start") and structKeyExists(arguments, "max")>
+			<cfquery name="gettotal" datasource="#variables.dsn#">
+			select	count(id) as total
+			from	#variables.tableprefix#messages
+			where	1=1
+			<cfif structKeyExists(arguments, "threadid")>
+				and		#variables.tableprefix#messages.threadidfk = <cfqueryparam value="#arguments.threadid#" cfsqltype="CF_SQL_VARCHAR" maxlength="35">
+			</cfif>
+			<cfif structKeyExists(arguments, "search") and len(arguments.search)>
+				and		#variables.tableprefix#messages.title like  <cfqueryparam value="%#arguments.search#%" cfsqltype="CF_SQL_VARCHAR" maxlength="35">
+			</cfif>
+			</cfquery>
+
+			<cfquery name="qGetMessagesID" datasource="#variables.dsn#" maxrows="#arguments.start+arguments.max-1#">
+				select	#variables.tableprefix#messages.id
+				from #variables.tableprefix#messages
+				where 1=1
+				<cfif structKeyExists(arguments, "threadid")>
+					and		#variables.tableprefix#messages.threadidfk = <cfqueryparam value="#arguments.threadid#" cfsqltype="CF_SQL_VARCHAR" maxlength="35">
+				</cfif>
+				<cfif structKeyExists(arguments, "search") and len(arguments.search)>
+					and		#variables.tableprefix#messages.title like  <cfqueryparam value="%#arguments.search#%" cfsqltype="CF_SQL_VARCHAR" maxlength="35">
+				</cfif>
+				order by #arguments.sort#
+				<cfif variables.dbtype is "MYSQL">
+				limit #arguments.start-1#,#arguments.max#
+				</cfif>
+			</cfquery>
+			<cfset idfilter = valueList(qGetMessagesID.id)>
+			
+			<cfif listLen(idfilter) gt arguments.max>
+				<cfloop index="x" from="#listLen(idfilter)-arguments.page#" to="#listLen(idfilter)#">
+					<cfset smalleridfilter = listAppend(smalleridfilter, listGetAt(idfilter, x))>
+				</cfloop>
+				<cfset idfilter = smalleridfilter>
+			</cfif>
+		</cfif>		
+		
 		<cfquery name="qGetMessages" datasource="#variables.dsn#">
-		select	#variables.tableprefix#messages.id, #variables.tableprefix#messages.title, #variables.tableprefix#messages.body, #variables.tableprefix#messages.attachment, #variables.tableprefix#messages.filename, 
+		select					
+				#variables.tableprefix#messages.id, #variables.tableprefix#messages.title, #variables.tableprefix#messages.body, #variables.tableprefix#messages.attachment, #variables.tableprefix#messages.filename, 
 				#variables.tableprefix#messages.posted, #variables.tableprefix#messages.threadidfk, #variables.tableprefix#messages.useridfk, 
 				#variables.tableprefix#threads.name as threadname, #variables.tableprefix#users.username,
 				#variables.tableprefix#forums.name as forumname, #variables.tableprefix#conferences.name as conferencename
@@ -233,16 +285,28 @@ User:		#arguments.username#
 					left join #variables.tableprefix#forums on #variables.tableprefix#threads.forumidfk = #variables.tableprefix#forums.id)
 					left join #variables.tableprefix#conferences on #variables.tableprefix#forums.conferenceidfk = #variables.tableprefix#conferences.id)
 					left join #variables.tableprefix#users on #variables.tableprefix#messages.useridfk = #variables.tableprefix#users.id
-
-
-		<cfif isDefined("arguments.threadid")>
-			where		#variables.tableprefix#messages.threadidfk = <cfqueryparam value="#arguments.threadid#" cfsqltype="CF_SQL_VARCHAR" maxlength="35">
+		where	1=1
+		<cfif structKeyExists(arguments, "threadid")>
+			and		#variables.tableprefix#messages.threadidfk = <cfqueryparam value="#arguments.threadid#" cfsqltype="CF_SQL_VARCHAR" maxlength="35">
 		</cfif>
-		order by	posted asc
+		<cfif structKeyExists(arguments, "search") and len(arguments.search)>
+			and		#variables.tableprefix#messages.title like  <cfqueryparam value="%#arguments.search#%" cfsqltype="CF_SQL_VARCHAR" maxlength="35">
+		</cfif>
+		<cfif len(idfilter)>
+			and	#variables.tableprefix#messages.id in (<cfqueryparam value="#idfilter#" cfsqltype="cf_sql_varchar" list="true">)
+		</cfif>
+		order by	#arguments.sort#
 		</cfquery>
 		
-		<cfreturn qGetMessages>
-			
+		<cfif structKeyExists(arguments, "start") and structKeyExists(arguments, "max")>
+			<cfset result.total = gettotal.total>		
+		<cfelse>
+			<cfset result.total = qGetMessages.recordCount>
+		</cfif>
+
+		<cfset result.data = qGetMessages>
+
+		<cfreturn result>			
 	</cffunction>
 	
 	<cffunction name="notifySubscribers" access="private" returnType="string" output="false"
