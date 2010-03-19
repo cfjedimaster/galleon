@@ -218,7 +218,7 @@
 				<div class="clearer"><br /></div>
 				</cfif>
 				</cfif>
-				<input type="image" src="images/btn_save.gif" alt="Save" name="save" class="submit_btns">
+				<input type="image" src="images/btn_save.gif" title="Save" name="save" class="submit_btns">
 				
 			</div>
 			

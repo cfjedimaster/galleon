@@ -459,3 +459,12 @@ a:active {
 	}
 	
 .left_24 { width: 24%; float: left; }	
+
+.sendpm_form {
+	padding: 20px;
+	width: 600px;
+	}
+	.sendpm_form textarea { width: 500px; height: 300px; }
+	.sendpm_form .clearer { line-height: 5px; }
+
+

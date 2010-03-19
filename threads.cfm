@@ -34,8 +34,8 @@
 
 
 <!--- get my threads --->
-
-<cfset data = application.thread.getThreads(forumid=url.forumid)>
+<cfset tdata = application.thread.getThreads(forumid=url.forumid)>
+<cfset data = tdata.data>
 <!--- sort --->
 <cfset data = request.udf.querySort(data,url.sort,url.sortdir)>
 

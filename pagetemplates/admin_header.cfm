@@ -63,7 +63,7 @@ function navon(s) {
 		<div class="nav_breaker"></div>
 		
 		<div class="nav_title">Stats</div>
-		<a href="stats.cfm" name="General Reporting" class="#navOn('/stats.cfm')#">General Reporting</a>
+		<!---<a href="stats.cfm" name="General Reporting" class="#navOn('/stats.cfm')#">General Reporting</a>--->
 		<a href="search_stats.cfm" name="Search Reporting" class="#navOn('search_stats.cfm')#">Search Reporting</a>
 		
 		<div class="nav_breaker"></div>

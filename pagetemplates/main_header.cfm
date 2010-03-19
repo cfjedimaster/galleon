@@ -51,7 +51,20 @@ $(document).ready(function()	{
 		
 		<div class="top_menu">
 			<a href="index.cfm">Home</a> | 
+			<cfif request.udf.isLoggedOn()>
+			<cfif  isUserInRole("forumsadmin")>
+			<a href="admin/">Admin</a> |
+			</cfif>
 			<a href="profile.cfm">Profile</a> | 
+				<cfif application.settings.allowpms>
+					<cfset totalunread = application.user.getUnreadMessageCount(getAuthUser())>
+					<cfif totalunread neq 0>
+						<a href="pms.cfm"> (#totalunread#) Messages</a> | 
+					<cfelse>
+						<a href="pms.cfm">Messages</a> | 
+					</cfif>
+				</cfif>
+			</cfif>
 			<a href="search.cfm">Search</a> 
 			<cfset thisPage = cgi.script_name & "?" & reReplace(cgi.query_string,"logout=1","")>
 			<cfif not isDefined("url.ref")>
