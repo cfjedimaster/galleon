@@ -763,8 +763,8 @@ To complete your registration at #variables.title#, please click on the link bel
 		insert into #variables.tableprefix#privatemessages(id,fromuseridfk,touseridfk,sent,body,subject,unread) 
 		values(
 			<cfqueryparam cfsqltype="cf_sql_varchar" value="#createUUID()#">,
-			<cfqueryparam cfsqltype="cf_sql_varchar" value="#toid#">,
 			<cfqueryparam cfsqltype="cf_sql_varchar" value="#fromid#">,
+			<cfqueryparam cfsqltype="cf_sql_varchar" value="#toid#">,
 			<cfqueryparam cfsqltype="cf_sql_timestamp" value="#now()#">,
 			<cfqueryparam cfsqltype="cf_sql_longvarchar" value="#arguments.body#">,
 			<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.subject#" maxlength="255">,
