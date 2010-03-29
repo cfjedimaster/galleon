@@ -388,6 +388,7 @@ To complete your registration at #variables.title#, please click on the link bel
 		<cfargument name="username" type="string" required="true">
 		<cfset var q = "">
 		<cfset var s = structNew()>
+		<cfset var col = "">
 		
 		<cfquery name="q" datasource="#variables.dsn#">
 		select pm.id, pm.subject, pm.body, pm.unread, pm.sent, u2.username as sender
@@ -584,6 +585,8 @@ To complete your registration at #variables.title#, please click on the link bel
 		<cfset var qGetUsersId = "">
 		<cfset var idfilter = "">
 		<cfset var smalleridfilter = "">
+		<cfset var result = structNew()>
+		<cfset var x = "">
 		
 		<cfif structKeyExists(arguments, "start") and structKeyExists(arguments, "max")>
 			<cfquery name="gettotal" datasource="#variables.dsn#">
