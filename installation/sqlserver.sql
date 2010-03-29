@@ -1,3 +1,14 @@
+CREATE TABLE dbo.galleon_privatemessages ( 
+	[id]        	nvarchar(35) NOT NULL,
+	fromuseridfk  	nvarchar(35) NOT NULL,
+	touseridfk  	nvarchar(35) NOT NULL,
+	sent 	datetime NULL, 
+	body      	ntext NOT NULL,
+	subject     	nvarchar(255) NOT NULL,
+	unread          	tinyint NOT NULL
+be	)
+GO
+
 CREATE TABLE dbo.galleon_conferences ( 
 	[id]              	nvarchar(35) NOT NULL,
 	[name]            	nvarchar(255) NOT NULL,
@@ -101,6 +112,11 @@ CREATE TABLE dbo.galleon_users (
 	confirmed   	bit NOT NULL ,
 	avatar      	nvarchar(255) NULL 
 	)
+GO
+
+ALTER TABLE dbo.galleon_privatemessages
+	ADD CONSTRAINT PK_privatemessages
+	PRIMARY KEY (id)
 GO
 
 ALTER TABLE dbo.galleon_conferences

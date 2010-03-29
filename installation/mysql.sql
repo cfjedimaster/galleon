@@ -15,6 +15,20 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
+
+DROP TABLE IF EXISTS `galleon_privatemessages`;
+CREATE TABLE `galleon_privatemessages` (
+  `Id` varchar(35) NOT NULL default '',
+  `fromuseridfk` varchar(35) NOT NULL default '',
+  `touseridfk` varchar(35) NOT NULL default '',
+  `sent` datetime NOT NULL default '0000-00-00 00:00:00',
+  `body` text NOT NULL,
+  `subject` varchar(255) NOT NULL default '',
+  `unread` tinyint(1) NOT NULL default '0',
+  PRIMARY KEY  (`Id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
 --
 -- Table structure for table `galleon_conferences`
 --
