@@ -27,6 +27,11 @@ Gifts are always welcome. ;)
 
 
 ---- LATEST VERSION ----
+2.3.001 (March 31, 2010)
+/cfcs/forum.cfc and thread.cfc - Updates to fix issue with deletes
+/cfcs/settings.ini.cfm - just the version
+
+---- ARCHIVED UPDATES ----
 2.2.3 (March 19, 2010)
 
 NOTE: A new table has been added, privatemessages. Please ensure you add this table.
@@ -51,8 +56,6 @@ Changes in regard to messaging/performance.
 /tags/datatablenew.cfm -> New tag
 
 Thanks to Nick Hill for updating the Access MDB.
-
----- ARCHIVED UPDATES ----
 2.2.9.004 (March 5, 2010)
 /login.cfm - thanks to use rucky544 for noticing a bug in the send password reminder 
 /cfcs/settings.ini.cfm - Version #
