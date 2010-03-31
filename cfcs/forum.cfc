@@ -55,8 +55,8 @@
 		
 		<!--- first, delete my children --->
 		<cfset threadKids = variables.thread.getThreads(false,arguments.id)>
-		<cfloop query="threadKids">
-			<cfset variables.thread.deleteThread(threadKids.id,false)>
+		<cfloop query="threadKids.data">
+			<cfset variables.thread.deleteThread(threadKids.data.id[currentRow],false)>
 		</cfloop>
 
 		<cfquery datasource="#variables.dsn#">
@@ -237,14 +237,14 @@
 		--->
 
 		<cfset threadKids = variables.thread.getThreads(true,arguments.id)>
-		<cfset haveSome = threadKids.recordCount gte 1>
+		<cfset haveSome = threadKids.total gte 1>
 
-		<cfloop query="threadKids">
+		<cfloop query="threadKids.data">
 			<cfset total = total + messages>
 			<cfif isDate(lastPostCreated) and dateCompare(last, lastPostCreated) is -1>
 				<cfset last = lastpostcreated>
 				<cfset lastu = lastpostuseridfk>
-				<cfset lasti = threadKids.id[currentRow]>
+				<cfset lasti = threadKids.data.id[currentRow]>
 			</cfif>
 		</cfloop>
 

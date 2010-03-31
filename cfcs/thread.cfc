@@ -65,8 +65,8 @@
 		<!--- delete kids --->
 		<cfset var msgKids = variables.message.getMessages(arguments.id)>
 		
-		<cfloop query="msgKids">
-			<cfset variables.message.deleteMessage(msgKids.id,false)>
+		<cfloop query="msgKids.data">
+			<cfset variables.message.deleteMessage(msgKids.data.id[currentRow],false)>
 		</cfloop>
 
 		<cfquery datasource="#variables.dsn#">
@@ -321,14 +321,14 @@
 		--->
 
 		<cfset msgKids = variables.message.getMessages(arguments.id)>
-		<cfset haveSome = msgKids.recordCount gte 1>
+		<cfset haveSome = msgKids.total gte 1>
 
 		<!--- last msg is latest --->
 		<cfif haveSome>
-			<cfset total = msgKids.recordCount>
-			<cfset last = msgKids.posted[msgKids.recordCount]>
-			<cfset lastu = msgKids.useridfk[msgKids.recordCount]>
-			<cfset lasti = msgKids.id[msgKids.recordCount]>
+			<cfset total = msgKids.total>
+			<cfset last = msgKids.data.posted[msgKids.total]>
+			<cfset lastu = msgKids.data.useridfk[msgKids.total]>
+			<cfset lasti = msgKids.data.id[msgKids.total]>
 			<!--- lasti is NOT used. I know this. keeping this anyway for now. --->
 		</cfif>
 
