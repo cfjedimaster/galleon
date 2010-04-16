@@ -6,7 +6,7 @@ CREATE TABLE dbo.galleon_privatemessages (
 	body      	ntext NOT NULL,
 	subject     	nvarchar(255) NOT NULL,
 	unread          	tinyint NOT NULL
-be	)
+	)
 GO
 
 CREATE TABLE dbo.galleon_conferences ( 

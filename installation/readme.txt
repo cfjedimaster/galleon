@@ -29,6 +29,7 @@ Gifts are always welcome. ;)
 ---- LATEST VERSION ----
 2.3.002 (April 16, 2010)
 /cfcs/settings.ini.cfm - I accidentally checked in a version that didn't have the right table prefix for the default db scripts.
+/install/sqlserver.sql - typo found by user GSMadMan
 
 ---- ARCHIVED UPDATES ----
 2.3.001 (March 31, 2010)
