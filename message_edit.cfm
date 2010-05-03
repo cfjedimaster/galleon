@@ -149,17 +149,16 @@
 				
 			<p class="input_name">Title:</p>
 			<input type="text" name="title" value="#form.title#"  class="input_box" maxlength="50">
-			
 			<div class="clearer"><br /></div>
 			
 			<p class="input_name">Body:</p><br />
 			<textarea id="markitup" name="body" class="edit_textarea">#form.body#</textarea>
 			
 			<div class="clearer"><br /></div>
+
 			<cfif isBoolean(request.forum.attachments) and request.forum.attachments>
 			
 			<div class="avatar_title">Attach File:</div>
-				
 				<div class="avatar_options">
 								
 				<div class="clearer"><br /></div>
@@ -174,16 +173,18 @@
 				</cfif>
 				
 				<div class="clearer"></div>
-				</cfif>
 				
 			</div>
+
+			</cfif>
+
 			
 			<div class="clearer"><br /></div>
 			<input type="image" src="images/btn_update.gif" alt="Update" title="Update" class="submit_btns"  name="post">
 			<div class="clearer"><br /></div>
 			
 			</form>
-			
+
 		</div>	
 		<!-- Message Edit Ender -->
 						
