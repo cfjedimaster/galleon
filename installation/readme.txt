@@ -27,11 +27,15 @@ Gifts are always welcome. ;)
 
 
 ---- LATEST VERSION ----
+2.3.003 (May 3, 2010)
+/message_edit.cfm - small bug in display
+/cfcs/settings.ini.cfm - version #
+
+---- ARCHIVED UPDATES ----
 2.3.002 (April 16, 2010)
 /cfcs/settings.ini.cfm - I accidentally checked in a version that didn't have the right table prefix for the default db scripts.
 /install/sqlserver.sql - typo found by user GSMadMan
 
----- ARCHIVED UPDATES ----
 2.3.001 (March 31, 2010)
 /cfcs/forum.cfc and thread.cfc - Updates to fix issue with deletes
 /cfcs/settings.ini.cfm - just the version
