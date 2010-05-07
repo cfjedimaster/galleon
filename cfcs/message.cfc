@@ -539,6 +539,9 @@ No HTML is allowed in your message. Basic Formatting Rules:<br />
 [img]...[/img] for images<br />
 </td>
 </tr>
+<tr>
+<td colspan="2">
+[attachment]...[/attachment] will link to your attachment if one exists. If your attachment is an image, it will be displayed inline.
 </table>
 
 <p>

@@ -640,7 +640,7 @@ To complete your registration at #variables.title#, please click on the link bel
 		<cfif structKeyExists(arguments, "start") and structKeyExists(arguments, "max")>
 			<cfset result.total = gettotal.total>		
 		<cfelse>
-			<cfset result.total = qGetTUsers.recordCount>
+			<cfset result.total = qGetUsers.recordCount>
 		</cfif>
 
 		<cfset result.data = qGetUsers>

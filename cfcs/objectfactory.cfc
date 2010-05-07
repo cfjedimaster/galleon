@@ -173,6 +173,14 @@
 					return obj;
 				break;
 
+				case "coldfish":
+					obj = createObject('component','delmore.coldfish').init();
+						if (arguments.singleton) { // scope singleton
+							addSingleton(arguments.objName, obj);
+						}
+						// inject dependencies through setter
+					return obj;
+				break;
 			}
 		</cfscript>
 		

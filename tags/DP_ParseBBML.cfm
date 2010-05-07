@@ -188,6 +188,22 @@ eInfo.e0111 = StructNew();
 	<cfset UseCF_ColoredCode = "No">
 </cfif>
 
+<!---
+Ray Mod: If we have an attachment, look for and replace [attachment][/attachment] with a link
+--->
+<cfif structKeyExists(attributes, "attachment") and len(attributes.attachment) and structKeyExists(attributes, "attachmenturl")>
+	<cfset useAttachment = true>
+	<!--- If image, we embed --->
+	<cfset ext = listLast(attributes.attachment, ".")>
+	<cfif listFindNoCase("gif,jpg,jpeg,png", ext)>
+		<cfset attachmentIsImage = true>
+	<cfelse>
+		<cfset attachmentIsImage = false>
+	</cfif>
+<cfelse>
+	<cfset useAttachment = false>
+</cfif>
+
 	<!--- Create Output Structure --->
 <cfset TempOutput = StructNew()>
 <cfset TempOutput.Input = Input>
@@ -271,57 +287,9 @@ if ( ConvertBBML AND Find("[", Input) AND Find("]", Input) ) {
 		if (UseCF_ColoredCode) {
 				// The following code copyrighted by Dain Anderson, www.cfcomet.com.  Used with Permission
 			/* Pointer to Attributes.Data */
-			this = CurCodeBlock;
-			/* Convert special characters so they do not get interpreted literally; italicize and boldface */
-			this = REReplaceNoCase(this, "&([[:alpha:]]{2,});", "«B»«I»&amp;\1;«/I»«/B»", "ALL");
-			/* Convert many standalone (not within quotes) numbers to blue, ie. myValue = 0 */
-			this = REReplaceNoCase(this, "(gt|lt|eq|is|,|\(|\))([[:space:]]?[0-9]{1,})", "\1«FONT COLOR=BLUE»\2«/FONT»", "ALL");
-			/* Convert normal tags to navy blue */
-			this = REReplaceNoCase(this, "<(/?)((!d|b|c(e|i|od|om)|d|e|f(r|o)|h|i|k|l|m|n|o|p|q|r|s|t(e|i|t)|u|v|w|x)[^>]*)>", "«FONT COLOR=NAVY»<\1\2>«/FONT»", "ALL");
-			/* Convert all table-related tags to teal */
-			this = REReplaceNoCase(this, "<(/?)(t(a|r|d|b|f|h)([^>]*)|c(ap|ol)([^>]*))>", "«FONT COLOR=TEAL»<\1\2>«/FONT»", "ALL");
-			/* Convert all form-related tags to orange */
-			this = REReplaceNoCase(this, "<(/?)((bu|f(i|or)|i(n|s)|l(a|e)|se|op|te)([^>]*))>", "«FONT COLOR=FF8000»<\1\2>«/FONT»", "ALL");
-			/* Convert all tags starting with 'a' to green, since the others aren't used much and we get a speed gain */
-			this = REReplaceNoCase(this, "<(/?)(a[^>]*)>", "«FONT COLOR=GREEN»<\1\2>«/FONT»", "ALL");
-			/* Convert all image and style tags to purple */
-			this = REReplaceNoCase(this, "<(/?)((im[^>]*)|(sty[^>]*))>", "«FONT COLOR=PURPLE»<\1\2>«/FONT»", "ALL");
-			/* Convert all ColdFusion, SCRIPT and WDDX tags to maroon */
-			this = REReplaceNoCase(this, "<(/?)((cf[^>]*)|(sc[^>]*)|(wddx[^>]*))>", "«FONT COLOR=MAROON»<\1\2>«/FONT»", "ALL");
-			/* Convert all inline "//" comments to gray (revised) */
-			this = REReplaceNoCase(this, "([^:/]\/{2,2})([^[:cntrl:]]+)($|[[:cntrl:]])", "«FONT COLOR=GRAY»«I»\1\2«/I»«/FONT»", "ALL");
-			/* Convert all multi-line script comments to gray */
-			this = REReplaceNoCase(this, "(\/\*[^\*]*\*\/)", "«FONT COLOR=GRAY»«I»\1«/I»«/FONT»", "ALL");
-			/* Convert all HTML and ColdFusion comments to gray */	
-			/* The next 10 lines of code can be replaced with the commented-out line following them, if you do care whether HTML and CFML 
-			   comments contain colored markup. */
-			EOF = 0; BOF = 1;
-			while(NOT EOF) {
-				Match = REFindNoCase("<!---?([^-]*)-?-->", this, BOF, True);
-				if (Match.pos[1]) {
-					Orig = Mid(this, Match.pos[1], Match.len[1]);
-					Chunk = REReplaceNoCase(Orig, "«(/?[^»]*)»", "", "ALL");
-					BOF = ((Match.pos[1] + Len(Chunk)) + 31); // 31 is the length of the FONT tags in the next line
-					this = Replace(this, Orig, "«FONT COLOR=GRAY»«I»#Chunk#«/I»«/FONT»");
-				} else EOF = 1;
-			}
-			// Use this next line of code instead of the last 10 lines if you want (faster)
-			// this = REReplaceNoCase(this, "(<!---?[^-]*-?-->)", "«FONT COLOR=GRAY»«I»\1«/I»«/FONT»", "ALL");
-			/* Convert all quoted values to blue */
-			this = REReplaceNoCase(this, """([^""]*)""", "«FONT COLOR=BLUE»""\1""«/FONT»", "ALL");
-			/* Convert left containers to their ASCII equivalent */
-			this = REReplaceNoCase(this, "<", "&lt;", "ALL");
-			/* Revert all pseudo-containers back to their real values to be interpreted literally (revised) */
-			this = REReplaceNoCase(this, "«([^»]*)»", "<\1>", "ALL");
-			/* ***New Feature*** Convert all FILE and UNC paths to active links (i.e, file:///, \\server\, c:\myfile.cfm) */
-			this = REReplaceNoCase(this, "(((file:///)|([a-z]:\\)|(\\\\[[:alpha:]]))+(\.?[[:alnum:]\/=^@*|:~`+$%?_##& -])+)", "<A TARGET=""_blank"" HREF=""\1"">\1</A>", "ALL");
-			/* Convert all URLs to active links (revised) */
-			this = REReplaceNoCase(this, "([[:alnum:]]*://[[:alnum:]\@-]*(\.[[:alnum:]][[:alnum:]-]*[[:alnum:]]\.)?[[:alnum:]]{2,}(\.?[[:alnum:]\/=^@*|:~`+$%?_##&-])+)", "<A TARGET=""_blank"" HREF=""\1"">\1</A>", "ALL");
-			/* Convert all email addresses to active mailto's (revised) */
-			this = REReplaceNoCase(this, "(([[:alnum:]][[:alnum:]_.-]*)?[[:alnum:]]@[[:alnum:]][[:alnum:].-]*\.[[:alpha:]]{2,})", "<A HREF=""mailto:\1"">\1</A>", "ALL");
-			this = "<DIV STYLE=""padding-left : 10px;""><PRE>#this#</PRE></DIV>";
-				// The above code copyrighted by Dain Anderson, www.cfcomet.com.  Used with Permission
-			CurCodeBlock = this;
+			//this = CurCodeBlock;
+			curCodeBlock = application.coldfish.formatstring(curCodeBlock);
+			//CurCodeBlock = this;
 		} else {
 			CurCodeBlock = HTMLCodeFormat(CurCodeBlock);
 		};
@@ -330,7 +298,7 @@ if ( ConvertBBML AND Find("[", Input) AND Find("]", Input) ) {
 	};
 
 		// Set non-tag brackets to safe entities
-	Input = ReReplaceNoCase(Input, "\[(/?)((\*)|(b)|(bold)|(i)|(italic)|(u)|(underline)|(s)|(strikethrough)|(sup)|(superscript)|(center)|(sub)|(subscript)|(size(=[0-9]*)?)|(color(=[##0-9A-Za-z]*)?)|(q)|(quote)|(sql)|(code)|(pre)|(preformatted)|((url|link)(=([^]]*))?)|(email(=([^]]*))?)|(img)|(image)|(list(=(1|a|A|i|I))?))\]", "ù\1\2ú", "All");
+	Input = ReReplaceNoCase(Input, "\[(/?)((\*)|(attachment)|(b)|(bold)|(i)|(italic)|(u)|(underline)|(s)|(strikethrough)|(sup)|(superscript)|(center)|(sub)|(subscript)|(size(=[0-9]*)?)|(color(=[##0-9A-Za-z]*)?)|(q)|(quote)|(sql)|(code)|(pre)|(preformatted)|((url|link)(=([^]]*))?)|(email(=([^]]*))?)|(img)|(image)|(list(=(1|a|A|i|I))?))\]", "ù\1\2ú", "All");
 	Input = Replace(Input, "[", "Ù", "All");
 	Input = Replace(Input, "]", "Ú", "All");
 	Input = Replace(Input, "ù", "[", "All");
@@ -381,7 +349,17 @@ if ( ConvertBBML AND Find("[", Input) AND Find("]", Input) ) {
 			// Convert Links
 		Input = ReReplaceNoCase(Input, "\[(url|link)=([^]]*)\]([^[£]*)\[/\1\]", "£ href=§\2§»\3«/a»", "All");
 		Input = ReReplaceNoCase(Input, "\[(url|link)\]([^[£]*)\[/\1\]", "£ href=§\2§»\2«/a»", "All");
-	
+
+		//RayMod for Attachment
+		if(useAttachment) {
+			if(not attachmentIsImage) {
+				Input = ReReplaceNoCase(Input, "\[attachment\]([^[£]*)\[/attachment\]", "£ href=§#attributes.attachmenturl#§»\1«/a»", "All");
+			} else {
+				Input = ReReplaceNoCase(Input, "\[attachment\]([^[£]*)\[/attachment\]", "«img src=§#attributes.attachmenturl#§ title=§\1§»", "All");			
+			}
+		} 
+
+			
 			// Convert Email Links
 		Input = ReReplaceNoCase(Input, "\[email=([^]]*)\]([^[£]*)\[/email\]", "£ href=§mailto:\1§»\2«/a»", "All");
 		Input = ReReplaceNoCase(Input, "\[email\]([^[(£]*)\[/email\]", "£ href=§mailto:\1§»\1«/a»", "All");

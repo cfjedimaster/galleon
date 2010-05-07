@@ -202,7 +202,7 @@
 				<cfif len(attachment)>Attachment: <a href="attachment.cfm?id=#id#">#attachment#</a></cfif></p>
 
 				<div class="forum_post_content">
-				<cfmodule template="tags/DP_ParseBBML.cfm" input="#body#" outputvar="result" convertsmilies="true" usecf_coloredcode="true" smileypath="images/Smilies/Default/">
+				<cfmodule template="tags/DP_ParseBBML.cfm" input="#body#" outputvar="result" convertsmilies="true" usecf_coloredcode="true" smileypath="images/Smilies/Default/" attachment="#attachment#" attachmenturl="attachment.cfm?id=#id#">
 				#result.output#
 				<cfif len(uinfo.signature)>
 					<cfset sig = uinfo.signature>

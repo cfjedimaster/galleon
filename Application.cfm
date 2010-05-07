@@ -77,6 +77,8 @@
 		<cfset application.image = application.factory.get('image')>
 		<cfset application.image.setOption("throwonerror", false)>
 	</cfif>
+	
+	<cfset application.coldfish = application.factory.get('coldfish')>
 
 	<cfset application.init = true>
 	

@@ -27,11 +27,24 @@ Gifts are always welcome. ;)
 
 
 ---- LATEST VERSION ----
+2.3.1 (May 7, 2010)
+/cfcs/settings.ini.cfm - version #
+/admin/thread_edit.cfm - You cna no longer reset the owner of a thread. Will return.
+/Application.cfm - load a new CFC
+/cfcs/delmore/* -> ColdFish support for code rendering
+/cfcs/image.cfc - change one \ to /
+/cfcs/message.cfc - update to help text for message editing
+/cfcs/objectfactory - get new cfcs
+/cfcs/user.cfc - bug fix in get users
+/messages.cfm - slight change to what we pass to parsebbml
+/tags/dp_parsebbml -> support for attachment directive
+
+
+---- ARCHIVED UPDATES ----
 2.3.003 (May 3, 2010)
 /message_edit.cfm - small bug in display
 /cfcs/settings.ini.cfm - version #
 
----- ARCHIVED UPDATES ----
 2.3.002 (April 16, 2010)
 /cfcs/settings.ini.cfm - I accidentally checked in a version that didn't have the right table prefix for the default db scripts.
 /install/sqlserver.sql - typo found by user GSMadMan

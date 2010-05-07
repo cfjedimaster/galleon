@@ -60,8 +60,7 @@
 <!--- get all forums --->
 <cfset forums = application.forum.getForums(false)>
 
-<!--- get all users --->
-<cfset users = application.user.getUsers()>
+<cfset author = application.user.getUserNameFromId(thread.useridfk)>
 
 <cfmodule template="../tags/layout.cfm" templatename="admin" title="Thread Editor">
 
@@ -99,11 +98,8 @@
 
 <div class="row_1">
 	<p class="input_name">User</p>
-		<select name="useridfk" class="inputs_02">
-			<cfloop query="users">
-			<option value="#id#" <cfif form.useridfk is id>selected</cfif>>#username#</option>
-			</cfloop>
-		</select>
+		#author#
+		<input type="hidden" name="useridfk" value="#thread.useridfk#">
 <div class="clearer"></div>
 </div>
 

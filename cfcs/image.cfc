@@ -720,7 +720,7 @@
 	<cfset var encoder = "">
 	<cfset var param = "">
 	<cfset var quality = javacast("float", jpegCompression/100)>	
-	<cfset var tempOutputFile = "#variables.tempDirectory#\#createUUID()#.#extension#">
+	<cfset var tempOutputFile = "#variables.tempDirectory#/#createUUID()#.#extension#">
 	
 	<cfset retVal.errorCode = 0>
 	<cfset retVal.errorMessage = "">
