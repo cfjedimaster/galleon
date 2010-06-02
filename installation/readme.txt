@@ -34,6 +34,8 @@ Mel Williams wrote support to generate password reminders when encryption (hashi
 /includes/udf.cfm - see above
 
 /install - New SQL files - we now enable encrption by default. Docs reflect this.
+/cfcs/delmore/coldfish.cfc - remove some code that should not have been there
+/cfcs/settings.ini.cfm - enable encryption by default
 
 ---- ARCHIVED UPDATES ----
 2.3.1 (May 7, 2010)
