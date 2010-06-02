@@ -238,7 +238,7 @@ CREATE TABLE `galleon_users` (
 
 LOCK TABLES `galleon_users` WRITE;
 /*!40000 ALTER TABLE `galleon_users` DISABLE KEYS */;
-INSERT INTO `galleon_users` VALUES ('C189C5AC-7E9B-AEC8-1DAEEEA03A562CF0','admin','admin','admin@localhost.com','','2005-01-29 12:00:00',1,'');
+INSERT INTO `galleon_users` VALUES ('C189C5AC-7E9B-AEC8-1DAEEEA03A562CF0','admin','21232F297A57A5A743894A0E4A801FC3','admin@localhost.com','','2005-01-29 12:00:00',1,'');
 /*!40000 ALTER TABLE `galleon_users` ENABLE KEYS */;
 UNLOCK TABLES;
 
