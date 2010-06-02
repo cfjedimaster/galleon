@@ -27,6 +27,15 @@ Gifts are always welcome. ;)
 
 
 ---- LATEST VERSION ----
+2.3.2 (June 2, 2010)
+
+Mel Williams wrote support to generate password reminders when encryption (hashing) is being used.
+/login.cfm - see above
+/includes/udf.cfm - see above
+
+/install - New SQL files - we now enable encrption by default. Docs reflect this.
+
+---- ARCHIVED UPDATES ----
 2.3.1 (May 7, 2010)
 /cfcs/settings.ini.cfm - version #
 /admin/thread_edit.cfm - You cna no longer reset the owner of a thread. Will return.
@@ -39,8 +48,6 @@ Gifts are always welcome. ;)
 /messages.cfm - slight change to what we pass to parsebbml
 /tags/dp_parsebbml -> support for attachment directive
 
-
----- ARCHIVED UPDATES ----
 2.3.003 (May 3, 2010)
 /message_edit.cfm - small bug in display
 /cfcs/settings.ini.cfm - version #
