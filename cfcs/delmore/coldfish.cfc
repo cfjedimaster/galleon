@@ -72,23 +72,13 @@
     </cffunction>
 	<cffunction name="getFromCache" access="private" hint="This function returns everything stored in the cache." output="false">
 		<cfargument name="codesig" type="string"/>
-		<cfset var check_cache = {codesignature=arguments.codesig,code="",created="", recordcount=0}/>
-
-		<!--- temp 901 hack --->
-		<cfloop query="variables.cache">
-			<cfif codesignature is arguments.codesig>
-				<cfset check_cache.code = code>
-				<cfset check_cache.created = created>
-				<cfset check_cache.recordcount = 1>
-			</cfif>
-		</cfloop>
-		<!---
+		<cfset var check_cache = ""/>
 		<cfquery dbtype="query" name="check_cache" maxrows="1">
 			select	*
-			from	cache
-			where	codesignature = <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.codesig#">
+			from	[variables].cache
+			where	codesignature = '#arguments.codesig#'
 		</cfquery>
-		--->
+		
 		<cfreturn check_cache/>
     </cffunction>
 	<cffunction name="setConfig" access="public" hint="This sets the coldfish configuration object for the parser to use." output="false">
