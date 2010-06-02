@@ -89,14 +89,7 @@
 				</cfoutput>
 				<cfdump var="#cfcatch#">
 				</cfsavecontent>
-			<cfset application.mailService.sendMail(application.settings.sendonpost,application.settings.sendonpost,"#application.settings.title# Error Report","", mail)>
-				
-				<!---
-				<cfdump var="#cfcatch.detail#">
-				<cfdump var="#cfcatch.message#">
-				<cfdump var="#cfcatch.tagcontext#">
-				<cfdump var="#cfcatch#">
-				--->
+				<cfset application.mailService.sendMail(application.settings.sendonpost,application.settings.sendonpost,"#application.settings.title# Error Report","", mail)>
 			</cfcatch>
 		</cftry>
 
@@ -107,15 +100,33 @@
 <cfif isDefined("form.reminder") and len(trim(form.username_lookup))>
 	<cfset data = application.user.getUser(trim(form.username_lookup))>
 	<cfif data.emailaddress is not "">
-		<cfsavecontent variable="body">
-		<cfoutput>
+		<cfif not application.settings.encryptpasswords>
+			<cfsavecontent variable="body">
+			<cfoutput>
 This is a password reminder from #application.settings.title# at #application.settings.rooturl#.
 Your password is: #data.password#
-		</cfoutput>
-		</cfsavecontent>
-		<cfset application.mailService.sendMail(application.settings.fromaddress,data.emailaddress,"#application.settings.title# Password Reminder",trim(body))>
+			</cfoutput>
+			</cfsavecontent>
+			<cfset application.mailService.sendMail(application.settings.fromaddress,data.emailaddress,"#application.settings.title# Password Reminder",trim(body))>
 	
-		<cfset sentInfo = true>
+			<cfset sentInfo = true>
+		<cfelse>
+			
+			<!--- Create new password --->
+			<cfset data.password = request.udf.makePassword() />
+			<cfset application.user.saveUser(username=trim(form.username_lookup),emailaddress=data.emailaddress,datecreated=data.datecreated,groups=application.user.getGroupsForUser(trim(form.username_lookup)),password=data.password,confirmed=true) />
+		
+			<!--- Send email with new temp password --->
+			<cfsavecontent variable="body">
+			<cfoutput>
+This is a password reminder from #application.settings.title# at #application.settings.rooturl#.
+Your password has been reset to: #data.password#
+			</cfoutput>
+			</cfsavecontent>
+			<cfset application.mailService.sendMail(application.settings.fromaddress,data.emailaddress,"#application.settings.title# Password Reminder",trim(body))>
+			
+			<cfset sentInfo = true />
+		</cfif>
 	</cfif>
 </cfif>
 
@@ -228,8 +239,6 @@ Your password is: #data.password#
 		<!-- Register Ender -->
 					
 		<!-- Register Start -->
-		<cfif application.settings.encryptpasswords>
-		<cfelse>
 		<div class="row_title">
 			<p>Password Reminder</p>
 		</div>
@@ -262,7 +271,6 @@ Your password is: #data.password#
 			
 		</div>	
 		<!-- Register Ender -->
-		</cfif>
 		</cfif>
 	</div>
 	<!-- Content End -->
