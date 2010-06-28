@@ -27,6 +27,12 @@ Gifts are always welcome. ;)
 
 
 ---- LATEST VERSION ----
+2.3.3 (June 28, 2010)
+/cfcs/utils.cfc - removed coloredcode from utils.cfc
+/cfcs/settings.ini.cfm - version #
+/pagetemplates/admin_header.cfm - Add a logout link to admin. Thanks to Edai.
+
+---- ARCHIVED UPDATES ----
 2.3.2 (June 2, 2010)
 
 Mel Williams wrote support to generate password reminders when encryption (hashing) is being used.
@@ -37,7 +43,6 @@ Mel Williams wrote support to generate password reminders when encryption (hashi
 /cfcs/delmore/coldfish.cfc - remove some code that should not have been there
 /cfcs/settings.ini.cfm - enable encryption by default
 
----- ARCHIVED UPDATES ----
 2.3.1 (May 7, 2010)
 /cfcs/settings.ini.cfm - version #
 /admin/thread_edit.cfm - You cna no longer reset the owner of a thread. Will return.
