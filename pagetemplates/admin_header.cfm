@@ -72,6 +72,7 @@ function navon(s) {
 
 		<a href="index.cfm" name="Admin Home" class="#navOn('index.cfm')#">Admin Home</a>
 		<a href="../" name="Galleon Home" class="navs">Galleon Home</a>
+		<a href="index.cfm?logout=1" name="Logout" class="navs">Logout</a>
 
 		<div class="clearer"></div>
 		</div>
