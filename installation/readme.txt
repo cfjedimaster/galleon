@@ -27,12 +27,16 @@ Gifts are always welcome. ;)
 
 
 ---- LATEST VERSION ----
+2.3.3 (July 6, 2010)
+/tags/datatable.cfm - fixes a bug you would get when trying to sort in Admin/Groups.
+/cfcs/settings.ini.cfm - version #
+
+---- ARCHIVED UPDATES ----
 2.3.3 (June 28, 2010)
 /cfcs/utils.cfc - removed coloredcode from utils.cfc
 /cfcs/settings.ini.cfm - version #
 /pagetemplates/admin_header.cfm - Add a logout link to admin. Thanks to Edai.
 
----- ARCHIVED UPDATES ----
 2.3.2 (June 2, 2010)
 
 Mel Williams wrote support to generate password reminders when encryption (hashing) is being used.
