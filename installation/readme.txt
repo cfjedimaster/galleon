@@ -27,11 +27,15 @@ Gifts are always welcome. ;)
 
 
 ---- LATEST VERSION ----
-2.3.3 (July 6, 2010)
-/tags/datatable.cfm - fixes a bug you would get when trying to sort in Admin/Groups.
+2.3.5 (July 12, 2010)
+/cfcs/message.cfc + thread.cfc + user.cfc: Paging bug on non-MySQL systems.
 /cfcs/settings.ini.cfm - version #
 
 ---- ARCHIVED UPDATES ----
+2.3.4 (July 6, 2010)
+/tags/datatable.cfm - fixes a bug you would get when trying to sort in Admin/Groups.
+/cfcs/settings.ini.cfm - version #
+
 2.3.3 (June 28, 2010)
 /cfcs/utils.cfc - removed coloredcode from utils.cfc
 /cfcs/settings.ini.cfm - version #

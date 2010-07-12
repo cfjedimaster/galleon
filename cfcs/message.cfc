@@ -267,7 +267,7 @@ User:		#arguments.username#
 			<cfset idfilter = valueList(qGetMessagesID.id)>
 			
 			<cfif listLen(idfilter) gt arguments.max>
-				<cfloop index="x" from="#listLen(idfilter)-arguments.page#" to="#listLen(idfilter)#">
+				<cfloop index="x" from="#listLen(idfilter)-arguments.start#" to="#listLen(idfilter)#">
 					<cfset smalleridfilter = listAppend(smalleridfilter, listGetAt(idfilter, x))>
 				</cfloop>
 				<cfset idfilter = smalleridfilter>
