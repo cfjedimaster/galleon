@@ -22,6 +22,7 @@
 <cfif not isDefined("application.init") or isDefined("url.reinit")>
 
 	<cfset structDelete(application, "userCache")>
+	<cfset structDelete(application, "rssCache")>
 
 	<cfset settings = structNew()>
 	<cfset settings.attachmentdir = getDirectoryFromPath(getCurrentTemplatePath()) & "attachments">
@@ -80,6 +81,7 @@
 	
 	<cfset application.coldfish = application.factory.get('coldfish')>
 
+	<cfset application.rssCache = structNew()>
 	<cfset application.init = true>
 	
 </cfif>

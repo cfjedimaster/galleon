@@ -25,10 +25,15 @@
 	<cfabort>
 </cfif>
 
+<cfif structKeyExists(application.rssCache, url.conferenceid) and dateCompare(application.rssCache[url.conferenceid].created, request.conference.lastpostcreated) is 1>
+	<cfcontent type="text/xml"><cfoutput>#application.rssCache[url.conferenceid].content#</cfoutput><cfabort>
+</cfif>
+
 <!--- get my latest posts --->
 <cfset data = application.conference.getLatestPosts(conferenceid=url.conferenceid)>
 
-<cfcontent type="text/xml"><cfoutput><?xml version="1.0" encoding="iso-8859-1"?>
+<cfsavecontent variable="rss">
+<cfoutput><?xml version="1.0" encoding="iso-8859-1"?>
 
 <rdf:RDF 
 	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns##"
@@ -76,5 +81,12 @@
 
 </rdf:RDF>
 </cfoutput>
+</cfsavecontent>
+
+<cfset application.rssCache[url.conferenceid] = structNew()>
+<cfset application.rssCache[url.conferenceid].created = now()>
+<cfset application.rssCache[url.conferenceid].content = rss>
+
+<cfcontent type="text/xml"><cfoutput>#rss#</cfoutput>
 
 <cfsetting enablecfoutputonly=false>
