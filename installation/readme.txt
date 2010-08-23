@@ -27,12 +27,19 @@ Gifts are always welcome. ;)
 
 
 ---- LATEST VERSION ----
+2.3.7 (August 23, 2010)
+/cfcs/settings.ini.cfm - version #
+/cfcs/message.cfc - supports making a new thread on the front end sticky
+/stylesheets/style.css -added a new style for message title
+/messages.cfm - use new style from above
+/newpost.cfm - support allowing admins to set a thread as sticky from the front end
+
+---- ARCHIVED UPDATES ----
 2.3.6 (July 20, 2010)
 /Application.cfm - support for RSS Cache
 /rss.cfm - Support caching the RSS feeds.
 /cfcs/settings.ini.cfm - version #
 
----- ARCHIVED UPDATES ----
 2.3.5 (July 12, 2010)
 /cfcs/message.cfc + thread.cfc + user.cfc: Paging bug on non-MySQL systems.
 /cfcs/settings.ini.cfm - version #

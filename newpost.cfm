@@ -39,6 +39,7 @@
 <cfparam name="form.oldattachment" default="">
 <cfparam name="form.attachment" default="">
 <cfparam name="form.filename" default="">
+<cfparam name="form.sticky" default="false">
 
 <cfif isDefined("form.post") and not blockedAttempt>
 	<cfset errors = "">
@@ -95,6 +96,9 @@
 		<cfset args = structNew()>
 		<cfset args.message = message>
 		<cfset args.forumid = url.forumid>
+		<cfif isUserInRole("forumsadmin")>
+			<cfset args.sticky = form.sticky>
+		</cfif>
 		<cfset msgid = application.message.addMessage(argumentCollection=args)>
 		<!--- get the message so we can get thread id --->
 		<cfset message = application.message.getMessage(msgid)>
@@ -140,9 +144,15 @@
 			<cfif not blockedAttempt>
 			<p class="input_name">Title:</p>
 			<div class="clearer"></div>
-			<input type="text" name="title" value="#form.title#" class="formBox">
+			<input type="text" name="title" value="#form.title#" class="input_box_wide">
 			<div class="clearer"><br /></div>
 			
+			<!--- only admins may make sticky posts --->
+			<cfif isUserInRole("forumsadmin")>
+			<p class="input_name">Sticky:</p>
+			<input type="checkbox" name="sticky" value="true" <cfif form.sticky>checked</cfif>>
+			<div class="clearer"><br /></div>
+			</cfif>
 			
 			<p class="input_name">Body:</p>
 			<div class="clearer"></div>

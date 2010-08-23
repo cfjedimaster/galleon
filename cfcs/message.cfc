@@ -25,6 +25,7 @@
 		<cfargument name="forumid" type="uuid" required="true">
 		<cfargument name="username" type="string" required="false" default="#getAuthUser()#">
 		<cfargument name="threadid" type="uuid" required="false">
+		<cfargument name="sticky" type="boolean" required="false">
 		<cfset var badForum = false>
 		<cfset var forum = "">
 		<cfset var badThread = false>
@@ -104,7 +105,7 @@
 			<cfset tmpThread.forumidfk = arguments.forumid>
 			<cfset tmpThread.useridfk = variables.user.getUserID(arguments.username)>
 			<cfset tmpThread.dateCreated = posted>
-			<cfset tmpThread.sticky = false>
+			<cfset tmpThread.sticky = arguments.sticky>
 			<cfset arguments.threadid = variables.thread.addThread(tmpThread)>
 		</cfif>
 					

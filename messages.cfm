@@ -281,7 +281,7 @@
 			<input type="hidden" name="post" value="1">	
 			<p class="input_name">Title:</p>
 			<div class="clearer"></div>
-			<input type="text" name="title" value="#form.title#" class="formBox">
+			<input type="text" name="title" value="#form.title#" class="input_box_wide">
 			<div class="clearer"><br /></div>
 			
 			

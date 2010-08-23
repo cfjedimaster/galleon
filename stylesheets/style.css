@@ -359,6 +359,13 @@ a:active {
 	margin: 0px;
 	padding: 1px 0px 0px 0px;
 	}
+.input_box_wide {
+	width: 400px;
+	height: 15px;
+	line-height: 10px;
+	margin: 0px;
+	padding: 1px 0px 0px 0px;
+	}
 .select_box {
 	width: 204px;
 	line-height: 10px;
