@@ -56,7 +56,6 @@
 
 <cfset user = application.user.getUser(getAuthUser())>
 <cfset subs = application.user.getSubscriptions(getAuthUser())>
-
 <cfparam name="form.emailaddress" default="#user.emailaddress#">
 <cfparam name="form.password_new" default="">
 <cfparam name="form.password_confirm" default="">
@@ -65,6 +64,7 @@
 <cfif not structKeyExists(form, "usegravatar")>
 	<cfif user.avatar is "@gravatar">
 		<cfset form.usegravatar = true>
+		<cfset variables.avatar = user.avatar>
 	<cfelse>
 		<cfset form.usegravatar = false>
 		<cfset variables.avatar = user.avatar>
@@ -139,7 +139,7 @@
 	<cfelse>
 		<cfset avatar = "">
 	</cfif>
-	
+	<cfoutput>DEBUG #avatar#<p></cfoutput>
 	<cfif not len(errors)>
 		<cfset s = structNew()>
 		<cfif len(trim(form.password_new))>
