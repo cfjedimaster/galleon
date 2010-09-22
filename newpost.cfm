@@ -9,6 +9,10 @@
 --->
 
 <cfif not request.udf.isLoggedOn()>
+	<!--- remember any form info --->
+	<cfif not structIsEmpty(form)>
+		<cfset session.oldform = duplicate(form)>
+	</cfif>
 	<cfset thisPage = cgi.script_name & "?" & cgi.query_string>
 	<cflocation url="login.cfm?ref=#urlEncodedFormat(thisPage)#" addToken="false">
 </cfif>
@@ -16,7 +20,6 @@
 <cfif not isDefined("url.forumid") or not len(url.forumid)>
 	<cflocation url="index.cfm" addToken="false">
 </cfif>
-
 <!--- checks to see if we can post --->
 <cfset blockedAttempt = false>
 
@@ -32,6 +35,16 @@
 		<cflocation url="index.cfm" addToken="false">
 	</cfcatch>
 </cftry>
+
+<cfif structKeyExists(session, "oldForm")>
+	<cfif structKeyExists(session.oldForm, "body")>
+		<cfset form.body = session.oldForm.body>
+	</cfif>
+	<cfif structKeyExists(session.oldForm, "title")>
+		<cfset form.title = session.oldForm.title>
+	</cfif>
+	<cfset structDelete(session, "oldForm")>
+</cfif>
 
 <cfparam name="form.title" default="">
 <cfparam name="form.body" default="">

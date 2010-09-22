@@ -27,6 +27,14 @@ Gifts are always welcome. ;)
 
 
 ---- LATEST VERSION ----
+2.4.0 (September 22, 2010)
+/messages.cfm - title text for avatar
+/profile.cfm - support removing avatars - thanks to J. J. Blodgett
+/cfcs/settings.ini.cfm - Version
+/messages.cfm and /newpost.cfm - help support remembering content when you are logged out while writing
+/Application.cfm - removed some header text
+
+---- ARCHIVED UPDATES ----
 2.3.7 (August 23, 2010)
 /cfcs/settings.ini.cfm - version #
 /cfcs/message.cfc - supports making a new thread on the front end sticky
@@ -34,7 +42,6 @@ Gifts are always welcome. ;)
 /messages.cfm - use new style from above
 /newpost.cfm - support allowing admins to set a thread as sticky from the front end
 
----- ARCHIVED UPDATES ----
 2.3.6 (July 20, 2010)
 /Application.cfm - support for RSS Cache
 /rss.cfm - Support caching the RSS feeds.

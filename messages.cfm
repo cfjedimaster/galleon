@@ -51,6 +51,17 @@
 <cfparam name="form.oldattachment" default="">
 <cfparam name="form.attachment" default="">
 <cfparam name="form.filename" default="">
+<cfparam name="form.username" default="">
+
+<!--- Notice a session timeout --->
+<cfset triedToPost = false>
+<cfif isDefined("form.post") and not request.udf.isLoggedOn()>
+	<!--- detect a login --->
+	<cfif isDefined("form.logon")>
+		<cfset failedLogon = true>
+	</cfif>
+	<cfset triedToPost = true>
+</cfif>
 
 <cfif isDefined("form.post") and canPost>
 
@@ -180,9 +191,9 @@
 				#uInfo.rank#<br>
 				<cfif application.settings.allowavatars>
 					<cfif uinfo.avatar is "@gravatar">
-					<img src="http://www.gravatar.com/avatar.php?gravatar_id=#lcase(hash(uinfo.emailaddress))#&amp;rating=PG&amp;size=80&amp;default=#application.settings.rooturl#/images/gravatar.gif" alt="#username#'s Gravatar">
+					<img src="http://www.gravatar.com/avatar.php?gravatar_id=#lcase(hash(uinfo.emailaddress))#&amp;rating=PG&amp;size=80&amp;default=#application.settings.rooturl#/images/gravatar.gif" title="#username#'s Gravatar">
 					<cfelseif len(uinfo.avatar)>
-					<img src="images/avatars/#uinfo.avatar#" alt="#username#'s Gravatar">
+					<img src="images/avatars/#uinfo.avatar#" title="#username#'s Avatar">
 					</cfif>
 				</cfif>
 				<br /><br />
@@ -268,17 +279,49 @@
 			<p>Please correct the following error(s):</p>
 			<div class="submit_error"><p><b>#errors#</b></p></div><br />
 		</div>
-		</cfif>
-		<cfif not request.udf.isLoggedOn()>
-		<cfset thisPage = cgi.script_name & "?" & cgi.query_string & "&##newpost">
-		<cfset link = "login.cfm?ref=#urlEncodedFormat(thisPage)#">
+		<cfelseif triedToPost>
 		<div class="row_0">
-			<div class="left_90"><p>Please <a href="#link#">login</a> to post a response.</p></div>
+			<div class="clearer"></div>
+			<p>Please correct the following error(s):</p>
+			<div class="submit_error"><p><b>
+			Your session expired. Please include your login information.
+			<cfif structKeyExists(variables, "failedLogon")>
+			<br/>The login information you entered did not work.
+			</cfif>
+			</b></p></div><br />
 		</div>
-		<cfelseif canPost>	
+		</cfif>
+		<cfif not request.udf.isLoggedOn() and not triedToPost>
+			<cfset thisPage = cgi.script_name & "?" & cgi.query_string & "&##newpost">
+			<cfset link = "login.cfm?ref=#urlEncodedFormat(thisPage)#">
+			<div class="row_0">
+				<div class="left_90"><p>Please <a href="#link#">login</a> to post a response.</p></div>
+			</div>
+		<cfelseif canPost or triedToPost>	
+			<!--- 
+			So notice something - if triedToPost is true, we show the form. In theory, a hacker can send a POST to us and trigger
+			this form to show EVEN IF he would not have writes to post after logging in. However, once he did log in, he still
+			would not be able to post. So at most, the 'bad guy' can see a form that won't let him do anything.
+			--->
 		<div class="row_1 top_pad">
 			<form action="#cgi.script_name#?#qs#&##newpost" method="post" enctype="multipart/form-data" class="basic_forms">
 			<input type="hidden" name="post" value="1">	
+
+			<cfif triedToPost>
+			
+				<p class="input_name">Username:</p>
+				<div class="clearer"></div>
+				<input type="text" name="username" value="#form.username#" class="input_box_wide">
+				<div class="clearer"><br /></div>
+
+				<p class="input_name">Password:</p>
+				<div class="clearer"></div>
+				<input type="password" name="password" value="" class="input_box_wide">
+				<div class="clearer"><br /></div>
+				
+				<input type="hidden" name="logon" value="youbetterbelieveit">
+			</cfif>
+
 			<p class="input_name">Title:</p>
 			<div class="clearer"></div>
 			<input type="text" name="title" value="#form.title#" class="input_box_wide">

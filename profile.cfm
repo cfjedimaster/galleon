@@ -129,6 +129,12 @@
 			<cfif len(user.avatar) and user.avatar neq "@gravatar" and fileExists(application.settings.avatardir & "/" & user.avatar)>
 				<cffile action="delete" file="#application.settings.avatardir#/#user.avatar#">
 			</cfif>
+		<cfelseif structKeyExists(form, "deleteavatar")>
+			<!--- delete old --->
+			<cfif len(user.avatar) and user.avatar neq "@gravatar" and fileExists(application.settings.avatardir & "/" & user.avatar)>
+				<cffile action="delete" file="#application.settings.avatardir#/#user.avatar#">
+			</cfif>
+			<cfset avatar = "">
 		</cfif>
 	<cfelse>
 		<cfset avatar = "">
@@ -211,9 +217,15 @@
 				
 				<div class="clearer"><br /></div>
 				
-				<cfif structKeyExists(variables, "avatar") and len(variables.avatar) and variables.avatar neq "@gravatar">
+				<cfif structKeyExists(variables, "avatar") and len(variables.avatar)>
 				<p>Current Avatar:</p>
-				<img src="images/avatars/#variables.avatar#"/>
+				<cfif variables.avatar neq "@gravatar">
+					<img src="#application.settings.rooturl#/images/avatars/#variables.avatar#" title="#user.username#'s Avatar" />
+					<p>Remove this picture:<input type="checkbox" name="deleteAvatar" value="true"></p>
+				<cfelse>
+					<img src="http://www.gravatar.com/avatar.php?gravatar_id=#lcase(hash(user.emailaddress))#&amp;rating=PG&amp;size=80&amp;default=#application.settings.rooturl#/images/gravatar.gif" title="#user.username#'s Gravatar">
+				</cfif>			
+
 				
 				<div class="clearer"><br /></div>
 				</cfif>

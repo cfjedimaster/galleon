@@ -1,21 +1,11 @@
 <cfsetting enablecfoutputonly="true" showdebugoutput="false">
-<!---
-	Name         : Application.cfm
-	Author       : Raymond Camden 
-	Created      : June 01, 2004
-	Last Updated : October 29, 2007
-	History      : Reset for V2
-				 : Fix for IE login issue (rkc 10/15/07)
-				 : Remove BlueDragon mod (not needed in latest BD, thanks to Vince B for letting me know!) (rkc 10/29/07)
-	Purpose		 : 
---->
 
 <cfset appName = "galleonForums">
 <cfset prefix = getCurrentTemplatePath()>
 <cfset prefix = reReplace(prefix, "[^a-zA-Z]","","all")>
 <cfset prefix = right(prefix, 64 - len(appName))>
 
-<cfapplication name="#prefix##appName#" sessionManagement=true loginstorage="session">
+<cfapplication name="#prefix##appName#" sessionManagement="true" loginstorage="session">
 
 <cferror type="exception" template="error.cfm">
 
