@@ -44,7 +44,12 @@
 </cfif>
 
 <!--- attempt to unsubscribe --->
-<cfif isDefined("url.removeSub")>
+<cfif isDefined("url.removeAllSub")>
+	<cfset subs = application.user.getSubscriptions(getAuthUser())>
+	<cfloop query="subs">
+		<cfset application.user.unsubscribe(getAuthUser(), id)>
+	</cfloop>
+<cfelseif isDefined("url.removeSub")>
 	<cftry>
 		<cfset application.user.unsubscribe(getAuthUser(), url.removeSub)>
 		<cfset subscribeMessage = "Your unsubscribe request has been processed.<br>">
@@ -139,7 +144,7 @@
 	<cfelse>
 		<cfset avatar = "">
 	</cfif>
-	<cfoutput>DEBUG #avatar#<p></cfoutput>
+
 	<cfif not len(errors)>
 		<cfset s = structNew()>
 		<cfif len(trim(form.password_new))>
@@ -259,7 +264,12 @@
 			<cfif subs.recordCount is 0>
 			<div class="left_90"><p>You are not currently subscribed to anything.</p></div>
 			<cfelse>
-			<div class="left_90"><p>The following are your subscription(s):</p></div>
+			<div class="left_90">
+			<p>
+			<a href="profile.cfm?removeAllSub=1">Unsubscribe from all</a>
+			<p>
+			The following are your subscription(s):
+			</p></div>
 			
 			<cfloop query="subs">
 				<cfif len(conferenceidfk)>
