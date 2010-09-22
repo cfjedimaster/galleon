@@ -11,7 +11,8 @@
 	
 	<!--- fakehtml used for the html version of emails when no html is sent --->
 	<cfset fakeHTML = htmlEditFormat(arguments.body)>
-	<cfset fakeHTML = replace(fakeHTML, chr(13) & chr(10), "<br>", "all")>
+	<cfset fakeHTML = replace(fakeHTML, chr(13), chr(10), "all")>
+	<cfset fakeHTML = replace(fakeHTML, chr(10), "<br>", "all")>
 	
 	<!---
 	Notice: Why do we send the same string twice in the 2 final clauses? A user, J.J. Blodgett, noticed that
