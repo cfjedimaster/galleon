@@ -7,6 +7,12 @@
 	<cfargument name="body" type="string" required="false" default="">
 	<cfargument name="htmlbody" type="string" required="false" default="">
 	
+	<cfset var fakeHTML = "">
+	
+	<!--- fakehtml used for the html version of emails when no html is sent --->
+	<cfset fakeHTML = htmlEditFormat(arguments.body)>
+	<cfset fakeHTML = replace(fakeHTML, chr(13) & chr(10), "<br>", "all")>
+	
 	<!---
 	Notice: Why do we send the same string twice in the 2 final clauses? A user, J.J. Blodgett, noticed that
 	in Thunderbird and iPhone, the use of one mailpart was causing an issue. This fix is thanks to him.
@@ -18,7 +24,7 @@
 			       <cfmailpart type="html">#arguments.htmlbody#</cfmailpart>
 			<cfelseif len(arguments.body)>
 			       <cfmailpart type="text">#arguments.body#</cfmailpart>
-					<cfmailpart type="html">#replace(arguments.body, Chr(13) & Chr(10), "<br>", "ALL")#</cfmailpart>			
+					<cfmailpart type="html">#fakeHTML#</cfmailpart>			
 			<cfelse>
 			       <cfmailpart type="text">#arguments.htmlbody#</cfmailpart>
 			       <cfmailpart type="html">#arguments.htmlbody#</cfmailpart>
@@ -31,7 +37,7 @@
 			       <cfmailpart type="html">#arguments.htmlbody#</cfmailpart>
 			<cfelseif len(arguments.body)>
 			       <cfmailpart type="text">#arguments.body#</cfmailpart>
-					<cfmailpart type="html">#replace(arguments.body, Chr(13) & Chr(10), "<br>", "ALL")#</cfmailpart>			
+					<cfmailpart type="html">#fakeHTML#</cfmailpart>			
 			<cfelse>
 			       <cfmailpart type="text">#arguments.htmlbody#</cfmailpart>
 			       <cfmailpart type="html">#arguments.htmlbody#</cfmailpart>
