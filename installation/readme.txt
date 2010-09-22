@@ -33,6 +33,8 @@ Gifts are always welcome. ;)
 /cfcs/settings.ini.cfm - Version
 /messages.cfm and /newpost.cfm - help support remembering content when you are logged out while writing
 /Application.cfm - removed some header text
+/profile.cfm - support for unsub from all
+/cfcs/mailservice.cfc - better support for code within sent messages
 
 ---- ARCHIVED UPDATES ----
 2.3.7 (August 23, 2010)
