@@ -17,13 +17,13 @@
 <cfmodule template="tags/layout.cfm" templatename="main" title="#application.settings.title# Registration Confirmation">
 
 <cfoutput>
-<p>
-<table width="500" cellpadding="6" class="tableDisplay" cellspacing="1" border="0">
-	<tr class="tableHeader">
-		<td class="tableHeader">Registration Confirmation</td>
-	</tr>
-	<tr class="tableRowMain">
-		<td>
+	<div class="content_box">
+
+		<div class="row_title">
+			<p>Registration Confirmation</p>
+		</div>
+		
+		<div class="row_1">
 		<cfif result>
 			<p>
 			Thank you for confirming your registration. You will now have to <a href="login.cfm">login</a>
@@ -35,10 +35,10 @@
 			URL from your mail client.
 			</p>
 		</cfif>
-		</td>
-	</tr>
-</table>
-</p>
+		</div>	
+
+	</div>
+	
 </cfoutput>
 
 </cfmodule>

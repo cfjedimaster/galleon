@@ -35,6 +35,9 @@ Gifts are always welcome. ;)
 /Application.cfm - removed some header text
 /profile.cfm - support for unsub from all
 /cfcs/mailservice.cfc - better support for code within sent messages
+/cfcs/message.cfc - issue when making new posts and not having a sticky value
+/confirm.cfm - the design wasn't complete
+/error.cfm - it was always showing - now it should only show for an admin
 
 ---- ARCHIVED UPDATES ----
 2.3.7 (August 23, 2010)

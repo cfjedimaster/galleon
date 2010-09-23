@@ -25,7 +25,7 @@
 		<cfargument name="forumid" type="uuid" required="true">
 		<cfargument name="username" type="string" required="false" default="#getAuthUser()#">
 		<cfargument name="threadid" type="uuid" required="false">
-		<cfargument name="sticky" type="boolean" required="false">
+		<cfargument name="sticky" type="boolean" required="false" default="false">
 		<cfset var badForum = false>
 		<cfset var forum = "">
 		<cfset var badThread = false>

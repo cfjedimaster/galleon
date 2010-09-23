@@ -65,7 +65,7 @@ Error Occured:<br>
 	</p>
 	</cfoutput>
 	
-	<cfif isUserInRole("forumsadmin") or 1>
+	<cfif isUserInRole("forumsadmin")>
 		<cfoutput>#mail#</cfoutput>
 	</cfif>
 	
