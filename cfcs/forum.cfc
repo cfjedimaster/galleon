@@ -182,22 +182,23 @@
 			<cfset joiner = "AND">
 		</cfif>
 		
-		<cfquery name="results" datasource="#variables.dsn#">
-			select	id, name, description, conferenceidfk
-			from	#variables.tableprefix#forums
-			where	active = 1
+		<cfquery name="results" datasource="#variables.dsn#" maxrows="100">
+			select	f.id, f.name, f.description, f.conferenceidfk, c.name as conference
+			from	#variables.tableprefix#forums f, #variables.tableprefix#conferences c
+			where	f.active = 1
+			and		f.conferenceidfk = c.id
 			and (
 				<cfif arguments.searchtype is not "phrase">
 					<cfloop index="x" from=1 to="#arrayLen(aTerms)#">
-						(name like <cfqueryparam cfsqltype="CF_SQL_VARCHAR" maxlength="255" value="%#left(aTerms[x],255)#%"> 
+						(f.name like <cfqueryparam cfsqltype="CF_SQL_VARCHAR" maxlength="255" value="%#left(aTerms[x],255)#%"> 
 						 or
-						 description like '%#aTerms[x]#%')
+						 f.description like '%#aTerms[x]#%')
 						 <cfif x is not arrayLen(aTerms)>#joiner#</cfif>
 					</cfloop>
 				<cfelse>
-					name like <cfqueryparam cfsqltype="CF_SQL_VARCHAR" maxlength="255" value="%#left(arguments.searchTerms,255)#%">
+					f.name like <cfqueryparam cfsqltype="CF_SQL_VARCHAR" maxlength="255" value="%#left(arguments.searchTerms,255)#%">
 					or
-					description like '%#arguments.searchTerms#%'
+					f.description like '%#arguments.searchTerms#%'
 				</cfif>
 			)
 		</cfquery>

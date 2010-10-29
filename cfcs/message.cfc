@@ -613,12 +613,13 @@ No HTML is allowed in your message. Basic Formatting Rules:<br />
 			<cfset joiner = "AND">
 		</cfif>
 		
-		<cfquery name="results" datasource="#variables.dsn#">
-			select	m.id, m.title, m.threadidfk, t.forumidfk, f.conferenceidfk
+		<cfquery name="results" datasource="#variables.dsn#" maxrows="100">
+			select	m.id, m.title, m.threadidfk, t.forumidfk, f.conferenceidfk, t.name as thread, f.name as forum, c.name as conference
 			from	#variables.tableprefix#messages m, #variables.tableprefix#threads t,
-					#variables.tableprefix#forums f
+					#variables.tableprefix#forums f, #variables.tableprefix#conferences c
 			where	m.threadidfk = t.id
 			and		t.forumidfk = f.id
+			and		f.conferenceidfk = c.id
 			and (
 				<cfif arguments.searchtype is not "phrase">
 					<cfloop index="x" from=1 to="#arrayLen(aTerms)#">
@@ -634,6 +635,7 @@ No HTML is allowed in your message. Basic Formatting Rules:<br />
 					body like '%#arguments.searchTerms#%'
 				</cfif>
 			)
+			group by c.id, f.id, t.id
 		</cfquery>
 		
 		<cfreturn results>

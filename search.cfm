@@ -30,16 +30,58 @@
 			messages (title/body)
 	--->
 	
+	<!---
 	<cfset conferences = application.conference.search(form.searchterms, form.searchtype)>
 	<cfset forums = application.forum.search(form.searchterms, form.searchtype)>
 	<cfset threads = application.thread.search(form.searchterms, form.searchtype)>
+	--->
 	<cfset messages = application.message.search(form.searchterms, form.searchtype)>
 	
 	<cfset application.utils.logSearch(form.searchTerms, application.settings.dsn, application.settings.tableprefix)>
 
+	<!--- get my conferences --->
+	<cfset data = application.conference.getConferences()>
+	<!--- filter by what I can read... --->
+	<cfset data = application.permission.filter(query=data, groups=request.udf.getGroups(), right=application.rights.CANVIEW)>
+
+	<cfif data.recordCount is 1>
+		<cfset showConferences = false>
+	<cfelse>
+		<cfset showConferences = true>
+	</cfif>
+	
 </cfif>
 
 <cfoutput>
+	
+	<style>
+	table.searchMessages {
+		width: 100%;
+		border-width: 1px;
+		border-spacing: 0px;
+		border-style: solid;
+		border-collapse: separate;
+	}
+	table.searchMessages th {
+		border-width: 1px;
+		padding: 1px;
+		border-style: solid;
+		border-color: black;
+		-moz-border-radius: ;
+	}
+	table.searchMessages td {
+		border-width: 1px;
+		padding: 1px;
+		border-style: inset;
+		border-color: black;
+		-moz-border-radius: ;
+	}
+	tr.cfHeader td {
+		font-weight: bold;
+		font-size: 12px;
+		padding: 10px;
+	}
+	</style>
 	
 	<!-- Content Start -->
 	<div class="content_box">
@@ -76,76 +118,47 @@
 		<cfif len(form.searchterms)>
 		<div class="row_1 top_pad">
 			<p>
-				<b>Results in Conferences:</b><br>
-				<cfif conferences.recordCount>
-					<cfset didOne = false>
-					<cfloop query="conferences">
-						<cfif application.permission.allowed(application.rights.CANVIEW, id, request.udf.getGroups())>
-							<a href="forums.cfm?conferenceid=#id#">#name#</a><br>
-							<cfset didOne = true>
-						</cfif>
-					</cfloop>
-					<cfif not didOne>
-						No matches.
-					</cfif>
-				<cfelse>
-				No matches.
-				</cfif>
-				</p>
+
+
 				<p>
-				<b>Results in Forums:</b><br>
-				<cfif forums.recordCount>
-					<cfset didOne = false>
-					<cfloop query="forums">
-						<cfif application.permission.allowed(application.rights.CANVIEW, id, request.udf.getGroups()) and
-							application.permission.allowed(application.rights.CANVIEW, conferenceidfk, request.udf.getGroups())>
-							<a href="threads.cfm?forumid=#id#">#name#</a><br>
-							<cfset didOne = true>
-						</cfif>
-					</cfloop>
-					<cfif not didOne>
-						No matches.
-					</cfif>
-				<cfelse>
-				No matches.
-				</cfif>
-				</p>
-				<p>
-				<b>Results in Threads:</b><br>
-				<cfif threads.recordCount>
-					<cfset didOne = false>
-					<cfloop query="threads">
-						<cfif application.permission.allowed(application.rights.CANVIEW, forumidfk, request.udf.getGroups()) and
-							  application.permission.allowed(application.rights.CANVIEW, conferenceidfk, request.udf.getGroups())>
-							<a href="messages.cfm?threadid=#id#">#name#</a><br>
-							<cfset didOne = true>
-						</cfif>
-					</cfloop>
-					<cfif not didOne>
-						No matches.
-					</cfif>
-				<cfelse>
-				No matches.
-				</cfif>
-				</p>
-				<p>
-				<b>Results in Messages:</b><br>
 				<cfif messages.recordCount>
+					<cfset lastConf = "">
+					<cfset lastForum = "">
 					<cfset didOne = false>
 					<cfloop query="messages">
 						<cfif application.permission.allowed(application.rights.CANVIEW, forumidfk, request.udf.getGroups()) and
 							  application.permission.allowed(application.rights.CANVIEW, conferenceidfk, request.udf.getGroups())>
-							<a href="messages.cfm?threadid=#threadidfk#">#title#</a><br>
+							<cfif not didOne>
+							<div style="padding: 5px">
+							<table class="searchMessages">
+							</cfif>
+							<cfif conference neq lastConf or forum neq lastForum>
+								<tr class="cfHeader">
+									<td colspan="2"><cfif showConferences>#conference# / </cfif>#forum#</td>
+								</tr>
+								<cfset lastConf = conference>
+								<cfset lastForum = forum>
+							</cfif>
+							<tr>
+								<td>#thread#</td>
+								<td><a href="messages.cfm?threadid=#threadidfk#&mid=#id#">#title#</a></td>
+							</tr>
 							<cfset didOne = true>
 						</cfif>
 					</cfloop>
+					<cfif didOne>
+						</div>
+						</table>
+					</cfif>
 					<cfif not didOne>
-						No matches.
+						Sorry, but there were no matches.
 					</cfif>
 				<cfelse>
-				No matches.
+					Sorry, but there were no matches.
 				</cfif>
 				</p>
+
+			</p>
 		</div>
 		</cfif>
 		<!-- Search Ender -->

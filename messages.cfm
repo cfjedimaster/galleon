@@ -153,6 +153,22 @@
 	<cfset pages = 1>
 </cfif>
 
+<!--- 
+We need to be able to go to a page if a specific msg is requested. In normal browsing we handle this by passing page, but
+we don't know the page when searching. We can skip this if pages == 1
+--->
+<cfif structKeyExists(url, "mid") and pages gt 1>
+	<cfloop query="data">
+		<cfif url.mid is id>
+			<cfif currentRow lte application.settings.perpage>
+				<cfset url.page = 1>
+			<cfelse>
+				<cfset url.page = ((currentRow - (currentRow mod application.settings.perpage)) / application.settings.perpage)+1>
+			</cfif>
+		</cfif>
+	</cfloop>
+</cfif>
+
 <!--- last page cheat --->
 <cfif structKeyExists(url, "last")>
 	<!---

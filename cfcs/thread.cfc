@@ -270,7 +270,7 @@
 			<cfset joiner = "AND">
 		</cfif>
 		
-		<cfquery name="results" datasource="#variables.dsn#">
+		<cfquery name="results" datasource="#variables.dsn#" maxrows="100">
 			select	t.id, t.name, t.forumidfk, f.conferenceidfk
 			from	#variables.tableprefix#threads t, #variables.tableprefix#forums f
 			where	t.active = 1
