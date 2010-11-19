@@ -28,6 +28,11 @@ Gifts are always welcome. ;)
 
 ---- LATEST VERSION ----
 2.4.1 (October 29, 2010)
+/cfcs/settings.ini.cfm - just the version
+/cfcs/user.cfc + /tags/datatablenew.cfm - fix for 11 users - fix provided by Jerry Shay: http://galleon.riaforge.org/index.cfm?event=page.issue&issueid=B1FF6A57-D7DB-389C-111F49B35DA0A47E
+
+---- ARCHIVED UPDATES ----
+2.4.1 (October 29, 2010)
 Mark Drew found a bug where if your search result was on page N, your search result took you to page 1 always.
 This led me to update search in general. We now ONLY search messages, and we limit to 100 results. We also show the conf, forum, thread when displaying
 the results.
@@ -35,7 +40,6 @@ the results.
 /cfcs/forum.cfc, message.cfc, thread.cfc, settings.ini.cfm
 /messages.cfm, /search.cfm
 
----- ARCHIVED UPDATES ----
 2.4.0 (September 22, 2010)
 /messages.cfm - title text for avatar
 /profile.cfm - support removing avatars - thanks to J. J. Blodgett
