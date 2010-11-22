@@ -27,11 +27,16 @@ Gifts are always welcome. ;)
 
 
 ---- LATEST VERSION ----
+2.4.3 (November 22, 2010)
+/cfcs/settings.ini.cfm - just the version
+/cfcs/message.cfc - SQL Server fix - thanks to Ric - http://www.coldfusionjedi.com/forums/messages.cfm?threadid=539F1AFB-9050-46E8-A156A561A7846D18&page=1
+
+
+---- ARCHIVED UPDATES ----
 2.4.2 (November 19, 2010)
 /cfcs/settings.ini.cfm - just the version
 /cfcs/user.cfc + /tags/datatablenew.cfm - fix for 11 users - fix provided by Jerry Shay: http://galleon.riaforge.org/index.cfm?event=page.issue&issueid=B1FF6A57-D7DB-389C-111F49B35DA0A47E
 
----- ARCHIVED UPDATES ----
 2.4.1 (October 29, 2010)
 Mark Drew found a bug where if your search result was on page N, your search result took you to page 1 always.
 This led me to update search in general. We now ONLY search messages, and we limit to 100 results. We also show the conf, forum, thread when displaying

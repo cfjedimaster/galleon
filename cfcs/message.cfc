@@ -635,7 +635,7 @@ No HTML is allowed in your message. Basic Formatting Rules:<br />
 					body like '%#arguments.searchTerms#%'
 				</cfif>
 			)
-			group by c.id, f.id, t.id
+			group by c.id, c.name, f.id, f.name, f.conferenceidfk, t.id, t.name, t.forumidfk, m.id, m.title, m.threadidfk
 		</cfquery>
 		
 		<cfreturn results>
