@@ -125,6 +125,13 @@
 					<cfif len(user.avatar) and user.avatar neq "@gravatar" and fileExists(application.settings.avatardir & "/" & user.avatar)>
 						<cffile action="delete" file="#application.settings.avatardir#/#user.avatar#">
 					</cfif>
+					<!---
+					Even if we have errors, we want to store this image as your profile image. Corrects a bug where a user uploaded an image
+					but screwed up something else in the form. May revisit this.
+					--->
+					<cfset tempUser = application.user.getUser(getAuthUser())>
+					<cfset application.user.saveUser(username=getAuthUser(),emailaddress=tempUser.emailaddress,datecreated=tempUser.datecreated,groups=application.user.getGroupsForUser(getAuthUser()), confirmed=true, avatar=avatar)>
+					<cfset request.udf.cachedUserInfo(getAuthUser(),false)>		
 					<cfset form.usegravatar = false>
 				</cfif>
 			</cfif>

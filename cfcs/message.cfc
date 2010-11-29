@@ -543,8 +543,9 @@ No HTML is allowed in your message. Basic Formatting Rules:<br />
 <tr>
 <td colspan="2">
 [attachment]...[/attachment] will link to your attachment if one exists. If your attachment is an image, it will be displayed inline.
+</td>
+</tr>
 </table>
-
 <p>
 <a href="syntax.cfm">View Complete BBML Syntax</a> DBML support courtesy of <a href="http://www.depressedpress.com/Content/Development/ColdFusion/Extensions/DP_ParseBBML/Index.cfm" target="_new">DP_ParseBBML</a>
 </p>

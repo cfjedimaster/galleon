@@ -739,7 +739,10 @@ To complete your registration at #variables.title#, please click on the link bel
 					confirmed = <cfqueryparam value="#arguments.confirmed#" cfsqltype="CF_SQL_BIT">
 					<cfif structKeyExists(arguments, "signature")>
 					,
-					signature = <cfqueryparam value="#left(htmleditFormat(arguments.signature),1000)#" cfsqltype="cf_sql_varchar">,
+					signature = <cfqueryparam value="#left(htmleditFormat(arguments.signature),1000)#" cfsqltype="cf_sql_varchar">
+					</cfif>
+					<cfif structKeyExists(arguments, "avatar")>
+					,
 					avatar = <cfqueryparam value="#arguments.avatar#" cfsqltype="cf_sql_varchar" maxlength="255">
 					</cfif>
 			where	username = <cfqueryparam value="#arguments.username#" cfsqltype="CF_SQL_VARCHAR" maxlength="50">
