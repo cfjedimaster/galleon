@@ -27,14 +27,17 @@ Gifts are always welcome. ;)
 
 
 ---- LATEST VERSION ----
+2.4.5 (December 9, 2010)
+/cfcs/settings.ini.cfm - just the version
+/Application.cfm, /newpost.cfm - work done to help with 'funky' non-American characters. I belive it is working ok now. 
+
+---- ARCHIVED UPDATES ----
 2.4.4 (November 29, 2010)
 /cfcs/settings.ini.cfm - just the version
 /cfcs/message.cfc - HTML fix
 /cfcs/user.cfc - just corrected some logic in user.cfc. It wasn't ever exposed as a bug so nothing urgent here.
 /profile.cfm - Now when you change your profile pic, if it is an upload, we ALWAYS save the profile update.
 
-
----- ARCHIVED UPDATES ----
 2.4.3 (November 22, 2010)
 /cfcs/settings.ini.cfm - just the version
 /cfcs/message.cfc - SQL Server fix - thanks to Ric - http://www.coldfusionjedi.com/forums/messages.cfm?threadid=539F1AFB-9050-46E8-A156A561A7846D18&page=1

@@ -1,4 +1,6 @@
 <cfsetting enablecfoutputonly="true" showdebugoutput="false">
+<cfset setEncoding("form","utf-8")>
+<cfset setEncoding("url","utf-8")>
 
 <cfset appName = "galleonForums">
 <cfset prefix = getCurrentTemplatePath()>
