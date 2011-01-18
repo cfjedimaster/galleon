@@ -7,7 +7,7 @@ rootURL=http://dev.galleon.org
 sendonpost=youremail@goeshere.com
 dbtype=mysql
 tableprefix=galleon_
-version=2.4.5
+version=2.4.6
 requireconfirmation=true
 title=Galleon Forums
 fullemails=true
@@ -19,4 +19,5 @@ mailserver=
 mailusername=
 mailpassword=
 allowpms=true
+tempdir=
 --->

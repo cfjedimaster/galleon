@@ -95,7 +95,7 @@
 	
 	<cfif application.settings.allowavatars>
 		<cfif len(form.newavatar)>
-			<cffile action="upload" filefield="newavatar" destination="#getTempDirectory()#" nameConflict="makeunique">
+			<cffile action="upload" filefield="newavatar" destination="#application.settings.tempdir#" nameConflict="makeunique">
 			<cfif cffile.fileWasSaved>
 				<!--- new file --->
 				<cfset newfile = cffile.serverfile>

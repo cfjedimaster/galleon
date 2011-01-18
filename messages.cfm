@@ -87,7 +87,7 @@
 	</cfif>
 
 	<cfif isBoolean(request.forum.attachments) and request.forum.attachments and len(trim(form.attachment))>
-		<cffile action="upload" destination="#getTempDirectory()#" filefield="attachment" nameConflict="makeunique">
+		<cffile action="upload" destination="#application.settings.tempdir#" filefield="attachment" nameConflict="makeunique">
 		
 		<cfif cffile.fileWasSaved>
 			<!--- Is the extension allowed? --->

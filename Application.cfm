@@ -26,6 +26,9 @@
 	<!--- Get main settings --->
 	<cfset application.settings = application.factory.get('galleonSettings').getSettings()>
 
+	<cfif application.settings.tempdir is "">
+		<cfset application.settings.tempdir = getTempDirectory()>
+	</cfif>
 	<!--- get mail service --->
 	<cfset application.mailService = application.factory.get('mailService')>
 	
