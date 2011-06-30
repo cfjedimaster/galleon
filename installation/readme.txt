@@ -27,12 +27,17 @@ Gifts are always welcome. ;)
 
 
 ---- LATEST VERSION ----
+2.4.7 (June 30, 2011)
+/cfcs/settings.ini.cfm - version
+/admin/users_edit.cfm - No longer require you to enter a new password when saving a user. We only update the password if you specify it.
+/cfcs/message.cfc - removed security block on saving a message since front end handles it better 
+
+---- ARCHIVED UPDATES ----
 2.4.6 (January 18, 2011)
 /cfcs/settings.ini.cfm - new tempdir setting - see docs.
 /installation - docs discuss new tempdir setting
 /Application.cfm, message_edit.cfm, messages.cfm, newpost.cfm, profile.cfm - All updated to support tempdir setting.
 
----- ARCHIVED UPDATES ----
 2.4.5 (December 9, 2010)
 /cfcs/settings.ini.cfm - just the version
 /Application.cfm, /newpost.cfm - work done to help with 'funky' non-American characters. I belive it is working ok now. 

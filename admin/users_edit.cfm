@@ -22,9 +22,12 @@
 	<cfif not len(trim(form.emailaddress)) or not request.udf.isEmail(trim(form.emailaddress))>
 		<cfset errors = errors & "You must specify an emailaddress.<br>">
 	</cfif>
+	<!--- Password no longer required - if you don't pass it - we don't set it --->
+	<!---
 	<cfif not len(trim(form.password))>
 		<cfset errors = errors & "You must specify a password.<br>">
 	</cfif>
+	--->
 	<cfif not len(trim(form.datecreated)) or not isDate(form.datecreated)>
 		<cfset errors = errors & "You must specify a creation date.<br>">
 	</cfif>
@@ -41,8 +44,14 @@
 		<!--- set confirmed to true if not passed --->
 		<cfparam name="form.confirmed" default="true">
 		<cfif url.id neq 0>
-			<cfset application.user.saveUser(username=form.username,emailaddress=form.emailaddress,datecreated=form.datecreated,groups=form.groups,confirmed=form.confirmed, password=form.password)>
+			<cfset argStruct = structNew()>
+			<cfif len(form.password)>
+				<cfset argStruct.password = form.password>
+			</cfif>
+			<cfset application.user.saveUser(username=form.username,emailaddress=form.emailaddress,datecreated=form.datecreated,groups=form.groups,confirmed=form.confirmed, argumentCollection=argStruct)>
 		<cfelse>
+			<!--- You can't add users via the admin --->
+			<cfthrow message="You shouldn't be seeing this.">
 			<cftry>
 				<cfset application.user.addUser(form.username, form.password, form.emailaddress, form.groups,form.confirmed)>
 				<cfcatch>

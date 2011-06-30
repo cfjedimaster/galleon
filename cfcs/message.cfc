@@ -562,9 +562,12 @@ No HTML is allowed in your message. Basic Formatting Rules:<br />
         <cfset var theNow = now()>
         <cfset var CRNL = CHR(13)&CHR(10)>
         
+        <!--- 
+		Removed because our front end does this logic now.
 		<cfif (arguments.message.useridfk NEQ session.user.id) AND (NOT variables.utils.isTheUserInAnyRole("forumsadmin,forumsmoderator"))>
 			<cfset variables.utils.throw("Message CFC","Unauthorized execution of saveMessage.")>
 		</cfif>
+		--->
 		
 		<cfif not validMessage(arguments.message)>
 			<cfset variables.utils.throw("Message CFC","Invalid data passed to saveMessage.")>
