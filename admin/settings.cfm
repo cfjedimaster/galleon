@@ -201,7 +201,6 @@
 	<input type="image" src="../images/btn_save.jpg"  name="save" value="Save">
 </div>
 </form>
-
 </cfoutput>
 
 

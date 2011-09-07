@@ -32,6 +32,7 @@ CREATE TABLE [dbo].[galleon_forums] (
     [lastpost]        	varchar(35) NULL,
     [lastpostuseridfk]	varchar(35) NULL,
     [lastpostcreated] 	datetime NULL,
+	rank        	int NULL,
     CONSTRAINT [PK_forums] PRIMARY KEY([id])
 )
 

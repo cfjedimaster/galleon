@@ -1,5 +1,5 @@
 LICENSE 
-Copyright 2006, 2007, 2008, 2009, 2010 Raymond Camden
+Copyright 2006, 2007, 2008, 2009, 2010, 2011Raymond Camden
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@ Welcome to Galleon. This is an open-source forums application for ColdFusion. Fo
 read the word documentation. For folks who are upgrading, BE SURE to read the notes below. It details
 what changes in each release.
 
-This application was created by Raymond Camden (ray@camdenfamily.com). 
+This application was created by Raymond Camden (raymondcamden@gmail.com). 
 You may use this application as you will. I ask that you link back to my blog (http://www.coldfusionjedi.com).
 
 If you find this app worthy, I have a Amazon wish list set up (www.amazon.com/o/registry/2TCL1D08EZEYE ). 
@@ -27,12 +27,24 @@ Gifts are always welcome. ;)
 
 
 ---- LATEST VERSION ----
+2.5.0 (August 6, 2011)
+/cfcs/settings.ini.cfm - version
+/admin/forums_edit.cfm, /cfcs/forum.cfc - Support for "RANK" attribute of forums. Allows you to override the default name sort.
+/Application.cfm - slight mod for the above
+/cfcs/message.cfc - support for deletion by url
+/cfcs/thred.cfc - fix bug in updatestats
+/admin/reset_stats.cfm - New utility to reset stats in case they get out of sync
+/pagetemplates/admin_header.cfm - link for the above
+/Application.cfm - Support deleting items by URL
+
+NOTE - I'm no longer updating the MS Access database. I don't have MS Access and simply do not want to support it anymore.
+
+---- ARCHIVED UPDATES ----
 2.4.7 (June 30, 2011)
 /cfcs/settings.ini.cfm - version
 /admin/users_edit.cfm - No longer require you to enter a new password when saving a user. We only update the password if you specify it.
 /cfcs/message.cfc - removed security block on saving a message since front end handles it better 
 
----- ARCHIVED UPDATES ----
 2.4.6 (January 18, 2011)
 /cfcs/settings.ini.cfm - new tempdir setting - see docs.
 /installation - docs discuss new tempdir setting

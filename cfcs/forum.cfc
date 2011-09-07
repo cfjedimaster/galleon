@@ -30,14 +30,15 @@
 		</cfif>
 		
 		<cfquery name="newforum" datasource="#variables.dsn#">
-			insert into #variables.tableprefix#forums(id,name,description,active,conferenceidfk,attachments,messages)
+			insert into #variables.tableprefix#forums(id,name,description,active,conferenceidfk,attachments,messages, rank)
 			values(<cfqueryparam value="#newid#" cfsqltype="CF_SQL_VARCHAR" maxlength="35">,
 				   <cfqueryparam value="#arguments.forum.name#" cfsqltype="CF_SQL_VARCHAR" maxlength="255">,
 				   <cfqueryparam value="#arguments.forum.description#" cfsqltype="CF_SQL_VARCHAR" maxlength="255">,
 				   <cfqueryparam value="#arguments.forum.active#" cfsqltype="CF_SQL_BIT">,
 				   <cfqueryparam value="#arguments.forum.conferenceidfk#" cfsqltype="CF_SQL_VARCHAR" maxlength="35">,
 				   <cfqueryparam value="#arguments.forum.attachments#" cfsqltype="CF_SQL_BIT">,
-				   0
+				   0,
+				   <cfqueryparam value="#arguments.forum.rank#" null="#not isNumeric(arguments.forum.rank)#">
 				   )
 		</cfquery>
 		
@@ -83,7 +84,7 @@
 		<cfset var qGetForum = "">
 				
 		<cfquery name="qGetForum" datasource="#variables.dsn#">
-			select	id, name, description, active, conferenceidfk, attachments, messages, lastpost, lastpostuseridfk, lastpostcreated
+			select	id, name, description, active, conferenceidfk, attachments, messages, lastpost, lastpostuseridfk, lastpostcreated, rank
 			from	#variables.tableprefix#forums
 			where	id = <cfqueryparam value="#arguments.id#" cfsqltype="CF_SQL_VARCHAR" maxlength="35">
 		</cfquery>
@@ -118,7 +119,7 @@
 		
 		<cfquery name="qGetForums" datasource="#variables.dsn#">
 			select	f.id, f.name, f.description, f.active, f.attachments, f.conferenceidfk, f.lastpostcreated, 
-					f.messages, f.lastpost, f.lastpostuseridfk, c.name as conference
+					f.messages, f.lastpost, f.lastpostuseridfk, c.name as conference, f.rank
 			from	#variables.tableprefix#forums f, #variables.tableprefix#conferences c
 			where	f.conferenceidfk = c.id
 			<cfif structKeyExists(arguments, "bactiveonly") and arguments.bactiveonly>
@@ -127,7 +128,7 @@
 			<cfif structKeyExists(arguments, "conferenceid")>
 			and		f.conferenceidfk = <cfqueryparam cfsqltype="cf_sql_varchar" maxlength="35" value="#arguments.conferenceid#">
 			</cfif>
-			order by f.name
+			order by f.rank, f.name
 		</cfquery>
 
 		
@@ -151,7 +152,8 @@
 					description = <cfqueryparam value="#arguments.forum.description#" cfsqltype="CF_SQL_VARCHAR" maxlength="255">,
 					active = <cfqueryparam value="#arguments.forum.active#" cfsqltype="CF_SQL_BIT">,
 					attachments = <cfqueryparam value="#arguments.forum.attachments#" cfsqltype="CF_SQL_BIT">,
-					conferenceidfk = <cfqueryparam value="#arguments.forum.conferenceidfk#" cfsqltype="CF_SQL_VARCHAR" maxlength="35">
+					conferenceidfk = <cfqueryparam value="#arguments.forum.conferenceidfk#" cfsqltype="CF_SQL_VARCHAR" maxlength="35">,
+					rank =	<cfqueryparam value="#arguments.forum.rank#" null="#not isNumeric(arguments.forum.rank)#">
 			where	id = <cfqueryparam value="#arguments.id#" cfsqltype="CF_SQL_VARCHAR" maxlength="35">
 		</cfquery>
 		

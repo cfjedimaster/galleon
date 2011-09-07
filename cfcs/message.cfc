@@ -35,6 +35,7 @@
 		<cfset var getInterestedFolks = "">
 		<cfset var thread = "">
 		<cfset var newid = createUUID()>
+		<cfset var delid = createUUID()>
 		<cfset var notifiedList = "">
 		<cfset var body = "">
 		<cfset var posted = now()>
@@ -110,7 +111,7 @@
 		</cfif>
 					
 		<cfquery name="newmessage" datasource="#variables.dsn#">
-			insert into #variables.tableprefix#messages(id,title,body,useridfk,threadidfk,posted,attachment,filename)
+			insert into #variables.tableprefix#messages(id,title,body,useridfk,threadidfk,posted,attachment,filename,deleteid)
 			values(<cfqueryparam value="#newid#" cfsqltype="CF_SQL_VARCHAR" maxlength="35">,
 				   <cfqueryparam value="#arguments.message.title#" cfsqltype="CF_SQL_VARCHAR" maxlength="255">,
 				   <cfqueryparam value="#arguments.message.body#" cfsqltype="CF_SQL_LONGVARCHAR">,
@@ -118,7 +119,8 @@
 				   <cfqueryparam value="#arguments.threadid#" cfsqltype="CF_SQL_VARCHAR" maxlength="35">,
 				   <cfqueryparam value="#posted#" cfsqltype="CF_SQL_TIMESTAMP">,
 				   <cfqueryparam value="#arguments.message.attachment#" cfsqltype="CF_SQL_VARCHAR" maxlength="255">,
-   				   <cfqueryparam value="#arguments.message.filename#" cfsqltype="CF_SQL_VARCHAR" maxlength="255">				   
+   				   <cfqueryparam value="#arguments.message.filename#" cfsqltype="CF_SQL_VARCHAR" maxlength="255">,
+					<cfqueryparam value="#delid#" cfsqltype="CF_SQL_VARCHAR" maxlength="35">  			   
 				   )
 		</cfquery>
 
@@ -130,7 +132,14 @@
 		<!--- get everyone in the thread who wants posts --->
 		<cfset notifiedList = notifySubscribers(arguments.threadid, tmpThread.name, arguments.forumid, variables.user.getUserID(arguments.username),body)>
 		
+		<!--- 
+		Previously we would not email the admins if they were subscribed, but now we do so so that we can delete messages via email.
+
+		OLD
 		<cfif structKeyExists(variables.settings,"sendonpost") and len(variables.settings.sendonpost) and not listFindNoCase(notifiedList, variables.settings.sendOnPost)>
+
+		--->
+		<cfif structKeyExists(variables.settings,"sendonpost") and len(variables.settings.sendonpost)>
 
 			<cfprocessingdirective suppresswhitespace="false">
 			<cfsavecontent variable="fullbody">
@@ -144,6 +153,10 @@ User:		#arguments.username#
 #wrap(body,80)#
 			
 #variables.settings.rootURL#<cfif not right(variables.settings.rooturl,1) is "/">/</cfif>messages.cfm?threadid=#arguments.threadid#&last##last
+
+DELETE MESSAGE: #variables.settings.rootURL#<cfif not right(variables.settings.rooturl,1) is "/">/</cfif>index.cfm?del=#delid#
+Note - clicking the link above will delete the message and delete the user. Use with caution!
+
 			</cfoutput>
 			</cfsavecontent>
 			</cfprocessingdirective>
@@ -308,6 +321,47 @@ User:		#arguments.username#
 		<cfset result.data = qGetMessages>
 
 		<cfreturn result>			
+	</cffunction>
+	
+	<cffunction name="handleDeletion" access="public" returnType="void" output="false" hint="Allows for one click deletion from emails">
+		<cfargument name="delkey" type="any" required="false">
+		<cfset var checkMsg = "">
+		<cfset var thread = "">
+		<cfset var username = "">
+		
+		<cfif not len(trim(arguments.delKey))>
+			<cfreturn>
+		</cfif>
+		
+		<cfquery name="checkMsg" datasource="#variables.dsn#">
+			select	m.id, m.threadidfk, m.useridfk
+			from	#variables.tableprefix#messages m
+			where	m.deleteid = <cfqueryparam value="#arguments.delkey#" cfsqltype="CF_SQL_VARCHAR" maxlength="35">
+		</cfquery>
+
+		<cfif checkMsg.recordCount is 0>
+			<cfreturn>
+		</cfif>
+		
+		<!--- Kill the message --->
+		<cfset deleteMessage(checkMsg.id)>
+		<!--- Kill the messenger --->
+		<!--- possibly we should get his messages too, but I assume if spammer X does N posts, you will delete them all via click --->
+		<!--- 
+		Note too that possibly bad things can happen if they are still logged in - it SHOULD throw an error when they try to post
+		which I'd be happy with.
+		--->
+		<cfset username = variables.user.getUsernameFromId(checkMsg.useridfk)>
+		<cfif len(username)>
+			<cfset variables.user.deleteUser(username)>
+		</cfif>
+				
+		<!--- get the thread, if 0, we kill it --->
+		<cfset thread = variables.thread.getThread(checkMsg.threadidfk)>
+		<cfif thread.messages is 0>
+			<cfset variables.thread.deleteThread(checkMsg.threadidfk)>			
+		</cfif>
+		
 	</cffunction>
 	
 	<cffunction name="notifySubscribers" access="private" returnType="string" output="false"

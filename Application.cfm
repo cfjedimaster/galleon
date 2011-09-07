@@ -109,14 +109,25 @@
 <!--- Used by index, forums, and threads ---->
 <!--- however, if threads, default to lastpost --->
 <!--- however, don't do this in the admin ;) --->
+<!--- to be clear, I don't like this and it makes me sad --->
 <cfif not structKeyExists(variables, "isAdmin")>
 	<cfif findNoCase("threads.cfm", cgi.script_name)>
 		<cfparam name="url.sort" default="lastpostcreated">
 		<cfparam name="url.sortdir" default="desc">
+	<cfelseif findNoCase("forums.cfm", cgi.script_name)>
+		<cfparam name="url.sort" default="rank,name">
+		<cfparam name="url.sortdir" default="asc">
 	<cfelse>
 		<cfparam name="url.sort" default="name">
 		<cfparam name="url.sortdir" default="asc">
 	</cfif>
+</cfif>
+
+<!---
+Handle email based deletion. 
+---->
+<cfif structKeyExists(url, "del")>
+	<cfset application.message.handleDeletion(url.del)>
 </cfif>
 
 <cfsetting enablecfoutputonly=false>

@@ -63,6 +63,7 @@ CREATE TABLE `galleon_forums` (
   `lastpost` varchar(35) default NULL,
   `lastpostuseridfk` varchar(35) default NULL,
   `lastpostcreated` timestamp NULL default NULL,
+   `rank` int(11) default NULL,
   PRIMARY KEY  (`id`),
   KEY `galleon_forums_conferenceidfk` (`conferenceidfk`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;

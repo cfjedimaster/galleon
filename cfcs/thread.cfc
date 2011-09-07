@@ -93,7 +93,7 @@
 		<cfset var qGetThread = "">
 				
 		<cfquery name="qGetThread" datasource="#variables.dsn#">
-			select	id, name, active, forumidfk, useridfk, datecreated, sticky, lastpostuseridfk, lastpostcreated
+			select	id, name, active, forumidfk, useridfk, datecreated, sticky, lastpostuseridfk, lastpostcreated, messages
 			from	#variables.tableprefix#threads
 			where	id = <cfqueryparam value="#arguments.id#" cfsqltype="CF_SQL_VARCHAR" maxlength="35">
 		</cfquery>
@@ -344,7 +344,7 @@
 			</cfquery>
 		<cfelse>
 			<cfquery datasource="#variables.dsn#">
-			update	#variables.tableprefix#forums
+			update	#variables.tableprefix#threads
 			set		
 					lastpostuseridfk = <cfqueryparam cfsqltype="cf_sql_varchar" null="true">,
 					lastpostcreated = <cfqueryparam cfsqltype="cf_sql_timestamp" null="true">,

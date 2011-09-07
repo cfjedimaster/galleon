@@ -53,6 +53,7 @@ function navon(s) {
 		<a href="messages.cfm" name="Messages" class="#navOn('messages.cfm,messages_edit.cfm')#">Messages</a>
 		<a href="ranks.cfm" name="Ranks" class="#navOn('ranks.cfm,ranks_edit.cfm')#">Ranks</a>
 		<a href="settings.cfm" name="Galleon Settings" class="#navOn('settings.cfm')#">Galleon Settings</a>
+		<a href="reset_stats.cfm" name="Reset Stats" class="#navOn('reset_stats.cfm')#">Reset Stats</a>
 				
 		<div class="nav_breaker"></div>
 		

@@ -20,6 +20,7 @@
 	<cfparam name="form.active" default="#forum.active#">
 	<cfparam name="form.attachments" default="#forum.attachments#">
 	<cfparam name="form.conferenceidfk" default="#forum.conferenceidfk#">
+	<cfparam name="form.rank" default="#forum.rank#">
 	<!--- get groups with can read --->
 	<cfset canread = application.permission.getAllowed(application.rights.CANVIEW, url.id)>
 	<!--- get groups with can post --->
@@ -32,6 +33,7 @@
 	<cfparam name="form.active" default="true">
 	<cfparam name="form.attachments" default="false">
 	<cfparam name="form.conferenceidfk" default="">
+	<cfparam name="form.rank" default="">
 	<cfset canread = queryNew("group")>
 	<cfset canpost = queryNew("group")>
 	<cfset canedit = queryNew("group")>
@@ -62,6 +64,7 @@
 		<cfset forum.active = trim(htmlEditFormat(form.active))>
 		<cfset forum.attachments = trim(htmlEditFormat(form.attachments))>
 		<cfset forum.conferenceidfk = trim(htmlEditFormat(form.conferenceidfk))>
+		<cfset forum.rank = trim(htmlEditFormat(form.rank))>
 		<cfif url.id neq 0>
 			<cfset application.forum.saveForum(url.id, forum)>
 		<cfelse>
@@ -135,8 +138,15 @@
 		</select>
 	<div class="clearer"></div>
 	</div>
-		
+
 	<div class="row_0">
+		<p class="input_name">Rank</p>
+		Specifies an order for the forum that will override the default sort of alphabetical.<br/>
+		<input type="text" name="rank" value="#form.rank#" class="inputs_01" size="3">
+		<div class="clearer"></div>
+	</div>		
+	
+	<div class="row_1">
 		<p class="input_name">Attachments</p>
 		<select name="attachments" class="inputs_02">
 			<option value="1" <cfif isBoolean(form.attachments) and form.attachments>selected</cfif>>Yes</option>
@@ -145,7 +155,7 @@
 	<div class="clearer"></div>
 	</div>
 	
-	<div class="row_1">
+	<div class="row_0">
 		<p class="input_name">Groups with Read Access</p>
 			<select name="canread" multiple="true" size="4" class="inputs_02">
 			<option value="" <cfif form.canread is "">selected</cfif>>Everyone</option>
@@ -156,7 +166,7 @@
 	<div class="clearer"></div>
 	</div>
 	
-	<div class="row_0">
+	<div class="row_1">
 		<p class="input_name">Groups with Post Access</p>
 			<select name="canpost" multiple="true" size="4" class="inputs_02">
 			<option value="" <cfif form.canpost is "">selected</cfif>>Everyone</option>
@@ -167,7 +177,7 @@
 	<div class="clearer"></div>
 	</div>
 	
-	<div class="row_1">
+	<div class="row_0">
 		<p class="input_name">Groups with Edit Access</p>
 		<select name="canedit" multiple="true" size="4" class="inputs_02">
 			<option value="" <cfif form.canedit is "">selected</cfif>>Everyone</option>
