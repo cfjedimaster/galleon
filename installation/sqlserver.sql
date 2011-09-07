@@ -49,7 +49,8 @@ CREATE TABLE dbo.galleon_messages (
 	useridfk  	nvarchar(35) NOT NULL,
 	threadidfk	nvarchar(35) NOT NULL,
 	attachment	nvarchar(255) NOT NULL,
-	[filename]  	nvarchar(255) NOT NULL 
+	[filename]  	nvarchar(255) NOT NULL, 
+	[deleteid]        	nvarchar(35) NULL
 	)
 GO
 CREATE TABLE dbo.galleon_permissions ( 

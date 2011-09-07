@@ -105,6 +105,7 @@ CREATE TABLE `galleon_messages` (
   `threadidfk` varchar(35) NOT NULL default '',
   `attachment` varchar(255) NOT NULL default '',
   `filename` varchar(255) NOT NULL default '',
+  `deleteid` varchar(35) NULL default '',
   PRIMARY KEY  (`Id`),
   KEY `galleon_messages_useridfk` (`useridfk`),
   KEY `galleon_messages_threadidfk` (`threadidfk`)

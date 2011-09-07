@@ -37,7 +37,10 @@ Gifts are always welcome. ;)
 /pagetemplates/admin_header.cfm - link for the above
 /Application.cfm - Support deleting items by URL
 
+
+DATABASE CHANGES!!
 NOTE - I'm no longer updating the MS Access database. I don't have MS Access and simply do not want to support it anymore.
+NOTE - 2 new db columns. Forums added a RANK column (int) and Messages added deleteid (varchar35)
 
 ---- ARCHIVED UPDATES ----
 2.4.7 (June 30, 2011)
