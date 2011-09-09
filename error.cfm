@@ -60,7 +60,7 @@ Error Occured:<br>
 
 	<cfoutput>
 	<p>
-	We are sorry, but an error has occured.<br>
+	We are sorry, but an error has occurred.<br>
 	The administrator has been notified.
 	</p>
 	</cfoutput>

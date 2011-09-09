@@ -54,7 +54,7 @@
 		<cfreturn newid>
 	</cffunction>
 	
-	<cffunction name="deleteThread" access="public" returnType="void" roles="forumsadmin" output="false"
+	<cffunction name="deleteThread" access="public" returnType="void" output="false"
 				hint="Deletes a thread along with all of it's children.">
 
 		<cfargument name="id" type="uuid" required="true">

@@ -183,11 +183,14 @@ Note - clicking the link above will delete the message and delete the user. Use 
 		<cfset var q = "">
 		<cfset var m = getMessage(arguments.id)>
 		
+		<!--- Since you can't delete from the front end, except for the email thing, I'm removing this security check.
+		It prevents the email thing from working for an anonymous request which we explicitely want to allow. --->
+		<!---
 		<!--- First see if we can delete a message. Because roles= doesn't allow for OR, we use a UDF --->
-		<cfif not variables.utils.isTheUserInAnyRole("forumsadmin,forumsmoderator")>
+		<cfif  not variables.utils.isTheUserInAnyRole("forumsadmin,forumsmoderator")>
 			<cfset variables.utils.throw("Message CFC","Unauthorized execution of deleteMessage.")>
 		</cfif>
-
+		--->
 		<cfquery name="q" datasource="#variables.dsn#">
 			select	filename
 			from 	#variables.tableprefix#messages

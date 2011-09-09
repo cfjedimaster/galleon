@@ -46,7 +46,7 @@
 	
 	<cfif not arrayLen(errors)>
 
-		<cfset keylist = "bbcode_editor,dsn,perpage,fromaddress,rooturl,sendonpost,dbtype,tableprefix,requireconfirmation,title,version,fullemails,encryptpasswords,allowavatars,safeextensions,allowpms">
+		<cfset keylist = "bbcode_editor,dsn,perpage,fromaddress,rooturl,sendonpost,dbtype,tableprefix,requireconfirmation,title,version,fullemails,encryptpasswords,allowavatars,safeextensions,allowpms,preheaderlinkstext,preheaderlinksurl">
 		<cfloop index="key" list="#keylist#">
 			<cfif structKeyExists(form, key)>
 				<cfset application.factory.get('galleonSettings').setSetting(key, trim(form[key]))>
@@ -177,23 +177,35 @@
 <div class="clearer"></div>
 </div>
 
-<div class="row_0">
+<div class="row_1">
 	<p class="input_name">Allow Private Messages</p>
 	<input type="radio" name="allowpms" value="true" <cfif form.allowpms>checked</cfif>>Yes<br>
 	<input type="radio" name="allowpms" value="false" <cfif not form.allowpms>checked</cfif>>No<br>
 <div class="clearer"></div>
 
 </div>				
-<div class="row_1">
+<div class="row_0">
 	<p class="input_name">Safe Extensions</p>
 	<input type="text" name="safeextensions" value="#form.safeextensions#" class="inputs_01">
 <div class="clearer"></div>
 </div>
 
-<div class="row_0">
+<div class="row_1">
 	<p class="input_name">Use markItUp! Beta for rich text editing</p>
 	<input type="radio" name="bbcode_editor" value="true" <cfif form.bbcode_editor>checked</cfif>>Yes<br>
 	<input type="radio" name="bbcode_editor" value="false" <cfif not form.bbcode_editor>checked</cfif>>No<br>
+<div class="clearer"></div>
+</div>
+
+<div class="row_0">
+	<p class="input_name">Pre Header Links Text</p>
+	<input type="text" name="preheaderlinkstext" value="#form.preheaderlinkstext#" class="inputs_01">
+<div class="clearer"></div>
+</div>
+
+<div class="row_1">
+	<p class="input_name">Pre Header Links Urls</p>
+	<input type="text" name="preheaderlinksurl" value="#form.preheaderlinksurl#" class="inputs_01">
 <div class="clearer"></div>
 </div>
 

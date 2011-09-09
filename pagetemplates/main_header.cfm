@@ -50,6 +50,14 @@ $(document).ready(function()	{
 		<!--- <img src="images/Galleon.gif" alt="Galleon" class="logo"/> --->
 		
 		<div class="top_menu">
+			<!--- Insert pre header links --->
+			<cfif structKeyExists(application.settings,'preHeaderLinksText') AND listLen(application.settings.preHeaderLinksText)
+				AND structKeyExists(application.settings,'preHeaderLinksURL') AND listLen(application.settings.preHeaderLinksURL)
+				AND	ListLen(application.settings.preHeaderLinksText) EQ listLen(application.settings.preHeaderLinksURL)>
+				<cfloop from="1" to="#ListLen(application.settings.preHeaderLinksURL)#" index="hl">
+					<a href="#ListGetAt(application.settings.preHeaderLinksURL, hl)#">#ListGetAt(application.settings.preHeaderLinksText, hl)#</a> |
+				</cfloop>
+			</cfif>			
 			<a href="index.cfm">Home</a> | 
 			<cfif request.udf.isLoggedOn()>
 			<cfif  isUserInRole("forumsadmin")>

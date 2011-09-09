@@ -27,6 +27,14 @@ Gifts are always welcome. ;)
 
 
 ---- LATEST VERSION ----
+2.5.0 (September 9, 2011)
+/cfcs/settings.ini.cfm - preheaderlinkstext and preheaderlinksurl settings. These settings allow you to quickly add additional links to the top level nav. Credit Ben Forta for the feature.
+/admin/settings.cfm - allows you to edit the settings above
+/cfcs/message.cfc, thread.cfc - bug in the 'auto delete from email' feature - thanks to Forta for the fix
+/pagetemplates/main_header.cfm - support for the two new settings
+/error.cfm - typo
+
+---- ARCHIVED UPDATES ----
 2.5.0 (August 6, 2011)
 /cfcs/settings.ini.cfm - version
 /admin/forums_edit.cfm, /cfcs/forum.cfc - Support for "RANK" attribute of forums. Allows you to override the default name sort.
@@ -42,7 +50,6 @@ DATABASE CHANGES!!
 NOTE - I'm no longer updating the MS Access database. I don't have MS Access and simply do not want to support it anymore.
 NOTE - 2 new db columns. Forums added a RANK column (int) and Messages added deleteid (varchar35)
 
----- ARCHIVED UPDATES ----
 2.4.7 (June 30, 2011)
 /cfcs/settings.ini.cfm - version
 /admin/users_edit.cfm - No longer require you to enter a new password when saving a user. We only update the password if you specify it.
