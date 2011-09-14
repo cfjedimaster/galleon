@@ -45,7 +45,7 @@
 		<cfset message.title = trim(htmlEditFormat(form.title))>
 		<cfset message.body = trim(htmlEditFormat(form.body))>
 		<cfset message.posted = trim(form.posted)>
-		
+		<cfset message.threadidfk = form.threadidfk>
 		<cfif structKeyExists(variables, "attachment")>
 			<cfset message.attachment = attachment>
 			<cfset message.filename = filename>
@@ -61,8 +61,11 @@
 </cfif>
 
 <cfset message = application.message.getMessage(url.id)>
+<cfset thread = application.thread.getThread(message.threadidfk)>
+<cfset threads = application.thread.getThreads(forumidfk=thread.forumidfk,sort="name")>
 <cfparam name="form.title" default="#message.title#">
 <cfparam name="form.body" default="#message.body#">
+<cfparam name="form.threadidfk" default="#message.threadidfk#">
 <cfparam name="form.posted" default="#dateFormat(message.posted,"m/dd/yy")# #timeFormat(message.posted,"h:mm tt")#">
 
 <cfmodule template="../tags/layout.cfm" templatename="admin" title="Message Editor">
@@ -90,7 +93,12 @@
 
 <div class="row_0">
 	<p class="input_name">Thread</p>
-	#message.thread#
+	<select name="threadidfk">
+		<cfloop query="threads.data">
+			<option value="#id#" <cfif form.threadidfk is id>selected</cfif>>#name#</option>
+		</cfloop>
+	</select><br/>
+	You can move this message to another thread in the same forum.
 <div class="clearer"></div>
 </div>
 
@@ -118,7 +126,7 @@
 
 <div id="input_btns">	
 	<input type="image" src="../images/btn_save.jpg"  name="save" value="Save">
-	<input type="image" src="../images/btn_cancel.jpg" type="submit" name="cancel" value="Cancel">
+	<input type="image" src="../images/btn_cancel.jpg" name="cancel" value="Cancel">
 </div>
 </form>
 </cfoutput>
