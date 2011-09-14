@@ -138,9 +138,12 @@
 		</cfif>
 
 		<cfif structKeyExists(arguments, "start") and structKeyExists(arguments, "max")>
-			<cfquery name="gettotal" datasource="#variables.dsn#">
-			select	count(id) as total
-			from	#variables.tableprefix#threads t
+			<cfquery name="gettotal" datasource="#variables.dsn#" result="aa">
+			select	count(t.id) as total
+			from	((#variables.tableprefix#threads t
+						inner join #variables.tableprefix#forums f on t.forumidfk = f.id)
+						inner join #variables.tableprefix#conferences c on f.conferenceidfk = c.id)
+						inner join #variables.tableprefix#users u on t.useridfk = u.id			
 			where	1=1
 			<cfif arguments.bActiveOnly>
 				and		t.active = 1
@@ -153,7 +156,7 @@
 			</cfif>			
 			</cfquery>
 
-			<cfquery name="qGetThreadsID" datasource="#variables.dsn#" maxrows="#arguments.start+arguments.max-1#">
+			<cfquery name="qGetThreadsID" datasource="#variables.dsn#" maxrows="#arguments.start+arguments.max-1#" result="rr">
 				select	t.id
 				from	((#variables.tableprefix#threads t
 						inner join #variables.tableprefix#forums f on t.forumidfk = f.id)
@@ -184,7 +187,7 @@
 				<cfset idfilter = smalleridfilter>
 			</cfif>
 		</cfif>		
-				
+
 		<cfquery name="qGetThreads" datasource="#variables.dsn#">
 		select	t.id, t.name, t.active, t.forumidfk, t.useridfk, t.datecreated, t.messages, t.lastpostuseridfk,
 			   	t.lastpostcreated, f.name as forum, u.username, sticky, c.name as conference
