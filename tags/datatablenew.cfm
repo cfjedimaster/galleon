@@ -77,7 +77,7 @@ function checksubmit() {
 		Previous
 	</cfif>
 	- 
-	<cfif (attributes.start * attributes.perpage) lt attributes.total>
+	<cfif (attributes.start+attributes.perpage) lt attributes.total>
 	<a href="#cgi.script_name#?start=#attributes.start+attributes.perpage#&sort=#urlEncodedFormat (url.sort)#&dir=#url.dir##attributes.linkappend#">Next</a>
 	<cfelse>
 	Next
