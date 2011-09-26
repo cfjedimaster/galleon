@@ -55,7 +55,11 @@
 <cfparam name="form.filename" default="">
 <cfparam name="form.sticky" default="false">
 
+<cfset Cffp = CreateObject("component","cfformprotect.cffpVerify").init() />
+
 <cfif isDefined("form.post") and not blockedAttempt>
+
+	
 	<cfset errors = "">
 	<!--- clean the fields --->
 	<cfset form.title = trim(htmlEditFormat(form.title))>
@@ -71,6 +75,10 @@
 	
 	<cfif len(form.title) gt 255>
 		<cfset errors = errors & "Your title is too long.<br>">
+	</cfif>
+	
+	<cfif not Cffp.testSubmission(form)>
+		<cfset errors = errors & "Your post has been flagged as spam.<br>">
 	</cfif>
 	
 	<cfif isBoolean(request.forum.attachments) and request.forum.attachments and len(trim(form.attachment))>
@@ -153,6 +161,7 @@
 		
 		<div class="row_1 top_pad">
 			<form action="#cgi.script_name#?#cgi.query_string#" method="post" enctype="multipart/form-data" class="basic_forms">
+			<cfinclude template="./cfformprotect/cffp.cfm">
 			<input type="hidden" name="post" value="1">
 			
 			<cfif not blockedAttempt>

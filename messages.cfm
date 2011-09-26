@@ -63,6 +63,8 @@
 	<cfset triedToPost = true>
 </cfif>
 
+<cfset Cffp = CreateObject("component","cfformprotect.cffpVerify").init() />
+
 <cfif isDefined("form.post") and canPost>
 
 	<cfset errors = "">
@@ -84,6 +86,10 @@
 	
 	<cfif len(form.title) gt 255>
 		<cfset errors = errors & "Your title is too long.<br>">
+	</cfif>
+
+	<cfif not Cffp.testSubmission(form)>
+		<cfset errors = errors & "Your post has been flagged as spam.<br>">
 	</cfif>
 
 	<cfif isBoolean(request.forum.attachments) and request.forum.attachments and len(trim(form.attachment))>
@@ -214,7 +220,7 @@ we don't know the page when searching. We can skip this if pages == 1
 				</cfif>
 				<br /><br />
 				<p><span class="bolder">Joined:</span> #dateFormat(uInfo.dateCreated,"mm/dd/yy")#</p>
-				<p><span class="bolder">Posts:</span> #uInfo.postcount#</p>
+				<p><span class="bolder">Posts:</span> #numberFormat(uInfo.postcount)#</p>
 				<cfif request.udf.isLoggedOn() and application.settings.allowpms and username neq getAuthUser()>
 				<p><span class="bolder">Message:</span> <a href="sendpm.cfm?user=#urlEncodedFormat(username)#">Private Message</a></p>
 				</cfif>
@@ -321,6 +327,7 @@ we don't know the page when searching. We can skip this if pages == 1
 			--->
 		<div class="row_1 top_pad">
 			<form action="#cgi.script_name#?#qs#&##newpost" method="post" enctype="multipart/form-data" class="basic_forms">
+			<cfinclude template="./cfformprotect/cffp.cfm">				
 			<input type="hidden" name="post" value="1">	
 
 			<cfif triedToPost>
