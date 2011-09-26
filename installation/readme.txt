@@ -27,13 +27,24 @@ Gifts are always welcome. ;)
 
 
 ---- LATEST VERSION ----
+2.6.0 (September 14, 2011)
+/cfformprotect - Addition of the CFFormProtect to help battle spam. Right now this is required and cannot be turned off. If you do not like it, remove this block from messages.cfm and newpost.cfm:
+<cfif Cffp.testSubmission(form)>
+In the future I may make this configurable.
+
+/cfcs/setting.ini.cfm - version
+/tags/pagination - support for PM fix
+/messages.cfm and newpost.cfm - support for cfformprotect
+/pms.cfm - pagination fix
+/pm.cfm - display fix
+
+---- ARCHIVED UPDATES ----
 2.5.2 (September 14, 2011)
 /admin/message_edit.cfm - Support for moving a message to a new thread. For now, you can only move it to a thread in the same forum.
 /cfcs/settings.ini.cfm - version #
 /cfcs/thread.cfc - fixes a bug with thread counting that should not happen in production, but occurred on my text machine. Correcting it anyway. 
 /tags/datatablenew.cfm - fixes a pagination bug
 
----- ARCHIVED UPDATES ----
 2.5.1 (September 9, 2011)
 /cfcs/settings.ini.cfm - preheaderlinkstext and preheaderlinksurl settings. These settings allow you to quickly add additional links to the top level nav. Credit Ben Forta for the feature.
 /admin/settings.cfm - allows you to edit the settings above
