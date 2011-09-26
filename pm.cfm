@@ -84,7 +84,7 @@
 			
 			<p class="input_name">Body:</p>
 			<div class="clearer"></div>
-			<textarea name="body" cols="100" rows="20">#form.body#</textarea>
+			<textarea name="body" rows="20" style="width:100%">#form.body#</textarea>
 			<div class="clearer"><br /></div>
 			
 			<input type="image" src="images/btn_reply.gif" alt="Reply" title="Reply" name="send" class="submit_btns">

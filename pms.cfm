@@ -29,10 +29,7 @@
 
 <cfparam name="url.page" default=1>
 
-<!---
-<!--- Displays pagination on right side, plus left side buttons for threads --->
-<cfmodule template="tags/pagination.cfm" pages="#pages#" mode="messages" canPost="#canPost#" />
---->
+<cfmodule template="tags/pagination.cfm" pages="#pages#" mode="messages" showButtons="false" />
 
 <!--- Now display the table. This changes based on what our data is. --->
 <cfoutput>	
@@ -53,7 +50,6 @@
 		</div>
 		
 		<cfif data.recordCount>
-
 		<cfloop query="data" startrow="#(url.page-1)*application.settings.perpage+1#" endrow="#(url.page-1)*application.settings.perpage+application.settings.perpage#">
 		<div class="row_#currentRow mod 2#">
 			
