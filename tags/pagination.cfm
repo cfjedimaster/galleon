@@ -17,6 +17,9 @@
 <!--- used to determine if we show a new topic --->
 <cfparam name="attributes.canpost" default="true">
 
+<!--- used to determine if we show buttons --->
+<cfparam name="attributes.showbuttons" default="true">
+
 <!--- what page am I on? --->
 <cfparam name="url.page" default=1>
 <cfif not isNumeric(url.page) or url.page lte 0>
@@ -31,7 +34,8 @@
 	
 <!-- Pages and Button Start -->
 	<div id="pages_btn">
-	
+
+		<cfif attributes.showbuttons>	
 		<!-- Top Button Start -->
 		<div class="top_btn">
 			<cfif (attributes.mode is "threads" or attributes.mode is "messages") and attributes.canpost>
@@ -51,7 +55,8 @@
 			</cfif>
 		</div>
 		<!-- Top Button Ender -->
-			
+		</cfif>
+		
 		<!-- Pages Start -->
 		<div class="pages">
 			<cfset qs = reReplaceNoCase(cgi.query_string,"\&*page=[^&]*","")>			
