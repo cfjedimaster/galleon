@@ -84,7 +84,7 @@
 		<cfif data.recordCount>
 		<cfloop query="data" startrow="#(url.page-1)*application.settings.perpage+1#" endrow="#(url.page-1)*application.settings.perpage+application.settings.perpage#">
 		<!--- I add this because it is possible for a thread to have 0 posts. --->
-			<cfif messages is "">
+			<cfif messages is "" or messages is 0>
 				<cfset mcount = 0>
 			<cfelse>
 				<cfset mcount = messages - 1>

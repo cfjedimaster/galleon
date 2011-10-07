@@ -27,6 +27,11 @@ Gifts are always welcome. ;)
 
 
 ---- LATEST VERSION ----
+2.6.1 (October 7, 2011)
+/threads.cfm - fix for message count - credit Marco Spescha
+/cfcs/setting.ini.cfm - version
+
+---- ARCHIVED UPDATES ----
 2.6.0 (September 14, 2011)
 /cfformprotect - Addition of the CFFormProtect to help battle spam. Right now this is required and cannot be turned off. If you do not like it, remove this block from messages.cfm and newpost.cfm:
 <cfif Cffp.testSubmission(form)>
@@ -38,7 +43,6 @@ In the future I may make this configurable.
 /pms.cfm - pagination fix
 /pm.cfm - display fix
 
----- ARCHIVED UPDATES ----
 2.5.2 (September 14, 2011)
 /admin/message_edit.cfm - Support for moving a message to a new thread. For now, you can only move it to a thread in the same forum.
 /cfcs/settings.ini.cfm - version #
