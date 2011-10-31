@@ -27,11 +27,15 @@ Gifts are always welcome. ;)
 
 
 ---- LATEST VERSION ----
+2.6.2 (October 31, 2011)
+/cfformprotect/cffpverify.cfc - fixes an issue with pathing
+/cfcs/setting.ini.cfm - version
+
+---- ARCHIVED UPDATES ----
 2.6.1 (October 7, 2011)
 /threads.cfm - fix for message count - credit Marco Spescha
 /cfcs/setting.ini.cfm - version
 
----- ARCHIVED UPDATES ----
 2.6.0 (September 14, 2011)
 /cfformprotect - Addition of the CFFormProtect to help battle spam. Right now this is required and cannot be turned off. If you do not like it, remove this block from messages.cfm and newpost.cfm:
 <cfif Cffp.testSubmission(form)>
